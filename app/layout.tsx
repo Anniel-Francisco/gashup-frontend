@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import "./globals.css";
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Gashup",
@@ -9,7 +9,8 @@ export const metadata: Metadata = {
 };
 //
 import TopBar from "@/components/TopBar";
-
+import SideBar from "@/components/SideBar";
+import RightBar from "@/components/RightBar";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,9 +18,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="container">
         <TopBar />
-        {children}
+        <div className="flex flex-row">
+          <SideBar />
+          <div style={{ flex: 7 }} className=" pt-2 pl-2 pr-2">
+            {children}
+          </div>
+          <RightBar />
+        </div>
       </body>
     </html>
   );

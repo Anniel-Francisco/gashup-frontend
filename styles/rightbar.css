@@ -1,3 +1,34 @@
-.rightbar{
-    flex: 3.5;
+.rightbar {
+  flex: 3.5;
+}
+
+.rightbar-element {
+  width: 80%;
+  background-color: rgb(236, 236, 236);
+}
+.rightbar-item-container {
+  transition: height 0.5s ease-in-out;
+}
+.rightbar-item-container::-webkit-scrollbar {
+  width: 7px;
+}
+
+.rightbar-item-container::-webkit-scrollbar-thumb {
+  background-color: rgb(167, 167, 167);
+  border-radius: 10px;
+}
+.rightbar-item-container::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.rightbar-item:hover {
+  background-color: rgba(84, 84, 84, 0.2);
+}
+
+.image-container {
+  width: 50px;
+  height: 50px;
+  background-color: #a7a7a7;
+  border-radius: 50%;
 }
