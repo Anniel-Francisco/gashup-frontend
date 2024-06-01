@@ -1,5 +1,23 @@
 .sidebar{
     flex: 2;
-    height: calc(100vh - 50px);
-    border-right: 1px solid gray;
+    border-right: 1px solid var(--secondary-text);
+}
+
+.link:hover{
+    background-color: var(--effect);
+}
+
+.icon {
+    color: var(--primary-text);
+}
+
+.link:hover > .name{
+    color: white;
+}
+
+.link:hover > .icon{
+    color: white;
+}
+.name{
+    color: var(--primary-text);
 }

@@ -9,10 +9,10 @@ import { GoPerson } from "react-icons/go";
 import "@/styles/sidebar.css";
 export default function SideBar() {
   const links: Sidebar[] = [
-    { icon: <BiSolidHome fontSize={20} />, name: "Home", link: "/" },
-    { icon: <IoMdTrendingUp fontSize={20} />, name: "Popular", link: "/popular" },
-    { icon: <FaRegFaceSmile fontSize={20} />, name: "Communities", link: "/communities" },
-    {icon: <GoPerson fontSize={25}/>, name: "Profile", link: "/profile"}
+    { icon: <BiSolidHome fontSize={20} className="icon" />, name: "Home", link: "/" },
+    { icon: <IoMdTrendingUp fontSize={20} className="icon"/>, name: "Popular", link: "/popular" },
+    { icon: <FaRegFaceSmile fontSize={20} className="icon"/>, name: "Communities", link: "/communities" },
+    {icon: <GoPerson fontSize={25} className="icon"/>, name: "Profile", link: "/profile"}
   ];
   return (
     <div className="sidebar flex flex-col p-2 gap-4">
@@ -21,10 +21,10 @@ export default function SideBar() {
           <Link
             href={item.link}
             key={index}
-            className="flex items-center pt-2 pb-2 pl-4 hover:bg-slate-200  rounded-lg "
+            className="link flex items-center pt-2 pb-2 pl-4 rounded-lg "
           >
             {item.icon}
-            <span className="ml-3">{item.name}</span>
+            <span className="ml-3 name font-medium">{item.name}</span>
           </Link>
         );
       })}

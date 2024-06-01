@@ -1,0 +1,30 @@
+.topbar {
+  height: 60px;
+  padding: 4px 20px;
+  border-bottom: 1px solid var(--secondary-text);
+}
+
+.app-name > h1 {
+  color: var(--primary-text);
+}
+
+.input-container {
+    width: 40%;
+  
+}
+
+input {
+  outline: none;
+  padding: 8px 20px 8px 30px;
+  width: 100%;
+  border: none;
+  color: var(--primary-text);
+  background-color: lightgray;
+}
+
+.dots{
+    padding: 10px;
+}
+.dots:hover {
+    background-color: var(--default-color);
+}
