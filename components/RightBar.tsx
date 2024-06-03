@@ -1,5 +1,10 @@
-import { Rightbar } from "@/types/rightbar";
+// STYLES
 import "@/styles/rightbar.css";
+export interface Rightbar {
+  image?: string;
+  name: string;
+  followers: number;
+}
 
 export default function RightBar() {
   const data: Rightbar[] = [
@@ -16,7 +21,9 @@ export default function RightBar() {
   function RightBar() {
     return (
       <div className="rightbar-element p-4">
-        <h3 className="rightbar-head text-lg font-semibold">Famous Communities</h3>
+        <h3 className="rightbar-head text-lg font-semibold">
+          Famous Communities
+        </h3>
         <div className="rightbar-item-container overflow-y-scroll pr-1">
           {data.map((item, index) => {
             return (
@@ -28,14 +35,13 @@ export default function RightBar() {
                   <div className="image-container cursor-pointer"></div>
                   <div className="text-span flex flex-col">
                     <span className="font-medium">{item.name}</span>
-                    <span className="font-light">{formatNumber(item.followers)} followers</span>
+                    <span className="font-light">
+                      {formatNumber(item.followers)} followers
+                    </span>
                   </div>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    className="join-button rounded-sm"
-                  >
+                  <button type="button" className="join-button rounded-sm">
                     Join
                   </button>
                 </div>
