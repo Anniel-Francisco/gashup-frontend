@@ -16,13 +16,13 @@ export const useAuth = (): UseAuthType => {
 
   const setLogin = () => {
     setUserState(true);
-    localStorage.setItem("userState", JSON.stringify({ logged: true }));
+    localStorage.setItem("userState", JSON.stringify({ logged: userState }));
   };
 
   const setLogout = () => {
     setUserState(false);
-    localStorage.setItem("userState", JSON.stringify({ logged: false }));
-  };
+    localStorage.setItem("userState", JSON.stringify({ logged: userState }));
+  }; 
 
   const setUserData = (user: IUser) => {
     setUser({ ...user });
