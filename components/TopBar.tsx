@@ -1,7 +1,8 @@
+"use client";
 import Link from "next/link";
 // ICONS
 import { HiDotsHorizontal } from "react-icons/hi";
-
+import Options from "./Options";
 import "@/styles/topbar.css";
 export default function TopBar() {
   return (
@@ -13,9 +14,8 @@ export default function TopBar() {
       <div className="input-container">
         <input type="text" className="rounded-full" placeholder="Buscar..." />
       </div>
-      <div className="dots cursor-pointer rounded-full">
-        <HiDotsHorizontal />
-      </div>
+
+      <Options />
     </div>
   );
 }

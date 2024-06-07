@@ -1,4 +1,6 @@
-import { ReactNode } from "react";
+"use client";
+import { useState, useEffect, ReactElement, cloneElement } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 // ICONS
 import { BiSolidHome } from "react-icons/bi";
@@ -9,15 +11,21 @@ import { GoPerson } from "react-icons/go";
 import "@/styles/sidebar.css";
 
 export interface Sidebar {
-  icon: ReactNode;
+  icon: ReactElement;
   name: string;
   link: string;
 }
 
-export default function SideBar() {
-  const links: Sidebar[] = [
+function SideBar() {
+  const router = usePathname();
+  const [links, setLinks] = useState<Sidebar[]>([
     {
-      icon: <BiSolidHome fontSize={20} className="icon" />,
+      icon: (
+        <BiSolidHome
+          fontSize={20}
+          className="icon"
+        />
+      ),
       name: "Home",
       link: "/",
     },
@@ -36,7 +44,18 @@ export default function SideBar() {
       name: "Profile",
       link: "/profile",
     },
-  ];
+  ]);
+  useEffect(() => {
+    setLinks((prevLinks) =>
+      prevLinks.map((link) => ({
+        ...link,
+        icon: cloneElement(link.icon as ReactElement, {
+          color: link.link === router ? "#fff" : "",
+        }),
+      }))
+    );
+  }, [router]);
+
   return (
     <div className="sidebar flex flex-col p-2 gap-4">
       {links.map((item, index) => {
@@ -44,13 +63,25 @@ export default function SideBar() {
           <Link
             href={item.link}
             key={index}
+            style={{
+              backgroundColor: item.link === router ? "#16a085" : "",
+            }}
             className="link flex items-center pt-2 pb-2 pl-4 rounded-lg "
           >
             {item.icon}
-            <span className="ml-3 name font-medium">{item.name}</span>
+            <span
+              className="ml-3 name font-medium"
+              style={{
+                color: item.link === router ? "#fff" : "",
+              }}
+            >
+              {item.name}
+            </span>
           </Link>
         );
       })}
     </div>
   );
 }
+
+export default SideBar;

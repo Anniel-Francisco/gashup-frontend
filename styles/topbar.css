@@ -5,7 +5,7 @@
 }
 
 .app-name > h1 {
-  color: var(--primary-text);
+  color: var(--primary);
 }
 
 .input-container {
@@ -18,7 +18,7 @@ input {
   padding: 8px 20px 8px 30px;
   width: 100%;
   border: none;
-  color: var(--primary-text);
+  color: var(--primary);
   background-color: lightgray;
 }
 

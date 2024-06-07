@@ -8,7 +8,7 @@
 }
 
 .rightbar-head{
-  color: var(--primary-text);
+  color: var(--primary);
 }
 .rightbar-item-container {
   transition: height 0.5s ease-in-out;
@@ -37,12 +37,12 @@
   border-radius: 50%;
 }
 .text-span > span{
-  color: var(--primary-text);
+  color: var(--primary);
 }
 
 .join-button {
   padding: 2px 20px;
-  background-color: var(--primary-text);
+  background-color: var(--primary);
   color: white;
   font-weight: 600;
 
