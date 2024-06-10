@@ -1,5 +1,5 @@
 // STYLES
-import "@/styles/rightbar.css";
+import "@/styles/general/rightbar.css";
 export interface Rightbar {
   image?: string;
   name: string;
@@ -20,7 +20,7 @@ export default function RightBar() {
   }
   function RightBar() {
     return (
-      <div className="rightbar-element p-4">
+      <div className="rightbar-element p-4 max-md">
         <h3 className="rightbar-head text-lg font-semibold">
           Famous Communities
         </h3>

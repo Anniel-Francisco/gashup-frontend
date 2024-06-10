@@ -1,4 +1,4 @@
-import '@/styles/communities.css'
+import '@/styles/general/communities.css'
 export default function Communities() {
   return (
     <>

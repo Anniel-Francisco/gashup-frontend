@@ -3,11 +3,11 @@
 }
 
 .rightbar-element {
-  width: 80%;
+  width: 85%;
   background-color: rgb(236, 236, 236);
 }
 
-.rightbar-head{
+.rightbar-head {
   color: var(--primary);
 }
 .rightbar-item-container {
@@ -36,7 +36,7 @@
   background-color: var(--default-color);
   border-radius: 50%;
 }
-.text-span > span{
+.text-span > span {
   color: var(--primary);
 }
 
@@ -45,9 +45,15 @@
   background-color: var(--primary);
   color: white;
   font-weight: 600;
-
 }
 
-.join-button:hover{
+.join-button:hover {
   background-color: var(--effect);
+}
+
+
+@media (max-width: 768px) {
+  .rightbar {
+    display: none;
+  }
 }

@@ -7,10 +7,6 @@
     background-color: var(--effect);
 }
 
-.icon {
-    color: var(--primary);
-}
-
 .link:hover > .name{
     color: white;
 }
@@ -21,3 +17,9 @@
 .name{
     color: var(--primary);
 }
+@media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+  }
+  
