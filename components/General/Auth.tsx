@@ -2,6 +2,7 @@ import { useState } from "react";
 // MUI
 import Modal from "@mui/material/Modal";
 
+// COMPONENTS
 import { LogIn, SignUp } from "../Auth";
 
 interface Props {

@@ -5,4 +5,9 @@ export interface IUser {
   phone: string;
   password: string;
   img?: string;
+  isActive?: boolean;
+  isDeleted?: boolean;
+  role?: string;
+  created_at?: string;
+  updated_at?: string;
 }
