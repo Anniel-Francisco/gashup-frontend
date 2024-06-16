@@ -1,4 +1,15 @@
-.absolute-element{
-    width: 250px;
-    background-color: var(--primary);
+.absolute-element {
+  width: 250px;
+  background-color: var(--primary);
+}
+
+.btn {
+  width: 40px;
+  height: 40px;
+}
+
+.user-logged {
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary);
 }

@@ -12,7 +12,9 @@ type UseLogInType = [
   }>
 ];
 
-export const useLogIn = (body: IUser): UseLogInType => {
+type LogiDataType = Pick<IUser, "email" | "password">;
+
+export const useLogIn = (body: LogiDataType): UseLogInType => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setSession } = useSession();
   async function load(): Promise<{
@@ -22,6 +24,7 @@ export const useLogIn = (body: IUser): UseLogInType => {
     try {
       setLoading(true);
       const data = await LogIn(body);
+      setSession(data.data.user);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };
