@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 // MUI
 import Modal from "@mui/material/Modal";
 
@@ -26,7 +26,7 @@ export function Auth({ modal, showModal }: Props) {
       className="flex justify-center items-center"
     >
       <div
-        style={{ height: auth ? "400px" : "550px" }}
+        style={{ height: auth ? "400px" : "600px" }}
         className="w-2/6 max-md:w-11/12 bg-white outline-none rounded-lg"
       >
         {auth ? (

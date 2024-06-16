@@ -8,21 +8,38 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-//
+// HOOKS
+import { useAlert } from "@/hooks/useAlert";
+import { useLogIn } from "@/hooks/useAuth";
+// ICONS
 import { IoCloseOutline } from "react-icons/io5";
+import { MdOutlineMail } from "react-icons/md";
+import { LuKeyRound } from "react-icons/lu";
+// COMPONENTS
+import { ToastContainer } from "react-toastify";
 // STYLES
 import "@/styles/general/auth.css";
+
 interface Props {
   onClose: () => void;
   setAuthState: () => void;
 }
 
+type LogiDataType = {
+  email: string;
+  password: string;
+};
+
 export default function LogIn({ onClose, setAuthState }: Props) {
-  const [loginData, setLoginData] = useState<object>({
+  const [loginData, setLoginData] = useState<LogiDataType>({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  // HOOKS
+  const [showAlert] = useAlert();
+
   const handleClickShowPassword = (): void => {
     setShowPassword((show) => !show);
   };
@@ -39,6 +56,11 @@ export default function LogIn({ onClose, setAuthState }: Props) {
   ) => {
     const { value } = e.target;
     setLoginData({ ...loginData, [name]: value });
+  };
+  const onSubmit = (): void => {
+    if (!loginData.email && !loginData.password) {
+      showAlert("warning", "You must fill out both fields");
+    }
   };
   return (
     <div className="flex flex-col h-full">
@@ -61,21 +83,34 @@ export default function LogIn({ onClose, setAuthState }: Props) {
             <TextField
               id="email-login"
               label="Email"
-              placeholder="juan@gmail.com"
+              placeholder="mateo@gmail.com"
               variant="outlined"
+              required
               className="w-full"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdOutlineMail />
+                  </InputAdornment>
+                ),
+              }}
               onInput={(e: ChangeEvent<HTMLInputElement>) =>
                 handleLogInInputChange(e, "email")
               }
             />
             {/* Password */}
             <FormControl variant="outlined" className="w-full">
-              <InputLabel htmlFor="outlined-adornment-password">
+              <InputLabel required htmlFor="outlined-adornment-password">
                 Password
               </InputLabel>
               <OutlinedInput
                 id="password-login"
-                placeholder="juan123"
+                placeholder="mateo123"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <LuKeyRound />
+                  </InputAdornment>
+                }
                 onInput={(e: ChangeEvent<HTMLInputElement>) =>
                   handleLogInInputChange(e, "password")
                 }
@@ -92,14 +127,17 @@ export default function LogIn({ onClose, setAuthState }: Props) {
                     </IconButton>
                   </InputAdornment>
                 }
-                label="Password"
+                label="Password*"
               />
             </FormControl>
           </FormControl>
         </div>
         {/* Button */}
         <div className="mt-4">
-          <button className="w-full text-white p-2 font-semibold rounded-sm btn-auth">
+          <button
+            onClick={onSubmit}
+            className="w-full text-white p-2 font-semibold rounded-sm btn-auth"
+          >
             Log In
           </button>
           <div className="flex justify-center mt-2 items-center gap-1">
@@ -113,6 +151,8 @@ export default function LogIn({ onClose, setAuthState }: Props) {
           </div>
         </div>
       </div>
+      {/* Alert */}
+      <ToastContainer />
     </div>
   );
 }

@@ -1,10 +1,6 @@
-import { ReactElement } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
-type UseAlertType = [
-  (type: string, message: string) => void,
-  () => ReactElement
-];
+type UseAlertType = [(type: string, message: string) => void];
 
 export const useAlert = (): UseAlertType => {
   const showAlert = (type: string, message: string) => {
@@ -18,7 +14,6 @@ export const useAlert = (): UseAlertType => {
       toast.info(message);
     }
   };
-  const Alert = () => <ToastContainer />;
 
-  return [showAlert, Alert];
+  return [showAlert];
 };

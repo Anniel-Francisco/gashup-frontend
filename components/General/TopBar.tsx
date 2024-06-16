@@ -12,7 +12,12 @@ export default function TopBar() {
       </Link>
 
       <div className="input-container">
-        <input type="text" className="rounded-full" placeholder="Buscar..." />
+        <input
+          type="text"
+          className="rounded-full"
+          style={{ backgroundColor: "#e6e4e4" }}
+          placeholder="Buscar..."
+        />
       </div>
 
       <Options />
