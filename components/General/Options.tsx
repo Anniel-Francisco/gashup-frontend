@@ -1,11 +1,11 @@
-import { useState, ReactNode } from "react";
+import { useState, useEffect, ReactNode, useRef } from "react";
 // ICONS
 import { MdLogin } from "react-icons/md";
 import { GoPerson } from "react-icons/go";
 // COMPONENTS
 import { Auth } from "./Auth";
 // STYLES
-import "@/styles/options.css";
+import "@/styles/general/options.css";
 interface Option {
   name: string;
   icon: ReactNode;
@@ -15,6 +15,7 @@ interface Option {
 export default function Options() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [authModal, setAuthModal] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const options: Option[] = [
     {
       icon: <MdLogin color="white" fontSize={20} className="font-semibold" />,
@@ -30,18 +31,34 @@ export default function Options() {
   const showDropDown = (): void => {
     setIsOpen(!isOpen);
   };
-  const showModal = (type: string): void => {
+  const showOption = (type: string): void => {
     if (type == "auth") {
       setAuthModal(!authModal);
+      setIsOpen(false);
     }
   };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
-    <div className="relative inline-block ">
+    <div className="relative inline-block" ref={dropdownRef}>
       <button
         onClick={showDropDown}
         style={{ backgroundColor: "#2c3e50" }}
-        className="relative z-10 text-white block p-2 border border-transparent rounded-md"
+        className="relative z-10 text-white block p-2 outline-none border border-transparent rounded-md"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +75,7 @@ export default function Options() {
             return (
               <div
                 key={index}
-                onClick={() => showModal(option.type)}
+                onClick={() => showOption(option.type)}
                 className="flex items-center cursor-pointer rounded-md p-4 gap-2 hover:bg-slate-500"
               >
                 {option.icon}
@@ -70,7 +87,7 @@ export default function Options() {
       ) : (
         ""
       )}
-      <Auth modal={authModal} showModal={() => showModal(options[0].type)} />
+      <Auth modal={authModal} showModal={() => showOption(options[0].type)} />
     </div>
   );
 }

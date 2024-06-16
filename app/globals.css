@@ -27,3 +27,11 @@
 .content{
     height: calc(100vh - 60px);
 }
+
+
+@media (max-width: 768px) {
+    .rightbar {
+      display: none;
+    }
+  }
+  

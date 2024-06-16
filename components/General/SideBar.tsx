@@ -6,9 +6,10 @@ import Link from "next/link";
 import { BiSolidHome } from "react-icons/bi";
 import { IoMdTrendingUp } from "react-icons/io";
 import { FaRegFaceSmile } from "react-icons/fa6";
-import { GoPerson } from "react-icons/go";
+import { BsChatLeftText } from "react-icons/bs";
+import { HiOutlineUserGroup } from "react-icons/hi";
 // STYLES
-import "@/styles/sidebar.css";
+import "@/styles/general/sidebar.css";
 
 export interface Sidebar {
   icon: ReactElement;
@@ -20,12 +21,7 @@ function SideBar() {
   const router = usePathname();
   const [links, setLinks] = useState<Sidebar[]>([
     {
-      icon: (
-        <BiSolidHome
-          fontSize={20}
-          className="icon"
-        />
-      ),
+      icon: <BiSolidHome fontSize={20} className="icon" />,
       name: "Home",
       link: "/",
     },
@@ -40,9 +36,14 @@ function SideBar() {
       link: "/communities",
     },
     {
-      icon: <GoPerson fontSize={25} className="icon" />,
-      name: "Profile",
-      link: "/profile",
+      icon: <BsChatLeftText fontSize={25} className="icon" />,
+      name: "Chats",
+      link: "/chats",
+    },
+    {
+      icon: <HiOutlineUserGroup fontSize={25} className="icon" />,
+      name: "My Communities",
+      link: "/my-communities",
     },
   ]);
   useEffect(() => {

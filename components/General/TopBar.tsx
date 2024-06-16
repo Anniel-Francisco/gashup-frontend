@@ -3,7 +3,7 @@ import Link from "next/link";
 // ICONS
 import { HiDotsHorizontal } from "react-icons/hi";
 import Options from "./Options";
-import "@/styles/topbar.css";
+import "@/styles/general/topbar.css";
 export default function TopBar() {
   return (
     <div className="topbar flex flex-row items-center justify-between">
@@ -12,7 +12,12 @@ export default function TopBar() {
       </Link>
 
       <div className="input-container">
-        <input type="text" className="rounded-full" placeholder="Buscar..." />
+        <input
+          type="text"
+          className="rounded-full"
+          style={{ backgroundColor: "#e6e4e4" }}
+          placeholder="Buscar..."
+        />
       </div>
 
       <Options />
