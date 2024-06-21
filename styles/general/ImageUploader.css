@@ -1,0 +1,52 @@
+.post-creator {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+.slider {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slides img {
+    width: 100%;
+    display: none;
+}
+
+#prevBtn,
+#nextBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#prevBtn {
+    left: 0;
+}
+
+#nextBtn {
+    right: 0;
+}
+
+#submitBtn:disabled,
+#prevBtn:disabled,
+#nextBtn:disabled {
+    cursor: not-allowed;
+    background-color: rgba(0, 0, 0, 0.2);
+}

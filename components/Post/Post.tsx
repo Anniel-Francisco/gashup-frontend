@@ -21,7 +21,7 @@ export default function Post() {
   return (
     <div>
       {posts.map((item) => (
-        <div className="flex flex-col gap-3 border p-4 w-[100%] border-r-2">
+        <div className="flex flex-col gap-3 border p-4 w-[100%] border-r-2 rounded-md">
           <div className="flex justify-between">
             <div className="flex flex-row items-center gap-3">
               <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
@@ -51,7 +51,7 @@ export default function Post() {
           <div className="flex gap-3">
             <PostButton Icon={AiFillLike} amount="10k" />
             <PostButton Icon={FaComments} amount="10k" />
-            <PostButton Icon={FaShare} amount="10k" />
+            <PostButton Icon={FaShare} amount="0" />
           </div>
         </div>
       ))}
