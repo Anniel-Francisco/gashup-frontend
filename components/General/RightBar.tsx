@@ -1,3 +1,5 @@
+"use client";
+import { usePathname } from "next/navigation";
 // STYLES
 import "@/styles/general/rightbar.css";
 export interface Rightbar {
@@ -7,6 +9,7 @@ export interface Rightbar {
 }
 
 export default function RightBar() {
+  const router = usePathname();
   const data: Rightbar[] = [
     { name: "Vegeta777", followers: 1000000 },
     { name: "Save The World", followers: 235000 },
@@ -52,5 +55,9 @@ export default function RightBar() {
       </div>
     );
   }
-  return <div className="rightbar pt-2">{<RightBar />}</div>;
+  return router === "/" || router === "/popular" ? (
+    <div className="rightbar pt-2">{<RightBar />}</div>
+  ) : (
+    ""
+  );
 }

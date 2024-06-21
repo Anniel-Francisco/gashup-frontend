@@ -58,7 +58,10 @@ function SideBar() {
   }, [router]);
 
   return (
-    <div className="sidebar flex flex-col p-2 gap-4">
+    <div
+      style={{ flex: router === "/" || router === "/popular" ? 2 : 1.4 }}
+      className="flex flex-col p-2 gap-4 sidebar"
+    >
       {links.map((item, index) => {
         return (
           <Link
