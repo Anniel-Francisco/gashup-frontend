@@ -1,0 +1,16 @@
+.primary {
+  color: var(--primary);
+}
+.icon {
+  color: var(--primary);
+}
+.icon:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .modal {
+    height: 400px;
+  }
+}

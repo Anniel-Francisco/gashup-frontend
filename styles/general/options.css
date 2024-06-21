@@ -1,0 +1,9 @@
+.absolute-element {
+  width: 250px;
+  background-color: var(--primary);
+}
+
+.btn {
+  width: 40px;
+  height: 40px;
+}

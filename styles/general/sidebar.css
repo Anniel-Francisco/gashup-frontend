@@ -1,0 +1,20 @@
+.link:hover{
+    background-color: var(--effect);
+}
+
+.link:hover > .name{
+    color: white;
+}
+
+.link:hover > .icon{
+    color: white;
+}
+.name{
+    color: var(--primary);
+}
+@media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+  }
+  

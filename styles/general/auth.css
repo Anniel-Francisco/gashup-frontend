@@ -1,0 +1,19 @@
+.primary {
+  color: var(--primary);
+}
+.icon {
+  color: var(--primary);
+}
+.icon:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-auth {
+  outline: none;
+  background-color: var(--primary);
+}
+.image-container {
+  background-color: var(--default-color);
+  border-radius: 50%;
+}
