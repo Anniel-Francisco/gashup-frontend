@@ -15,6 +15,9 @@ import { useLogIn } from "@/hooks/useAuth";
 import { IoCloseOutline } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
 import { LuKeyRound } from "react-icons/lu";
+// TYPES
+import { IUser } from "@/types/user";
+
 // COMPONENTS
 import { ToastContainer } from "react-toastify";
 // STYLES
@@ -25,10 +28,7 @@ interface Props {
   setAuthState: () => void;
 }
 
-type LogiDataType = {
-  email: string;
-  password: string;
-};
+type LogiDataType = Pick<IUser, "email" | "password">;
 
 export default function LogIn({ onClose, setAuthState }: Props) {
   const [loginData, setLoginData] = useState<LogiDataType>({
@@ -39,6 +39,7 @@ export default function LogIn({ onClose, setAuthState }: Props) {
 
   // HOOKS
   const [showAlert] = useAlert();
+  const [loading, load] = useLogIn(loginData);
 
   const handleClickShowPassword = (): void => {
     setShowPassword((show) => !show);
@@ -57,9 +58,25 @@ export default function LogIn({ onClose, setAuthState }: Props) {
     const { value } = e.target;
     setLoginData({ ...loginData, [name]: value });
   };
-  const onSubmit = (): void => {
-    if (!loginData.email && !loginData.password) {
+  const onSubmit = async () => {
+    if (!loginData.email || !loginData.password) {
       showAlert("warning", "You must fill out both fields");
+    } else {
+      let { response, error } = await load();
+      if (error) {
+        showAlert(
+          "error",
+          error && error.response
+            ? error.response.data.message
+            : "You may be experiencing connection problems or the server is down"
+        );
+      } else if (response) {
+        setLoginData({
+          email: "",
+          password: "",
+        });
+        onClose();
+      }
     }
   };
   return (
@@ -87,6 +104,7 @@ export default function LogIn({ onClose, setAuthState }: Props) {
               variant="outlined"
               required
               className="w-full"
+              value={loginData.email}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -106,6 +124,7 @@ export default function LogIn({ onClose, setAuthState }: Props) {
               <OutlinedInput
                 id="password-login"
                 placeholder="mateo123"
+                value={loginData.password}
                 startAdornment={
                   <InputAdornment position="start">
                     <LuKeyRound />

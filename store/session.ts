@@ -14,17 +14,14 @@ const useSession = (): SessionState => {
   return {
     session,
     getSession: () => {
-      if (!session) {
-        let storedSession = localStorage.getItem("session");
-        if (storedSession) {
-          session = JSON.parse(storedSession);
-        }
+      let storedSession = localStorage.getItem("session");
+      if (storedSession) {
+        session = JSON.parse(storedSession);
       }
       return session;
     },
     setSession: (userSession: IUser | null) => {
       if (userSession) {
-        session = userSession;
         localStorage.setItem("session", JSON.stringify(userSession));
       }
     },
