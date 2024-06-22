@@ -22,11 +22,12 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { IoPhonePortraitOutline } from "react-icons/io5";
 import { MdOutlineMail, MdPhotoLibrary } from "react-icons/md";
 import { LuKeyRound } from "react-icons/lu";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 // COMPONENTS
 import { ImagePreview } from "../SignUp/ImagePreview";
 import { ToastContainer } from "react-toastify";
-
+import { Spinner } from "../Spinner/Spinner";
 // STYLES
 import "@/styles/general/auth.css";
 
@@ -41,7 +42,7 @@ export default function SignUp({ setAuthState }: Props) {
     useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
   const [signUpData, setSignUpData] = useState<IUser>({
-    code: "USER",
+    code: process.env.NEXT_PUBLIC_USER_CODE,
     name: "",
     email: "",
     password: "",
@@ -78,17 +79,26 @@ export default function SignUp({ setAuthState }: Props) {
   const onClose = (): void => {
     setModal(false);
   };
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        let base64String = reader.result as string;
         setImagePreview(file.name);
-        setSignUpData({ ...signUpData, img: base64String });
+        setSignUpData({ ...signUpData, img: file });
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const onDeleteImage = () => {
+    setImagePreview("");
+    setSignUpData({ ...signUpData, img: "" });
+  const fileInput = document.getElementById("file-input") as HTMLInputElement;
+  if (fileInput) {
+    fileInput.value = "";
+  }
   };
 
   const triggerFileInput = () => {
@@ -129,7 +139,10 @@ export default function SignUp({ setAuthState }: Props) {
         showAlert("warning", "Different passwords");
       }
     } else {
-      showAlert("warning", "You must complete all fields with the * character.");
+      showAlert(
+        "warning",
+        "You must complete all fields with the * character."
+      );
     }
   };
   return (
@@ -162,6 +175,7 @@ export default function SignUp({ setAuthState }: Props) {
             <TextField
               id="image-upload"
               label="Photo"
+              disabled
               placeholder="mateo-photo.jpg"
               InputProps={{
                 startAdornment: (
@@ -174,6 +188,12 @@ export default function SignUp({ setAuthState }: Props) {
                 ),
                 endAdornment: (
                   <InputAdornment position="end">
+                    <RiDeleteBin6Fill
+                      fontSize={20}
+                      className="cursor-pointer mr-2"
+                      style={{ display: signUpData.img ? "" : "none" }}
+                      onClick={onDeleteImage}
+                    />
                     <Visibility className="cursor-pointer" onClick={onOpen} />
                   </InputAdornment>
                 ),
@@ -320,6 +340,8 @@ export default function SignUp({ setAuthState }: Props) {
       <ImagePreview modal={modal} onClose={onClose} image={signUpData.img} />
       {/* Alert */}
       <ToastContainer />
+      {/* Spinner */}
+      <Spinner loading={loading} />
     </div>
   );
 }

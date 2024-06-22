@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { LogIn, SignUp } from "@/services/Auth";
+import { logIn, signUp } from "@/services/Auth";
 import { IResponse, IError } from "@/types/response";
+import { useAuthProvider } from "@/context/AuthContext ";
 import { IUser } from "@/types/user";
-import useSession from "@/store/session";
 
 type UseLogInType = [
   boolean,
@@ -16,15 +16,15 @@ type LogiDataType = Pick<IUser, "email" | "password">;
 
 export const useLogIn = (body: LogiDataType): UseLogInType => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { setSession } = useSession();
+  const { setSessionState } = useAuthProvider();
   async function load(): Promise<{
     response: IResponse | null;
     error: IError | null;
   }> {
     try {
       setLoading(true);
-      const data = await LogIn(body);
-      setSession(data.data.user);
+      const data = await logIn(body);
+      setSessionState(data.data.user);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };
@@ -58,7 +58,7 @@ export const useSingUp = (body: IUser): UseSingUpType => {
   }> {
     try {
       setLoading(true);
-      const data = await SignUp(body);
+      const data = await signUp(body);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

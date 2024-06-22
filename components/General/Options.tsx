@@ -1,20 +1,25 @@
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+
 // ICONS
 import { MdLogin } from "react-icons/md";
 import { GoPerson } from "react-icons/go";
 import { CgLogOut } from "react-icons/cg";
-// HOOKS
-import useSession from "@/store/session";
+// SESSION
+import { useAuthProvider } from "@/context/AuthContext ";
 
 // COMPONENTS
 import { Auth } from "./Auth";
+import { Avatar } from "../Avatar/Avatar";
 // STYLES
 import "@/styles/general/options.css";
 
 export default function Options() {
-  const { getSession, removeSession } = useSession();
+  const router = useRouter();
+  const { session, removeSession } = useAuthProvider();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [authModal, setAuthModal] = useState<boolean>(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const showDropDown = (): void => {
     setIsOpen(!isOpen);
@@ -24,6 +29,8 @@ export default function Options() {
       setAuthModal(!authModal);
       setIsOpen(false);
     } else if (type === "profile") {
+      router.push("/profile");
+      setIsOpen(false);
     } else if (type === "logout") {
       setIsOpen(false);
       removeSession();
@@ -46,15 +53,13 @@ export default function Options() {
   }, []);
   return (
     <div className="relative inline-block" ref={dropdownRef}>
-      {getSession() ? (
-        <div
-          className="user-logged flex items-center cursor-pointer justify-center rounded-full"
+      {session ? (
+        <Avatar
+          size={40}
+          image={session?.img}
           onClick={showDropDown}
-        >
-          <span className="text-lg font-semibold text-white">
-            {getSession()?.name.charAt(0)}
-          </span>
-        </div>
+          styles={{ cursor: "pointer" }}
+        />
       ) : (
         <button
           onClick={showDropDown}
@@ -72,9 +77,9 @@ export default function Options() {
         </button>
       )}
       {isOpen ? (
-        <div className="absolute-element absolute right-0 top-12 rounded-lg p-2">
+        <div className="absolute-element absolute z-20 right-0 top-12 rounded-lg p-2">
           {/* Log In / Sign Up */}
-          {getSession() ? (
+          {session ? (
             ""
           ) : (
             <div
@@ -86,7 +91,7 @@ export default function Options() {
             </div>
           )}
           {/* Profile */}
-          {getSession() ? (
+          {session ? (
             <div
               onClick={() => showOption("profile")}
               className="flex items-center cursor-pointer rounded-md p-4 gap-2 hover:bg-slate-500"
@@ -99,7 +104,7 @@ export default function Options() {
           )}
           {/*  Log Out */}
           <div>
-            {getSession() ? (
+            {session ? (
               <div
                 onClick={() => showOption("logout")}
                 className="flex items-center cursor-pointer rounded-md p-4 gap-2 hover:bg-slate-500"

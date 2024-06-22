@@ -20,6 +20,7 @@ import { IUser } from "@/types/user";
 
 // COMPONENTS
 import { ToastContainer } from "react-toastify";
+import { Spinner } from "../Spinner/Spinner";
 // STYLES
 import "@/styles/general/auth.css";
 
@@ -172,6 +173,8 @@ export default function LogIn({ onClose, setAuthState }: Props) {
       </div>
       {/* Alert */}
       <ToastContainer />
+       {/* Spinner */}
+       <Spinner loading={loading} />
     </div>
   );
 }
