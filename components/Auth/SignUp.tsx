@@ -123,6 +123,7 @@ export default function SignUp({ setAuthState }: Props) {
               : "You may be experiencing connection problems or the server is down"
           );
         } else if (response) {
+          let fileInput = document.getElementById("file-input") as HTMLInputElement;
           showAlert("success", response.data.message);
           setSignUpData({
             code: "USER",
@@ -134,6 +135,7 @@ export default function SignUp({ setAuthState }: Props) {
           });
           setConfirmPassword("");
           setImagePreview("");
+          fileInput.value = "";
         }
       } else {
         showAlert("warning", "Different passwords");

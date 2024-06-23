@@ -28,12 +28,9 @@ export function ImagePreview({ modal, onClose, image }: Props) {
     <Modal
       open={modal}
       onClose={onClose}
-      className="flex flex-col items-center justify-center"
+      className="flex flex-col items-center flex-grow justify-center"
     >
-      <div
-        className="flex flex-col modal w-2/6 max-md:w-11/12 outline-none items-center justify-center bg-white h-full p-4 rounded-md"
-        style={{ height: "400px" }}
-      >
+      <div className="flex flex-col modal w-2/6 max-md:w-11/12 outline-none items-center justify-center bg-white h-3/6  p-4 rounded-md">
         <div className="flex items-center justify-between w-full mb-2">
           <span className="font-semibold text-xl primary">Preview</span>
           <span onClick={onClose} className="cursor-pointer">
@@ -46,14 +43,15 @@ export function ImagePreview({ modal, onClose, image }: Props) {
         </div>
 
         <div className="flex flex-grow w-full items-center justify-center">
-          {imageSrc  ? (
-            <Image
-              src={imageSrc}
-              alt="Preview Image"
-              className="w-full"
-              width={250}
-              height={250}
-            />
+          {imageSrc ? (
+            <div className="relative w-full h-full">
+              <Image
+                src={imageSrc}
+                alt="Preview Image"
+                fill
+                style={{ objectFit: "contain" }}
+              />
+            </div>
           ) : (
             <span className="text-xl font-semibold">Select an image</span>
           )}
