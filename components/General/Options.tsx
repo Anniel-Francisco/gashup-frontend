@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { MdLogin } from "react-icons/md";
 import { GoPerson } from "react-icons/go";
 import { CgLogOut } from "react-icons/cg";
+import { IoSettingsOutline } from "react-icons/io5";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext ";
 
@@ -19,7 +20,38 @@ export default function Options() {
   const { session, removeSession } = useAuthProvider();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [authModal, setAuthModal] = useState<boolean>(false);
-
+  const options = [
+    {
+      icon: <MdLogin color="white" fontSize={20} className="font-semibold" />,
+      name: "Log In / Sign Up",
+      type: "login",
+      showOption: !session,
+    },
+    {
+      icon: <GoPerson color="white" fontSize={20} className="font-semibold" />,
+      name: "Profile",
+      type: "profile",
+      showOption: session,
+    },
+    {
+      icon: (
+        <IoSettingsOutline
+          color="white"
+          fontSize={20}
+          className="font-semibold"
+        />
+      ),
+      name: "Settings",
+      type: "settings",
+      showOption: session,
+    },
+    {
+      icon: <CgLogOut color="white" fontSize={20} className="font-semibold" />,
+      name: "Log Out",
+      type: "logout",
+      showOption: session,
+    },
+  ];
   const dropdownRef = useRef<HTMLDivElement>(null);
   const showDropDown = (): void => {
     setIsOpen(!isOpen);
@@ -34,6 +66,9 @@ export default function Options() {
     } else if (type === "logout") {
       setIsOpen(false);
       removeSession();
+    } else if (type === "settings") {
+      router.push("/settings");
+      setIsOpen(false);
     }
   };
   useEffect(() => {
@@ -58,6 +93,7 @@ export default function Options() {
           size={40}
           image={session?.img}
           onClick={showDropDown}
+          session={session}
           styles={{ cursor: "pointer" }}
         />
       ) : (
@@ -78,48 +114,18 @@ export default function Options() {
       )}
       {isOpen ? (
         <div className="absolute-element absolute z-20 right-0 top-12 rounded-lg p-2">
-          {/* Log In / Sign Up */}
-          {session ? (
-            ""
-          ) : (
-            <div
-              onClick={() => showOption("login")}
-              className="flex items-center cursor-pointer rounded-md p-4 gap-2 hover:bg-slate-500"
-            >
-              <MdLogin color="white" fontSize={20} className="font-semibold" />
-              <span className="text-white font-semibold">Log In / Sign Up</span>
-            </div>
-          )}
-          {/* Profile */}
-          {session ? (
-            <div
-              onClick={() => showOption("profile")}
-              className="flex items-center cursor-pointer rounded-md p-4 gap-2 hover:bg-slate-500"
-            >
-              <GoPerson color="white" fontSize={20} className="font-semibold" />
-              <span className="text-white font-semibold">Profile</span>
-            </div>
-          ) : (
-            ""
-          )}
-          {/*  Log Out */}
-          <div>
-            {session ? (
+          {options
+            .filter((option) => option.showOption)
+            .map((option) => (
               <div
-                onClick={() => showOption("logout")}
+                key={option.type}
+                onClick={() => showOption(option.type)}
                 className="flex items-center cursor-pointer rounded-md p-4 gap-2 hover:bg-slate-500"
               >
-                <CgLogOut
-                  color="white"
-                  fontSize={20}
-                  className="font-semibold"
-                />
-                <span className="text-white font-semibold">Log Out</span>
+                {option.icon}
+                <span className="text-white font-semibold">{option.name}</span>
               </div>
-            ) : (
-              ""
-            )}
-          </div>
+            ))}
         </div>
       ) : (
         ""

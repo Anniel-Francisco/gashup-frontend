@@ -28,3 +28,9 @@ input {
 .dots:hover {
     background-color: var(--default-color);
 }
+
+@media (max-width: 768px){
+  .input-container{
+    display: none;
+  }
+}
