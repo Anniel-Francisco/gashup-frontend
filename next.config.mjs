@@ -8,6 +8,10 @@ const nextConfig = {
         port: "",
         pathname: "/ci/re/hola/hola_009.webp",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 };

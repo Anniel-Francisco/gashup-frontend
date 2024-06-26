@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { FaImage } from "react-icons/fa6";
 
 export const ImageInputButton = ( {handleFileChange}: any) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -19,7 +20,9 @@ export const ImageInputButton = ( {handleFileChange}: any) => {
         ref={fileInputRef}
         onChange={handleFileChange}
       />
-      <button onClick={handleClick}>Seleccionar imagen</button>
+      <button onClick={handleClick}>
+        <FaImage className="fill-slate-500 w-7 h-7" />
+      </button>
     </div>
   );
 };
