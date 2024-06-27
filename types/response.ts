@@ -11,6 +11,7 @@ export interface IDataResponse {
   message: string;
   ok: boolean;
   user?: IUser;
+  data?: any
 }
 
 export interface IError {

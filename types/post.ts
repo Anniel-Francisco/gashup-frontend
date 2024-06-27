@@ -1,8 +1,12 @@
+import { IUser } from "./user";
+
 export interface IPost {
+  _id?: string;
   title: string;
   description: string;
-  community_id: string | null;
-  user_id: string | null;
+  community: string | null;
+  user: string | IUser | null;
   user_likes?: Array<string>;
-  images?: (File | Blob)[];
+  images?: (File | Blob | string)[] | null;
+  postDate?: string;
 }

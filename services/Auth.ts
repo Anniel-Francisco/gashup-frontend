@@ -6,7 +6,7 @@ import { IUser } from "@/types/user";
 type LogiDataType = Pick<IUser, "email" | "password">;
 
 export async function logIn(body: LogiDataType) {
-  return http.post(`/api/auth/login`, body).then((data) => data);
+  return http.post(`/auth/login`, body).then((data) => data);
 }
 export async function signUp(body: IUser) {
   const formData = new FormData();
@@ -18,9 +18,9 @@ export async function signUp(body: IUser) {
   if (body.img) {
     formData.append("img", body.img);
   }
-  return http.post(`/api/user/createUser`, formData).then((data) => data);
+  return http.post(`/user/createUser`, formData).then((data) => data);
 }
 
 export async function updateUser(id: string, body: IUser) {
-  return http.put(`/api/user/updateUser/${id}`, body).then((data) => data);
+  return http.put(`/user/updateUser/${id}`, body).then((data) => data);
 }

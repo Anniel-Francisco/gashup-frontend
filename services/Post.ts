@@ -26,7 +26,7 @@ export async function createPost(body: IPost) {
 
   return http.post(`post/createPost`, formData).then((data) => data);
 }
-export async function getAllPostByCommunity(id: number) {
+export async function getAllPostByCommunity(id: string) {
   return http.get(`post/getAllPostByCommunity/${id}`).then((data) => data);
 }
 

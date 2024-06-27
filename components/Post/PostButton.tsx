@@ -4,7 +4,7 @@ import React from "react";
 
 interface PostButtonProps {
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  amount: string;
+  amount: number | null;
 }
 
 const PostButton: React.FC<PostButtonProps> = ({ Icon, amount }) => {

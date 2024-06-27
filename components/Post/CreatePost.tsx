@@ -1,33 +1,37 @@
 "use client";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Avatar } from "@mui/material";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import PostButtons from "./EditorButtons";
 import EditorButtons from "./EditorButtons";
 import CreateButtons from "./CreateButtons";
 import { useState } from "react";
-import Image from "next/image";
 import { useAlert } from "@/hooks/useAlert";
 import { useCreatePost } from "@/hooks/usePost";
 import { IPost } from "@/types/post";
 import { ImageCarousel } from "./ImageCarousel";
+import { useAuthProvider } from "@/context/AuthContext ";
+import { useRouter } from "next/navigation";
+import { Avatar } from "../Avatar/Avatar";
 
 export default function CreatePost() {
-  const [showAlert] = useAlert();
-  const [images, setImages] = useState([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const [postData, setPostData] = useState<IPost>({
+  const { session, removeSession } = useAuthProvider();
+  const post: IPost = {
     title: "",
     description: "",
-    community_id: "666f2c85cdb1f3d0279f892d",
-    user_id: "666aeb6d01dd81d3f00fddde",
-    images: []
-  });
+    community: "666f2c85cdb1f3d0279f892d",
+    user: session?._id ? session?._id : null,
+    images: [],
+  };
+
+  const router = useRouter();
+  const [showAlert] = useAlert();
+  const [images, setImages] = useState([]);
+  const [postData, setPostData] = useState<IPost>(post);
   const [loading, load] = useCreatePost(postData);
 
-  const clearData = () => {};
+  const clearData = () => {
+    setPostData(post);
+  };
 
   const onSubmit = async () => {
     if (!postData.description) {
@@ -46,18 +50,11 @@ export default function CreatePost() {
 
     if (response?.data.ok) {
       clearData();
+      console.log("holaaaa");
       return showAlert("warning", "SENT");
     } else {
       return showAlert("warning", "NOT SENT");
     }
-  };
-
-  const showPrevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const showNextSlide = () => {
-    setCurrentSlide((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
   const editor = useEditor({
@@ -86,55 +83,24 @@ export default function CreatePost() {
     <div className="flex flex-col gap-3 border p-4 w-full border-r-2 mb-2 rounded-md">
       <EditorButtons editor={editor} />
       <div className="flex flex-row gap-3">
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
+        <Avatar
+          size={40}
+          image={session?.img}
+          onClick={() => router.push("/profile")}
+          styles={{ cursor: "pointer" }}
+        />
 
         <div className="flex flex-col w-full border">
           <EditorContent editor={editor} className="w-full border rounded-md" />
         </div>
       </div>
-      {/* {images.length > 0 && (
-        <div className="slider w-full flex flex-row items-center justify-center gap-4">
-          <button
-            id="prevBtn"
-            onClick={showPrevSlide}
-            disabled={images.length === 0}
-          >
-            ❮
-          </button>
-
-          <div className="slides flex flex-col gap-2 justify-center">
-            <span>
-              {currentSlide + 1} de {images.length}
-            </span>
-
-            {images.map((image, index) => (
-              <Image
-                key={index}
-                src={image}
-                alt={`Slide ${index}`}
-                style={{ display: index === currentSlide ? "block" : "none" }}
-                height={250}
-                width={250}
-                className="rounded-md"
-              />
-            ))}
-          </div>
-          <button
-            id="nextBtn"
-            onClick={showNextSlide}
-            disabled={images.length === 0}
-          >
-            ❯
-          </button>
-        </div>
-      )} */}
       {images.length > 0 && <ImageCarousel items={images} />}
 
       <div>
         <CreateButtons
           setImages={setImages}
           images={images}
-          setCurrentSlide={setCurrentSlide}
           onSubmit={onSubmit}
           setPostData={setPostData}
           postData={postData}

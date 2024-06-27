@@ -7,7 +7,6 @@ import { ChangeEvent } from "react";
 export default function CreateButtons({
   setImages,
   images,
-  setCurrentSlide,
   onSubmit,
   setPostData,
   postData
@@ -20,7 +19,6 @@ export default function CreateButtons({
       );
 
       setImages(imageUrls);
-      setCurrentSlide(0);
       setPostData({...postData, images: files});
     }
   };
