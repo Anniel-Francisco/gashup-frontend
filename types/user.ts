@@ -1,4 +1,5 @@
 export interface IUser {
+  _id?: string;
   code: string | undefined;
   name: string;
   email: string;
