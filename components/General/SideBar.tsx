@@ -7,7 +7,7 @@ import { BiSolidHome } from "react-icons/bi";
 import { IoMdTrendingUp } from "react-icons/io";
 import { FaRegFaceSmile } from "react-icons/fa6";
 import { BsChatLeftText } from "react-icons/bs";
-import { HiOutlineUserGroup } from "react-icons/hi";
+import { IoBookmarkOutline } from "react-icons/io5";
 // STYLES
 import "@/styles/general/sidebar.css";
 
@@ -41,7 +41,7 @@ function SideBar() {
       link: "/chats",
     },
     {
-      icon: <HiOutlineUserGroup fontSize={25} className="icon" />,
+      icon: <IoBookmarkOutline fontSize={25} className="icon" />,
       name: "My Communities",
       link: "/my-communities",
     },
