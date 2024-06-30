@@ -2,7 +2,8 @@ import http from "@/utils/http";
 
 // TYPES
 import { IPost } from "@/types/post";
-import { BiBody } from "react-icons/bi";
+
+// POST
 
 export async function createPost(body: IPost) {
   console.log(body)
@@ -26,14 +27,25 @@ export async function createPost(body: IPost) {
 
   return http.post(`post/createPost`, formData).then((data) => data);
 }
+
+// GET
+
 export async function getAllPostByCommunity(id: string) {
   return http.get(`post/getAllPostByCommunity/${id}`).then((data) => data);
 }
 
-export async function updatePost(id: number, body: IPost) {
+// PUT
+
+export async function updatePost(id: string, body: IPost) {
   return http.put(`post/updatePost/${id}`, body).then((data) => data);
 }
 
-export async function deletePost(id: number) {
+export async function likePost(id: string, user: string) {
+  return http.put(`post/likePost/${id}`, { user }).then((data) => data);
+}
+
+// DELETE
+
+export async function deletePost(id: string) {
   return http.delete(`post/deletePost/${id}`).then((data) => data);
 }

@@ -23,11 +23,6 @@ export default function CreateButtons({
     }
   };
 
-  const handleSubmit = () => {
-    // Aquí puedes manejar el envío de las imágenes al backend
-    console.log("Submit images:", images);
-  };
-
   return (
     <div className="flex justify-between ">
       <div className="flex gap-3 items-center">

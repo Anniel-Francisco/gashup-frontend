@@ -95,7 +95,7 @@ export default function CreatePost() {
           <EditorContent editor={editor} className="w-full border rounded-md" />
         </div>
       </div>
-      {images.length > 0 && <ImageCarousel items={images} />}
+      {images.length > 0 && <ImageCarousel key={0} items={images} />}
 
       <div>
         <CreateButtons

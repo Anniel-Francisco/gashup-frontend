@@ -5,14 +5,19 @@ import React from "react";
 interface PostButtonProps {
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   amount: number | null;
+  callback: Function
 }
 
-const PostButton: React.FC<PostButtonProps> = ({ Icon, amount }) => {
+const PostButton: React.FC<PostButtonProps> = ({
+  Icon,
+  amount,
+  callback,
+}: PostButtonProps) => {
   return (
-    <div className="p-3 flex items-center gap-1 cursor-pointer">
+    <button onClick={() => callback()} className="p-3 flex items-center gap-1 cursor-pointer">
       <Icon className="fill-slate-500 w-5 h-5" />
       <p>{amount}</p>
-    </div>
+    </button>
   );
 };
 
