@@ -61,13 +61,13 @@ export default function Options() {
       setAuthModal(!authModal);
       setIsOpen(false);
     } else if (type === "profile") {
-      router.push("/profile");
+      router.push("/profile/posts");
       setIsOpen(false);
     } else if (type === "logout") {
       setIsOpen(false);
       removeSession();
     } else if (type === "settings") {
-      router.push("/settings");
+      router.push("/settings/account");
       setIsOpen(false);
     }
   };
@@ -94,7 +94,7 @@ export default function Options() {
           image={session?.img}
           onClick={showDropDown}
           session={session}
-          styles={{ cursor: "pointer" }}
+          pointer
         />
       ) : (
         <button

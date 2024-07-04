@@ -5,7 +5,6 @@ import { IPost } from "@/types/post";
 import { BiBody } from "react-icons/bi";
 
 export async function createPost(body: IPost) {
-  console.log(body)
   const formData = new FormData();
 
   Object.keys(body).forEach((key) => {

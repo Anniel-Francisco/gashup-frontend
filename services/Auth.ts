@@ -20,7 +20,3 @@ export async function signUp(body: IUser) {
   }
   return http.post(`/user/createUser`, formData).then((data) => data);
 }
-
-export async function updateUser(id: string, body: IUser) {
-  return http.put(`/user/updateUser/${id}`, body).then((data) => data);
-}

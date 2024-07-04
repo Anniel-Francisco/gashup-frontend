@@ -1,6 +1,9 @@
 .topbar {
   height: 60px;
   padding: 4px 20px;
+  z-index: 10;
+  position: sticky;
+  top: 0;
   border-bottom: 1px solid var(--secondary-text);
 }
 
@@ -9,8 +12,7 @@
 }
 
 .input-container {
-    width: 40%;
-  
+  width: 40%;
 }
 
 input {
@@ -22,15 +24,15 @@ input {
   background-color: lightgray;
 }
 
-.dots{
-    padding: 10px;
+.dots {
+  padding: 10px;
 }
 .dots:hover {
-    background-color: var(--default-color);
+  background-color: var(--default-color);
 }
 
-@media (max-width: 768px){
-  .input-container{
+@media (max-width: 1024px) {
+  .input-container {
     display: none;
   }
 }

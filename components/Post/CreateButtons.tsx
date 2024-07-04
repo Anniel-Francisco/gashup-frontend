@@ -25,7 +25,6 @@ export default function CreateButtons({
 
   const handleSubmit = () => {
     // Aquí puedes manejar el envío de las imágenes al backend
-    console.log("Submit images:", images);
   };
 
   return (
@@ -39,7 +38,7 @@ export default function CreateButtons({
 
       <button
         onClick={onSubmit}
-        className="rounded-md p-2 bg-[#16a085] text-white px-5"
+        className="rounded-md outline-none p-2 bg-[#16a085] text-white px-5"
       >
         Post
       </button>

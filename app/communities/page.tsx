@@ -8,7 +8,7 @@ import { IPost } from "@/types/post";
 import CreatePost from "@/components/Post/CreatePost";
 
 export default function Communities() {
-  const [post, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [loading, load] = useGetAllPostByCommunity("666f2c85cdb1f3d0279f892d");
 
   const getPosts = async () => {
@@ -23,13 +23,13 @@ export default function Communities() {
   }, []);
 
   return (
-    <div className="p-3 pr-5">
-      <h1>Communities</h1>
+    <>
       <CreatePost />
-      {post.map((item: IPost) => (
-        // <p key={item._id}>{item.description}</p>
-        <Post key={item._id} data={item} />
-      ))}
-    </div>
+      <div className="flex flex-col w-full pb-2">
+        {posts.map((item, index) => (
+          <Post key={index} data={item} />
+        ))}
+      </div>
+    </>
   );
 }

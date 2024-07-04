@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, ReactElement, cloneElement } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 // ICONS
 import { BiSolidHome } from "react-icons/bi";
 import { IoMdTrendingUp } from "react-icons/io";
@@ -18,7 +17,8 @@ export interface Sidebar {
 }
 
 function SideBar() {
-  const router = usePathname();
+  const pathName = usePathname();
+  const router = useRouter();
   const [links, setLinks] = useState<Sidebar[]>([
     {
       icon: <BiSolidHome fontSize={20} className="icon" />,
@@ -51,37 +51,39 @@ function SideBar() {
       prevLinks.map((link) => ({
         ...link,
         icon: cloneElement(link.icon as ReactElement, {
-          color: link.link === router ? "#fff" : "",
+          color: link.link === pathName ? "#fff" : "",
         }),
       }))
     );
-  }, [router]);
-
+  }, [pathName]);
+  const goToRoute = (route: string) => {
+    router.push(route);
+  };
   return (
     <div
-      style={{ flex: router === "/" || router === "/popular" ? 2 : 1.4 }}
-      className="flex flex-col p-2 gap-4 sidebar"
+      style={{ flex: pathName === "/" || pathName === "/popular" ? 2 : 1.4 }}
+      className="flex flex-col p-2 gap-4 sidebar bg-[#fdfbfb]"
     >
       {links.map((item, index) => {
         return (
-          <Link
-            href={item.link}
+          <div
             key={index}
+            onClick={() => goToRoute(item.link)}
             style={{
-              backgroundColor: item.link === router ? "#16a085" : "",
+              backgroundColor: item.link === pathName ? "#16a085" : "",
             }}
-            className="link flex items-center pt-2 pb-2 pl-4 rounded-lg "
+            className="link flex cursor-pointer items-center pt-2 pb-2 pl-4 rounded-lg "
           >
             {item.icon}
             <span
               className="ml-3 name font-medium"
               style={{
-                color: item.link === router ? "#fff" : "",
+                color: item.link === pathName ? "#fff" : "",
               }}
             >
               {item.name}
             </span>
-          </Link>
+          </div>
         );
       })}
     </div>

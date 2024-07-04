@@ -1,4 +1,4 @@
 export default function Posts() {
-    return <div>Posts</div>;
+    return <div></div>;
   }
   
