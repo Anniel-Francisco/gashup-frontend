@@ -7,7 +7,7 @@ import { GoPerson } from "react-icons/go";
 import { CgLogOut } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
 // SESSION
-import { useAuthProvider } from "@/context/AuthContext";
+import { useAuthProvider } from "@/context/AuthContext ";
 
 // COMPONENTS
 import { Auth } from "./Auth";

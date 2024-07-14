@@ -1,8 +1,6 @@
-
-
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
     --background-color: #fdfbfb;
@@ -22,7 +20,7 @@
 .container{
     min-height: 100vh;
     min-width: 100vw;
-    /* padding: 0 5px ; */
+    padding: 0 5px ;
     background-color: var(--background-color);
 }
 

@@ -9,7 +9,7 @@ import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
 import { ImageCarousel } from "./ImageCarousel";
 import { useLikePost } from "@/hooks/usePost";
-import { useAuthProvider } from "@/context/AuthContext";
+import { useAuthProvider } from "@/context/AuthContext ";
 import { useState } from "react";
 
 export default function Post({ data }: { data: IPost }) {
@@ -34,7 +34,7 @@ export default function Post({ data }: { data: IPost }) {
   };
 
   return (
-    <div className="flex flex-col gap-3 border w-full border-r-2 rounded-md my-3">
+    <div className="flex flex-col gap-3 border w-[100%] md:w-[70%] border-r-2 rounded-md my-3">
       <div className="flex justify-between px-4 pt-4">
         <div className="flex flex-row items-center gap-3">
           <Avatar

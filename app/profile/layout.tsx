@@ -3,7 +3,7 @@ import { useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 // SESSION
-import { useAuthProvider } from "@/context/AuthContext";
+import { useAuthProvider } from "@/context/AuthContext ";
 // COMPONENTS
 import { Avatar } from "@/components/Avatar/Avatar";
 // ICONS
@@ -36,12 +36,7 @@ export default function RootLayout({
     <div className="flex flex-col pt-6 h-full">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Avatar
-          size={60}
-          image={session?.img}
-          session={session}
-          styles={{ borderWidth: 2, borderColor: "#2c3e50" }}
-        />
+        <Avatar size={60} image={session?.img} session={session} styles={{borderWidth: 2, borderColor: '#2c3e50' }} />
         <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
           {session?.name}
         </span>
