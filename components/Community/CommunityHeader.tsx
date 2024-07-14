@@ -1,9 +1,22 @@
 "use client";
 import { Avatar } from "@/components/Avatar/Avatar";
 
-export default function CommunityHeader({ img, name, banner }: any) {
+interface CommunityHeaderProps {
+  img: string;
+  name: string;
+  banner?: string;
+}
+
+export default function CommunityHeader({
+  img,
+  name,
+  banner,
+}: CommunityHeaderProps) {
   return (
-    <div className={`relative flex items-end w-full h-44 bg-cover bg-center pl-8 bg-no-repeat bg-[url(${banner})]`}>
+    <div
+      className={`relative flex items-end w-full h-44 bg-cover bg-center pl-8 bg-no-repeat`}
+      style={{ backgroundImage: banner ? `url(${banner})` : "none" }}
+    >
       <div className="flex items-end gap-2 absolute bottom-[-40px]">
         <Avatar
           size={100}
