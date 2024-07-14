@@ -9,7 +9,7 @@ import { useAlert } from "@/hooks/useAlert";
 import { useCreatePost } from "@/hooks/usePost";
 import { IPost } from "@/types/post";
 import { ImageCarousel } from "./ImageCarousel";
-import { useAuthProvider } from "@/context/AuthContext ";
+import { useAuthProvider } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Avatar } from "../Avatar/Avatar";
 
