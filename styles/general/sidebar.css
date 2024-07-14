@@ -9,20 +9,20 @@
     background-color: var(--effect);
 }
 
-.link:hover > .name{
-    color: white;
+.link:hover > .name {
+  color: white;
 }
 
-.link:hover > .icon{
-    color: white;
-    background-color: transparent;
+.link:hover > .icon {
+  color: white;
+  background-color: transparent;
 }
-.name{
-    color: var(--primary);
+.name {
+  color: var(--primary);
 }
 @media (max-width: 1024px) {
     .sidebar {
       display: none;
     }
   }
-  
+

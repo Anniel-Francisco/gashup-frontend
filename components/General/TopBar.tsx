@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
-// ICONS
-import { HiDotsHorizontal } from "react-icons/hi";
+
+// COMPONENTS
 import Options from "./Options";
+
+// STYLES
 import "@/styles/general/topbar.css";
 export default function TopBar() {
   return (
-    <div className="topbar flex flex-row items-center justify-between">
+    <div className="topbar flex flex-row items-center justify-between w-full bg-[#fdfbfb]">
       <Link href="/" className="app-name">
         <h1 className="font-extrabold text-3xl">GashUp</h1>
       </Link>

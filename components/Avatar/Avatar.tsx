@@ -5,11 +5,23 @@ interface Props {
   size: number;
   image?: Blob | undefined | string | null;
   onClick?: () => void;
+  name?: string;
+  letterSize?: number;
   session?: IUser | null;
+  pointer?: boolean;
   styles?: CSSProperties;
 }
 
-export function Avatar({ size, image, onClick, session, styles }: Props) {
+export function Avatar({
+  size,
+  image,
+  onClick,
+  name,
+  session,
+  styles,
+  letterSize,
+  pointer,
+}: Props) {
   return (
     <div
       className="bg-center bg-cover flex items-center justify-center rounded-full"
@@ -18,13 +30,17 @@ export function Avatar({ size, image, onClick, session, styles }: Props) {
         backgroundImage: image ? `url('${image}')` : "",
         width: `${size}px`,
         height: `${size}px`,
+        cursor: pointer ? "pointer" : "default",
         ...styles,
       }}
       onClick={onClick}
     >
       {!image ? (
-        <span className="text-lg font-semibold text-white">
-          {session?.name.charAt(0)}
+        <span
+          style={{ fontSize: `${letterSize}px` }}
+          className="text-lg font-semibold text-white"
+        >
+          {name ? name.charAt(0) : session ? session?.name.charAt(0) : "G"}
         </span>
       ) : (
         ""

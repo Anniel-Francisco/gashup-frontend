@@ -4,6 +4,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import EditorButtons from "./EditorButtons";
 import CreateButtons from "./CreateButtons";
+import { Spinner } from "../Spinner/Spinner";
 import { useState } from "react";
 import { useAlert } from "@/hooks/useAlert";
 import { useCreatePost } from "@/hooks/usePost";
@@ -12,6 +13,7 @@ import { ImageCarousel } from "./ImageCarousel";
 import { useAuthProvider } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Avatar } from "../Avatar/Avatar";
+import { ToastContainer } from "react-toastify";
 
 export default function CreatePost() {
   const { session, removeSession } = useAuthProvider();
@@ -35,7 +37,7 @@ export default function CreatePost() {
 
   const onSubmit = async () => {
     if (!postData.description) {
-      return showAlert("warning", "You must fill out both fields");
+      return showAlert("warning", "You must write something");
     }
 
     const { response, error } = await load();
@@ -44,14 +46,13 @@ export default function CreatePost() {
         "error",
         error && error.response
           ? error.response.data.message
-          : "You may be experiencing connection problems or the server is down"
+          : "The server may be experiencing problems"
       );
     }
 
     if (response?.data.ok) {
       clearData();
-      console.log("holaaaa");
-      return showAlert("warning", "SENT");
+      return showAlert("success", "SENT");
     } else {
       return showAlert("warning", "NOT SENT");
     }
@@ -74,25 +75,26 @@ export default function CreatePost() {
       },
     },
     onUpdate({ editor }) {
-      console.log(editor.getHTML());
       setPostData((prev) => ({ ...prev, description: editor.getHTML() }));
     },
   });
 
   return (
-    <div className="flex flex-col gap-3 border p-4 w-full border-r-2 mb-2 rounded-md">
+    <div className="flex flex-col gap-3 border p-4 md:w-[70%] w-full border-r-2 rounded-md">
       <EditorButtons editor={editor} />
       <div className="flex flex-row gap-3">
         {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-        <Avatar
-          size={40}
-          image={session?.img}
-          onClick={() => router.push("/profile")}
-          styles={{ cursor: "pointer" }}
-        />
+        <div>
+          <Avatar
+            size={40}
+            image={session?.img}
+            onClick={() => router.push("/profile/posts")}
+            pointer
+          />
+        </div>
 
         <div className="flex flex-col w-full border">
-          <EditorContent editor={editor} className="w-full border rounded-md" />
+          <EditorContent editor={editor} className="w-full outline-none" />
         </div>
       </div>
       {images.length > 0 && <ImageCarousel key={0} items={images} />}
@@ -106,6 +108,10 @@ export default function CreatePost() {
           postData={postData}
         />
       </div>
+      {/* Alert */}
+      <ToastContainer />
+      {/* Spinner */}
+      <Spinner loading={loading} />
     </div>
   );
 }

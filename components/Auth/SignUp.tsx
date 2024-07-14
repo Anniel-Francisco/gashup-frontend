@@ -95,10 +95,10 @@ export default function SignUp({ setAuthState }: Props) {
   const onDeleteImage = () => {
     setImagePreview("");
     setSignUpData({ ...signUpData, img: "" });
-  const fileInput = document.getElementById("file-input") as HTMLInputElement;
-  if (fileInput) {
-    fileInput.value = "";
-  }
+    const fileInput = document.getElementById("file-input") as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   const triggerFileInput = () => {
@@ -120,10 +120,12 @@ export default function SignUp({ setAuthState }: Props) {
             "error",
             error && error.response
               ? error.response.data.message
-              : "You may be experiencing connection problems or the server is down"
+              : "The server may be experiencing problems"
           );
         } else if (response) {
-          let fileInput = document.getElementById("file-input") as HTMLInputElement;
+          let fileInput = document.getElementById(
+            "file-input"
+          ) as HTMLInputElement;
           showAlert("success", response.data.message);
           setSignUpData({
             code: "USER",
@@ -343,7 +345,7 @@ export default function SignUp({ setAuthState }: Props) {
       {/* Alert */}
       <ToastContainer />
       {/* Spinner */}
-      <Spinner loading={loading} />
+      <Spinner loading={loading} message="processing" />
     </div>
   );
 }

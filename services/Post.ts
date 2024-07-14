@@ -6,7 +6,6 @@ import { IPost } from "@/types/post";
 // POST
 
 export async function createPost(body: IPost) {
-  console.log(body)
   const formData = new FormData();
 
   Object.keys(body).forEach((key) => {
@@ -48,4 +47,7 @@ export async function likePost(id: string, user: string) {
 
 export async function deletePost(id: string) {
   return http.delete(`post/deletePost/${id}`).then((data) => data);
+}
+export async function getPostByUserId(id: string) {
+  return http.get(`post/userProfile/${id}`).then((data) => data);
 }
