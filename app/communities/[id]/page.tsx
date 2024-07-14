@@ -15,7 +15,7 @@ export default function CommunityPage() {
   const pathName = usePathname();
   const { session } = useAuthProvider();
 
-  const [community, setCommunity] = useState<ICommunity>({});
+  const [community, setCommunity] = useState<ICommunity>();
   const [loading, load] = useGetCommunity("666f2c85cdb1f3d0279f892d", {
     user_id: session?._id,
   });
