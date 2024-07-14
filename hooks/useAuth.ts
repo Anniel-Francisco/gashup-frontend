@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { logIn, signUp } from "@/services/Auth";
 import { IResponse, IError } from "@/types/response";
-import { useAuthProvider } from "@/context/AuthContext ";
+import { useAuthProvider } from "@/context/AuthContext";
 import { IUser } from "@/types/user";
 
 type UseLogInType = [

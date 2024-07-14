@@ -17,7 +17,7 @@ export interface Sidebar {
   link: string;
 }
 
-function SideBar() {
+export default function SideBar() {
   const router = usePathname();
   const [links, setLinks] = useState<Sidebar[]>([
     {
@@ -87,5 +87,3 @@ function SideBar() {
     </div>
   );
 }
-
-export default SideBar;

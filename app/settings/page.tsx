@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 // SESSION
-import { useAuthProvider } from "@/context/AuthContext ";
+import { useAuthProvider } from "@/context/AuthContext";
 export default function Settings() {
   const pathName = usePathname();
   const router = useRouter();
