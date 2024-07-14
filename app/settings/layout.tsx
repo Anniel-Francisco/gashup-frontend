@@ -16,7 +16,10 @@ export default function RootLayout({
   const pathName = usePathname();
   const { session } = useAuthProvider();
   //
-  const navigation = [{ name: "Account", route: "/settings/account" }];
+  const navigation = [
+    { name: "Account", route: "/settings/account" },
+    { name: "Profile", route: "/settings/profile" },
+  ];
   useEffect(() => {
     if (!session) {
       redirect("/");

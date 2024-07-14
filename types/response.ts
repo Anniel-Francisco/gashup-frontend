@@ -1,7 +1,7 @@
 import { IUser } from "./user";
 
 export interface IResponse {
-  data: IDataResponse;
+  data: IDataResponse | any;
   status: number;
   statusText: string;
 }
@@ -11,7 +11,6 @@ export interface IDataResponse {
   message: string;
   ok: boolean;
   user?: IUser;
-  data?: any
 }
 
 export interface IError {

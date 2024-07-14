@@ -18,6 +18,7 @@
     "@tiptap/react": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",
     "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "next": "14.2.3",
     "prop-types": "^15.8.1",
     "react": "^18",
@@ -28,6 +29,8 @@
     "react-toastify": "^10.0.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

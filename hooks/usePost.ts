@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IResponse, IError } from "@/types/response";
 import { IPost } from "@/types/post";
-import { createPost, getAllPostByCommunity } from "@/services/Post";
+import { createPost, getAllPostByCommunity, getPostByUserId } from "@/services/Post";
 
 type UseReponseType = [
   boolean,
@@ -61,3 +61,27 @@ export const useGetAllPostByCommunity = (id: string): UseReponseType => {
   ];
 };
 
+export const useGetPostByUserId = (id: string): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await getPostByUserId(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+}

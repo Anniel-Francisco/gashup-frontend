@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import "@/app/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 // import type { Metadata } from "next";
@@ -21,25 +20,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [online, setOnline] = useState<boolean>(navigator.onLine);
+  const [online, setOnline] = useState<boolean>(true);
+
   useEffect(() => {
-    function handleOnline() {
-      setOnline(true);
-    }
+    if (typeof window !== "undefined") {
+      setOnline(navigator.onLine);
 
-    function handleOffline() {
-      setOnline(false);
-    }
+      const handleOnline = () => {
+        setOnline(true);
+      };
 
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-    
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
+      const handleOffline = () => {
+        setOnline(false);
+      };
+
+      window.addEventListener("online", handleOnline);
+      window.addEventListener("offline", handleOffline);
+
+      return () => {
+        window.removeEventListener("online", handleOnline);
+        window.removeEventListener("offline", handleOffline);
+      };
+    }
   }, []);
-
   return (
     <html lang="en">
       <head>

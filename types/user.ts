@@ -4,6 +4,7 @@ export interface IUser {
   name: string;
   email: string;
   phone: string;
+  banner?: string | null | Blob;  
   password?: string;
   img?: Blob | string | null;
   isActive?: boolean;

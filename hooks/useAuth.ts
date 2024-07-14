@@ -51,6 +51,13 @@ type UseSingUpType = [
 
 export const useSingUp = (body: IUser): UseSingUpType => {
   const [loading, setLoading] = useState<boolean>(false);
+  const formData = new FormData();
+  formData.append("code", body.code ?? "");
+  formData.append("name", body.name);
+  formData.append("email", body.email);
+  formData.append("password", body.password ?? "");
+  formData.append("phone", body.phone);
+  if (body.img) formData.append("img", body.img);
 
   async function load(): Promise<{
     response: IResponse | null;
@@ -58,7 +65,7 @@ export const useSingUp = (body: IUser): UseSingUpType => {
   }> {
     try {
       setLoading(true);
-      const data = await signUp(body);
+      const data = await signUp(formData);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

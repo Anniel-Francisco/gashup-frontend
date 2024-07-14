@@ -4,6 +4,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import EditorButtons from "./EditorButtons";
 import CreateButtons from "./CreateButtons";
+import { Spinner } from "../Spinner/Spinner";
 import { useState } from "react";
 import { useAlert } from "@/hooks/useAlert";
 import { useCreatePost } from "@/hooks/usePost";
@@ -51,7 +52,7 @@ export default function CreatePost() {
 
     if (response?.data.ok) {
       clearData();
-      return showAlert("warning", "SENT");
+      return showAlert("success", "SENT");
     } else {
       return showAlert("warning", "NOT SENT");
     }
@@ -109,6 +110,8 @@ export default function CreatePost() {
       </div>
       {/* Alert */}
       <ToastContainer />
+      {/* Spinner */}
+      <Spinner loading={loading} />
     </div>
   );
 }

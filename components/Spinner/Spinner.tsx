@@ -29,7 +29,7 @@ export function Spinner({ loading, message , longMessage}: Props) {
         {message ? (
           <span
             style={{ width: longMessage ? "60%" : "100%" }}
-            className="text-white text-2xl font-semibold mt-4 uppercase text-center"
+            className="text-white text-2xl font-semibold mt-4 capitalize text-center"
           >
             {message}
           </span>

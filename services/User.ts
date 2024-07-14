@@ -3,7 +3,7 @@ import http from "@/utils/http";
 // TYPES
 import { IUser } from "@/types/user";
 
-export async function updateUser(id: string, body: IUser) {
+export async function updateUser(id: string, body: FormData) {
   return http.put(`/user/updateUser/${id}`, body).then((data) => data);
 }
 
