@@ -7,7 +7,6 @@ interface PostButtonsProps {
 }
 
 export default function EditorButtons({ editor }: PostButtonsProps) {
-  // if (editor) console.log(editor, "hola");
   return (
     <>
       {editor && (

@@ -3,7 +3,6 @@ import { FaComments } from "react-icons/fa";
 import { FaShare } from "react-icons/fa";
 import PostButton from "./PostButton";
 import { SlOptionsVertical } from "react-icons/sl";
-import Image from "next/image";
 import { IPost } from "@/types/post";
 import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
@@ -12,6 +11,7 @@ import { useLikePost } from "@/hooks/usePost";
 import { useAuthProvider } from "@/context/AuthContext ";
 import { useState } from "react";
 
+// import { useAuthProvider } from "@/context/AuthContext ";
 export default function Post({ data }: { data: IPost }) {
   const router = useRouter();
   const { session, removeSession } = useAuthProvider();
@@ -33,6 +33,12 @@ export default function Post({ data }: { data: IPost }) {
     }
   };
 
+  const goToRoute = () => {
+    if (data._id === session?._id) {
+      router.push("/profile/posts");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3 border w-[100%] md:w-[70%] border-r-2 rounded-md my-3">
       <div className="flex justify-between px-4 pt-4">
@@ -42,7 +48,7 @@ export default function Post({ data }: { data: IPost }) {
             image={
               typeof data.user !== "string" ? data.user?.img?.toString() : ""
             }
-            onClick={() => router.push("/profile")}
+            onClick={goToRoute}
             styles={{ cursor: "pointer" }}
           />
           <div className="flex flex-col">

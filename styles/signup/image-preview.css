@@ -10,7 +10,7 @@
   color: white;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .modal {
     height: 400px;
   }

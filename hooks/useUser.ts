@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { logIn, signUp } from "@/services/Auth";
-import { IResponse, IError } from "@/types/response";
+import { updateUser, getUserById } from "@/services/User";
 import { useAuthProvider } from "@/context/AuthContext ";
+import { IResponse, IError } from "@/types/response";
 import { IUser } from "@/types/user";
 
-type UseLogInType = [
+type UseUpdateUserType = [
   boolean,
   () => Promise<{
     response: IResponse | null;
@@ -12,19 +12,24 @@ type UseLogInType = [
   }>
 ];
 
-type LogiDataType = Pick<IUser, "email" | "password">;
-
-export const useLogIn = (body: LogiDataType): UseLogInType => {
+export const useUpdateUser = (id: string, body: IUser): UseUpdateUserType => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setSessionState } = useAuthProvider();
+  const formData = new FormData();
+  formData.append("code", body.code ?? "");
+  formData.append("email", body.email);
+  formData.append("name", body.name);
+  formData.append("password", body.password ?? "");
+  formData.append("phone", body.phone);
+  formData.append("img", body.img ?? '');
   async function load(): Promise<{
     response: IResponse | null;
     error: IError | null;
   }> {
     try {
       setLoading(true);
-      const data = await logIn(body);
-      setSessionState(data.data.user);
+      const data = await updateUser(id, formData);
+      setSessionState(data.data.update);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };
@@ -41,7 +46,7 @@ export const useLogIn = (body: LogiDataType): UseLogInType => {
   ];
 };
 
-type UseSingUpType = [
+type UseUserByIdType = [
   boolean,
   () => Promise<{
     response: IResponse | null;
@@ -49,15 +54,8 @@ type UseSingUpType = [
   }>
 ];
 
-export const useSingUp = (body: IUser): UseSingUpType => {
+export const useUserById = (id: string): UseUserByIdType => {
   const [loading, setLoading] = useState<boolean>(false);
-  const formData = new FormData();
-  formData.append("code", body.code ?? "");
-  formData.append("name", body.name);
-  formData.append("email", body.email);
-  formData.append("password", body.password ?? "");
-  formData.append("phone", body.phone);
-  if (body.img) formData.append("img", body.img);
 
   async function load(): Promise<{
     response: IResponse | null;
@@ -65,7 +63,7 @@ export const useSingUp = (body: IUser): UseSingUpType => {
   }> {
     try {
       setLoading(true);
-      const data = await signUp(formData);
+      const data = await getUserById(id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

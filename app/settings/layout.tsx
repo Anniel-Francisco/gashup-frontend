@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, ReactNode } from "react";
 import Link from "next/link";
-import { usePathname, redirect, useRouter } from "next/navigation";
+import { usePathname, redirect } from "next/navigation";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext ";
 // COMPONENTS
@@ -15,23 +15,19 @@ export default function RootLayout({
 }>) {
   const pathName = usePathname();
   const { session } = useAuthProvider();
-  const router = useRouter();
   //
   const navigation = [
-    { name: "Posts", route: "/profile/posts" },
-    { name: "Following", route: "/profile/following" },
-    { name: "About", route: "/profile/about" },
+    { name: "Account", route: "/settings/account" },
+    { name: "Profile", route: "/settings/profile" },
   ];
   useEffect(() => {
     if (!session) {
       redirect("/");
     }
   }, [session]);
-  const goToRoute = (route: string) => {
-    router.push(route);
-  };
+
   return (
-    <div className="flex flex-col pt-6 h-full w-full">
+    <div className="flex flex-col pt-6 h-full">
       {/* Header */}
       <div className="flex items-center gap-2">
         <Avatar
@@ -49,10 +45,10 @@ export default function RootLayout({
       <div className="flex navigation-container items-center w-full gap-4 p-2">
         {navigation.map((nav, index) => {
           return (
-            <div
+            <Link
               key={index}
-              onClick={() => goToRoute(nav.route)}
-              className="text-md cursor-pointer font-semibold navigation-text rounded-full"
+              href={nav.route}
+              className="text-md font-semibold navigation-text rounded-full"
             >
               <span className="text-[#2c3e50]">{nav.name}</span>
               {nav.route === pathName ? (
@@ -60,7 +56,7 @@ export default function RootLayout({
               ) : (
                 ""
               )}
-            </div>
+            </Link>
           );
         })}
       </div>

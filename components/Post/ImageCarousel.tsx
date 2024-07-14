@@ -16,7 +16,7 @@ export function ImageCarousel({ items }: Props) {
   return (
     <Carousel animation="slide" swipe navButtonsAlwaysVisible={true}>
       {items.map((item, index) => (
-        <div className="w-full flex items-center justify-center h-96 bg-[#e0dede]">
+        <div key={index} className="w-full flex items-center justify-center h-96 bg-[#e0dede]">
           <Image
             key={index}
             src={item.toString()}

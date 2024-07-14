@@ -69,7 +69,7 @@ export default function LogIn({ onClose, setAuthState }: Props) {
           "error",
           error && error.response
             ? error.response.data.message
-            : "You may be experiencing connection problems or the server is down"
+            : "The server may be experiencing problems"
         );
       } else if (response) {
         setLoginData({
@@ -174,7 +174,7 @@ export default function LogIn({ onClose, setAuthState }: Props) {
       {/* Alert */}
       <ToastContainer />
        {/* Spinner */}
-       <Spinner loading={loading} />
+       <Spinner loading={loading} message="processing"/>
     </div>
   );
 }

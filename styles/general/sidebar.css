@@ -1,21 +1,26 @@
-.link:hover{
-    background-color: var(--effect);
+.sidebar {
+  position: sticky;
+  top: 60px;
+  height: 100%;
+  width: 240px;
+}
+.link:hover {
+  background-color: var(--effect);
 }
 
-.link:hover > .name{
-    color: white;
+.link:hover > .name {
+  color: white;
 }
 
-.link:hover > .icon{
-    color: white;
-    background-color: transparent;
+.link:hover > .icon {
+  color: white;
+  background-color: transparent;
 }
-.name{
-    color: var(--primary);
+.name {
+  color: var(--primary);
 }
-@media (max-width: 768px) {
-    .sidebar {
-      display: none;
-    }
+@media (max-width: 1024px) {
+  .sidebar {
+    display: none;
   }
-  
+}
