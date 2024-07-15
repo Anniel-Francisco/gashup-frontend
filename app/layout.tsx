@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 // };
 
 // SESSION
-import { AuthProvider } from "@/context/AuthContext ";
+import { AuthProvider } from "@/context/AuthContext";
 // COMPONENTS
 import TopBar from "@/components/General/TopBar";
 import SideBar from "@/components/General/SideBar";

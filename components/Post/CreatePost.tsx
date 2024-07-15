@@ -14,13 +14,19 @@ import { useAuthProvider } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Avatar } from "../Avatar/Avatar";
 import { ToastContainer } from "react-toastify";
+import AlertDialog from "../ConfirmationDialog";
 
-export default function CreatePost() {
+interface props {
+  className?: string;
+  community_id: string;
+}
+
+export default function CreatePost({ className, community_id }: props) {
   const { session, removeSession } = useAuthProvider();
   const post: IPost = {
     title: "",
     description: "",
-    community: "666f2c85cdb1f3d0279f892d",
+    community: community_id,
     user: session?._id ? session?._id : null,
     images: [],
   };
@@ -30,16 +36,23 @@ export default function CreatePost() {
   const [images, setImages] = useState([]);
   const [postData, setPostData] = useState<IPost>(post);
   const [loading, load] = useCreatePost(postData);
+  const [openConfimationModal, setOpenConfirmationModal] = useState(false);
 
   const clearData = () => {
+    editor?.commands.setContent("");
     setPostData(post);
+    setImages([])
+  };
+
+  const openConfirmation = () => {
+    if (!postData.description) {
+      return showAlert("warning", "Debes escribir algo");
+    }
+
+    setOpenConfirmationModal(true);
   };
 
   const onSubmit = async () => {
-    if (!postData.description) {
-      return showAlert("warning", "You must write something");
-    }
-
     const { response, error } = await load();
     if (error) {
       return showAlert(
@@ -52,9 +65,11 @@ export default function CreatePost() {
 
     if (response?.data.ok) {
       clearData();
-      return showAlert("success", "SENT");
+      setOpenConfirmationModal(false);
+      return showAlert("success", response?.data.mensaje);
     } else {
-      return showAlert("warning", "NOT SENT");
+      setOpenConfirmationModal(false)
+      return showAlert("warning", response?.data.mensaje);
     }
   };
 
@@ -79,8 +94,22 @@ export default function CreatePost() {
     },
   });
 
+  console.log(postData.description)
+
   return (
-    <div className="flex flex-col gap-3 border p-4 md:w-[70%] w-full border-r-2 rounded-md">
+    <div
+      className={`${className} flex flex-col gap-3 border p-4 border-r-2 rounded-md`}
+    >
+      <AlertDialog
+        setOpen={setOpenConfirmationModal}
+        open={openConfimationModal}
+        titleText={"Publicar post"}
+        confirmationText={"Estas seguro de publicar este post"}
+        cancelButtonText={"Cancelar"}
+        confirmButtonText={"Publicar"}
+        callback={onSubmit}
+      />
+
       <EditorButtons editor={editor} />
       <div className="flex flex-row gap-3">
         {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
@@ -103,7 +132,7 @@ export default function CreatePost() {
         <CreateButtons
           setImages={setImages}
           images={images}
-          onSubmit={onSubmit}
+          onSubmit={openConfirmation}
           setPostData={setPostData}
           postData={postData}
         />

@@ -3,7 +3,7 @@ import { useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, redirect } from "next/navigation";
 // SESSION
-import { useAuthProvider } from "@/context/AuthContext ";
+import { useAuthProvider } from "@/context/AuthContext";
 // COMPONENTS
 import { Avatar } from "@/components/Avatar/Avatar";
 // STYLES

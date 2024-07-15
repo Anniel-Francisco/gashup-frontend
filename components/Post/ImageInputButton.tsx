@@ -11,7 +11,7 @@ export const ImageInputButton = ( {handleFileChange}: any) => {
   };
 
   return (
-    <div>
+    <div className="flex items-center">
       <input
         type="file"
         accept="image/*"

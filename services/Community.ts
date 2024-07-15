@@ -15,6 +15,16 @@ export async function getCommunity(id: string, data: Object) {
   return http.get(`community/getCommunity/${id}`).then((data) => data);
 }
 
+// POST
+
+export async function joinCommunity(id: string, data: Object) {
+  return http.post(`community/joinCommunity/${id}`, data).then((data) => data);
+}
+
+export async function leaveCommunity(id: string, data: Object) {
+  return http.post(`community/leaveCommunity/${id}`, data).then((data) => data);
+}
+
 // PUT
 
 export async function updateCommunity(id: string, body: IPost) {

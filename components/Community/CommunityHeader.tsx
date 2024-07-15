@@ -2,8 +2,8 @@
 import { Avatar } from "@/components/Avatar/Avatar";
 
 interface CommunityHeaderProps {
-  img: string;
-  name: string;
+  img?: string;
+  name?: string;
   banner?: string;
 }
 

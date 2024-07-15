@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { updateUser, getUserById } from "@/services/User";
-import { useAuthProvider } from "@/context/AuthContext ";
+import { useAuthProvider } from "@/context/AuthContext";
 import { IResponse, IError } from "@/types/response";
 import { IUser } from "@/types/user";
 
@@ -21,7 +21,7 @@ export const useUpdateUser = (id: string, body: IUser): UseUpdateUserType => {
   formData.append("name", body.name);
   formData.append("password", body.password ?? "");
   formData.append("phone", body.phone);
-  formData.append("img", body.img ?? '');
+  formData.append("img", body.img ?? "");
   async function load(): Promise<{
     response: IResponse | null;
     error: IError | null;

@@ -1,3 +1,4 @@
+"use client";
 import { AiFillLike } from "react-icons/ai";
 import { FaComments } from "react-icons/fa";
 import { FaShare } from "react-icons/fa";
@@ -9,17 +10,27 @@ import { useRouter } from "next/navigation";
 import { ImageCarousel } from "./ImageCarousel";
 import { useLikePost } from "@/hooks/usePost";
 import { useAuthProvider } from "@/context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// import { useAuthProvider } from "@/context/AuthContext ";
+// import { useAuthProvider } from "@/context/AuthContext";
 export default function Post({ data }: { data: IPost }) {
   const router = useRouter();
   const { session, removeSession } = useAuthProvider();
   const [loading, load] = useLikePost(data?._id ?? "", session?._id ?? "");
+  const [active, setActive] = useState(false);
 
   const [userLikesAmount, setUserLikesAmount] = useState<number>(
     data.user_likes?.length ?? 0
   );
+
+  useEffect(() => {
+    const findLike = data.user_likes?.find((item) => item == session?._id);
+    if (findLike) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, []);
 
   const likePost = async () => {
     const { response, error } = await load();
@@ -27,8 +38,10 @@ export default function Post({ data }: { data: IPost }) {
     if (response?.data.ok) {
       if (response.data.data) {
         setUserLikesAmount(userLikesAmount + 1);
+        setActive(true);
       } else {
         setUserLikesAmount(userLikesAmount - 1);
+        setActive(false);
       }
     }
   };
@@ -52,13 +65,20 @@ export default function Post({ data }: { data: IPost }) {
             styles={{ cursor: "pointer" }}
           />
           <div className="flex flex-col">
-            <p className="font-bold">
+            <div className="font-bold flex items-center flex-row gap-1">
               {typeof data.user !== "string" ? data.user?.name : ""}
-            </p>
+              <span>{"•"}</span>
+              <span className="font-normal text-sm">
+                {typeof data.community !== "string" && data?.community?.name}
+              </span>
+            </div>
             <p className="text-xs">{data.postDate}</p>
           </div>
         </div>
-        <SlOptionsVertical className="w-6 h-6 fill-black cursor-pointer" />
+        {session?._id ==
+          (typeof data.user !== "string" ? data.user?._id : data.user) && (
+          <SlOptionsVertical className="w-6 h-6 fill-black cursor-pointer" />
+        )}
       </div>
       <div
         className="pl-4"
@@ -84,6 +104,7 @@ export default function Post({ data }: { data: IPost }) {
           Icon={AiFillLike}
           amount={userLikesAmount}
           callback={likePost}
+          active={active}
         />
         <PostButton
           Icon={FaComments}

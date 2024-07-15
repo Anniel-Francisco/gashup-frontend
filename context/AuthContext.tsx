@@ -1,4 +1,10 @@
-import { createContext, useState, ReactNode, useContext } from "react";
+import {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
 import type { IUser } from "@/types/user";
 
 interface Props {
@@ -13,28 +19,35 @@ interface SessionState {
 
 const defaultState: SessionState = {
   session: null,
-  setSessionState: (userSession: IUser | null) => {},
+  setSessionState: (userSession: IUser | null) => {}, // Placeholder, should match actual implementation
   removeSession: () => {},
 };
 
 export const AuthContext = createContext<SessionState>(defaultState);
 
 export function AuthProvider({ children }: Props) {
-  const [session, setSession] = useState<IUser | null>(() => {
+  const [session, setSession] = useState<IUser | null>(null);
+
+  useEffect(() => {
     const storedSession = localStorage.getItem("session");
-    return storedSession ? JSON.parse(storedSession) : null;
-  });
+    if (storedSession) {
+      setSession(JSON.parse(storedSession));
+    }
+  }, []); // Only run once on mount
 
   const setSessionState = (userSession: IUser | null) => {
     if (userSession) {
       localStorage.setItem("session", JSON.stringify(userSession));
       setSession(userSession);
+    } else {
+      localStorage.removeItem("session");
+      setSession(null);
     }
   };
 
   const removeSession = () => {
-    setSession(null);
     localStorage.removeItem("session");
+    setSession(null);
   };
 
   return (
