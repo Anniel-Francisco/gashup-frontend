@@ -108,8 +108,8 @@ export default function Post({ data }: { data: IPost }) {
         />
         <PostButton
           Icon={FaComments}
-          amount={Number(data.user_likes?.length)}
-          callback={() => {}}
+          amount={Number(data.comments?.length)}
+          callback={() => router.push(`/post/${data._id}`)}
         />
         <PostButton Icon={FaShare} amount={0} callback={() => {}} />
       </div>

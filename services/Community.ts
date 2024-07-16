@@ -11,7 +11,7 @@ import { IPost } from "@/types/post";
 
 // GET
 
-export async function getCommunity(id: string, data: Object) {
+export async function getCommunity(id: string) {
   return http.get(`community/getCommunity/${id}`).then((data) => data);
 }
 

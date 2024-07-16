@@ -2,6 +2,7 @@ import http from "@/utils/http";
 
 // TYPES
 import { IPost } from "@/types/post";
+import { IComment } from "@/types/community";
 
 // POST
 
@@ -27,10 +28,22 @@ export async function createPost(body: IPost) {
   return http.post(`post/createPost`, formData).then((data) => data);
 }
 
+export async function createComment(body: IComment) {
+  return http.post(`post/comment`, body).then((data) => data);
+}
+
 // GET
 
 export async function getAllPostByCommunity(id: string) {
   return http.get(`post/getAllPostByCommunity/${id}`).then((data) => data);
+}
+
+export async function getPostById(id: string) {
+  return http.get(`post/getPostById/${id}`).then((data) => data);
+}
+
+export async function getCommentsByPost(id: string) {
+  return http.get(`post/getCommentsByPost/${id}`).then((data) => data);
 }
 
 // PUT

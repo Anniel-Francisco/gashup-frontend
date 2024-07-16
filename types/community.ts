@@ -1,3 +1,4 @@
+import { IPost } from "./post";
 import { IUser } from "./user";
 
 export interface ICommunity {
@@ -14,4 +15,12 @@ export interface ICommunity {
   created_at?: string;
   bannedUsers_id: Array<string>;
   communityCategory_id: Array<string>;
+}
+
+export interface IComment {
+  _id?: string;
+  description: string;
+  user_id: string | IUser | null;
+  post_id: string | IPost;
+  commentDate?: string;
 }

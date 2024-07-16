@@ -5,7 +5,7 @@ import MappedPosts from "@/components/Post/MappedPosts";
 export default function Communities() {
   return (
     <>
-      <CreatePost />
+      {/* <CreatePost /> */}
       <MappedPosts className=""/>
     </>
   );

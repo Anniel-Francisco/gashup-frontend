@@ -5,9 +5,9 @@ import StarterKit from "@tiptap/starter-kit";
 import EditorButtons from "./EditorButtons";
 import CreateButtons from "./CreateButtons";
 import { Spinner } from "../Spinner/Spinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAlert } from "@/hooks/useAlert";
-import { useCreatePost } from "@/hooks/usePost";
+import { useCreateComment, useCreatePost } from "@/hooks/usePost";
 import { IPost } from "@/types/post";
 import { ImageCarousel } from "./ImageCarousel";
 import { useAuthProvider } from "@/context/AuthContext";
@@ -15,45 +15,45 @@ import { useRouter } from "next/navigation";
 import { Avatar } from "../Avatar/Avatar";
 import { ToastContainer } from "react-toastify";
 import AlertDialog from "../ConfirmationDialog";
+import { IComment } from "@/types/community";
 
 interface props {
   className?: string;
-  community_id: string;
+  post_id: string;
+  callback: (item: IComment) => void
 }
 
-export default function CreatePost({ className, community_id }: props) {
+export default function CommentInput({ className, post_id, callback }: props) {
   const { session, removeSession } = useAuthProvider();
-  const post: IPost = {
-    title: "",
+  const comment: IComment = {
     description: "",
-    community: community_id,
-    user: session?._id ? session?._id : null,
-    images: [],
+    post_id: post_id,
+    user_id: session?._id ? session?._id : null,
   };
 
   const router = useRouter();
   const [showAlert] = useAlert();
-  const [images, setImages] = useState([]);
-  const [postData, setPostData] = useState<IPost>(post);
-  const [loading, load] = useCreatePost(postData);
-  const [openConfimationModal, setOpenConfirmationModal] = useState(false);
+  const [commentData, setCommentData] = useState<IComment>(comment);
+  const [loading, load] = useCreateComment(commentData);
+
+  useEffect(() => {
+    if (session?._id) {
+      setCommentData({ ...comment, user_id: session?._id });
+    }
+  }, [session]);
 
   const clearData = () => {
-    editor?.commands.setContent("");
-    setPostData(post);
-    setImages([])
-  };
-
-  const openConfirmation = () => {
-    if (!postData.description) {
-      return showAlert("warning", "Debes escribir algo");
-    }
-
-    setOpenConfirmationModal(true);
+    setCommentData(comment);
+    editor?.commands?.setContent("");
   };
 
   const onSubmit = async () => {
+    if (!commentData?.user_id) {
+      return showAlert("warning", "Debes iniciar sesión para comentar");
+    }
+
     const { response, error } = await load();
+
     if (error) {
       return showAlert(
         "error",
@@ -62,13 +62,11 @@ export default function CreatePost({ className, community_id }: props) {
           : "The server may be experiencing problems"
       );
     }
-
     if (response?.data.ok) {
       clearData();
-      setOpenConfirmationModal(false);
+      callback(response.data.data)
       return showAlert("success", response?.data.mensaje);
     } else {
-      setOpenConfirmationModal(false)
       return showAlert("warning", response?.data.mensaje);
     }
   };
@@ -77,39 +75,29 @@ export default function CreatePost({ className, community_id }: props) {
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: "What are you thinking?",
+        placeholder: "Añade un comentario",
         emptyEditorClass:
           "cursor-text before:content-[attr(data-placeholder)] before:absolute before:left-3 before:text-mauve-11 before:opacity-50 before-pointer-events-none",
       }),
     ],
+
     content: "",
     injectCSS: true,
     editorProps: {
       attributes: {
-        class: "p-2 rounded-md",
+        class: "p-2 rounded-lg",
       },
     },
+
     onUpdate({ editor }) {
-      setPostData((prev) => ({ ...prev, description: editor.getHTML() }));
+      setCommentData((prev) => ({ ...prev, description: editor.getHTML() }));
     },
   });
 
   return (
-    <div
-      className={`${className} flex flex-col gap-3 border p-4 border-r-2 rounded-md`}
-    >
-      <AlertDialog
-        setOpen={setOpenConfirmationModal}
-        open={openConfimationModal}
-        titleText={"Publicar post"}
-        confirmationText={"Estas seguro de publicar este post"}
-        cancelButtonText={"Cancelar"}
-        confirmButtonText={"Publicar"}
-        callback={onSubmit}
-      />
-
+    <div className={`${className} flex flex-col gap-3 py-2`}>
       <EditorButtons editor={editor} />
-      <div className="flex flex-row gap-3">
+      <div className="flex flex-row gap-3 items-start">
         {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
         <div>
           <Avatar
@@ -120,25 +108,26 @@ export default function CreatePost({ className, community_id }: props) {
           />
         </div>
 
-        <div className="flex flex-col w-full border">
+        <div className="flex flex-col w-full border rounded-lg">
           <EditorContent editor={editor} className="w-full outline-none" />
         </div>
-      </div>
-      {images.length > 0 && <ImageCarousel key={0} items={images} />}
 
-      <div>
-        <CreateButtons
-          setImages={setImages}
-          images={images}
-          onSubmit={openConfirmation}
-          setPostData={setPostData}
-          postData={postData}
-        />
+        <button
+          onClick={onSubmit}
+          disabled={
+            commentData.description == "<p></p>" || !commentData.description
+          }
+          className={`${
+            commentData.description == "<p></p>" || !commentData.description
+              ? "bg-[#afafaf] cursor-not-allowed"
+              : "bg-[#c258df]"
+          } rounded-md outline-none p-2 text-white px-5`}
+        >
+          Publicar
+        </button>
       </div>
-      {/* Alert */}
-      <ToastContainer />
-      {/* Spinner */}
       <Spinner loading={loading} />
+      <ToastContainer />
     </div>
   );
 }

@@ -45,7 +45,7 @@ export const useGetCommunity = (id: string, objectData: Object): UseReponseType 
   }> {
     try {
       setLoadingCommunity(true);
-      const data = await getCommunity(id, objectData);
+      const data = await getCommunity(id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };
