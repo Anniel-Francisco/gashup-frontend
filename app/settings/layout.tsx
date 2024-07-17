@@ -56,7 +56,7 @@ export default function RootLayout({
           }
         >
           <Avatar
-            size={session?.banner ? 80 : 60}
+            size={session?.banner ? 80 : 65}
             letterSize={30}
             image={session?.img}
             session={session}

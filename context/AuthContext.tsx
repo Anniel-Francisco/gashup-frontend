@@ -26,14 +26,10 @@ const defaultState: SessionState = {
 export const AuthContext = createContext<SessionState>(defaultState);
 
 export function AuthProvider({ children }: Props) {
-  const [session, setSession] = useState<IUser | null>(null);
-
-  useEffect(() => {
+  const [session, setSession] = useState<IUser | null>(() => {
     const storedSession = localStorage.getItem("session");
-    if (storedSession) {
-      setSession(JSON.parse(storedSession));
-    }
-  }, []); // Only run once on mount
+    return storedSession ? JSON.parse(storedSession) : null;
+  });
 
   const setSessionState = (userSession: IUser | null) => {
     if (userSession) {
