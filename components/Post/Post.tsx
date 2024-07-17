@@ -8,7 +8,7 @@ import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
 import { ImageCarousel } from "./ImageCarousel";
 
-import { useAuthProvider } from "@/context/AuthContext ";
+import { useAuthProvider } from "@/context/AuthContext";
 export default function Post({ data }: { data: IPost }) {
   const { session } = useAuthProvider();
   const router = useRouter();

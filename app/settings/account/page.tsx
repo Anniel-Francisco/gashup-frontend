@@ -1,5 +1,10 @@
 "use client";
-import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  MouseEvent as ReactMouseEvent,
+} from "react";
 
 // MUI
 import FormControl from "@mui/material/FormControl";
@@ -10,8 +15,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Button } from "@mui/material";
 //SESSION
-import { useAuthProvider } from "@/context/AuthContext ";
+import { useAuthProvider } from "@/context/AuthContext";
 
 // COMPONENTS
 import { ToastContainer } from "react-toastify";
@@ -39,7 +45,7 @@ export default function Account() {
     email: "",
     password: "",
     phone: "",
-    img: "",
+    img: null,
   });
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -75,6 +81,7 @@ export default function Account() {
         email: response.data.user?.email,
         password: response.data.user?.password,
         phone: response.data.user?.phone,
+        banner: response.data.user?.banner,
       });
       setConfirmPassword(response.data.user?.password);
     }
@@ -93,9 +100,7 @@ export default function Account() {
     const { value } = e.target;
     setUpdateData({ ...updateData, [name]: value });
   };
-  const handleMouseDownPassword = (
-    event: MouseEvent<HTMLButtonElement>
-  ): void => {
+  const handleMouseDownPassword = (event: ReactMouseEvent): void => {
     event.preventDefault();
   };
 
@@ -103,7 +108,7 @@ export default function Account() {
     setUpdateData({ ...updateData, img: image });
   };
   const onDeleteImage = () => {
-    setUpdateData({ ...updateData, img: "" });
+    setUpdateData({ ...updateData, img: null });
   };
   const onUpdate = async () => {
     const keys: (keyof IUser)[] = ["name", "email", "password", "phone"];
@@ -129,8 +134,35 @@ export default function Account() {
       showAlert("warning", "You must fill out all fields");
     }
   };
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onSetImage(file);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = (e: ReactMouseEvent) => {
+    e.stopPropagation();
+    const fileInput = document.getElementById("file-input");
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
   return (
     <div className="flex flex-col">
+      <input
+        id="file-input"
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={handleImageChange}
+      />
       <div>
         {updateData?.img ? (
           <ProfileAvatar
@@ -145,6 +177,7 @@ export default function Account() {
             letterSize={100}
             styles={{ margin: "16px auto" }}
             pointer
+            onClick={triggerFileInput}
           />
         )}
       </div>
@@ -275,12 +308,14 @@ export default function Account() {
         </FormControl>
       </div>
       <div className="w-full flex mb-2 justify-center">
-        <button
+        <Button
           onClick={onUpdate}
-          className="w-[35%] max-md:w-[100%]  text-white p-2 rounded-md btn-auth font-semibold"
+          variant="contained"
+          style={{ backgroundColor: "#2c3e50" }}
+          className="w-[35%] max-md:w-[100%] text-white p-2 rounded-md font-semibold"
         >
           Update
-        </button>
+        </Button>
       </div>
 
       {/* Modal */}
