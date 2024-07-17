@@ -8,6 +8,7 @@ interface Props {
   name?: string;
   letterSize?: number;
   session?: IUser | null;
+  onSetImage?: (image: string | Blob | null | undefined) => void;
   pointer?: boolean;
   styles?: CSSProperties;
 }

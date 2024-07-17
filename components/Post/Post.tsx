@@ -9,10 +9,9 @@ import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
 import { ImageCarousel } from "./ImageCarousel";
 import { useLikePost } from "@/hooks/usePost";
-import { useAuthProvider } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 
-// import { useAuthProvider } from "@/context/AuthContext";
+import { useAuthProvider } from "@/context/AuthContext";
 export default function Post({ data }: { data: IPost }) {
   const router = useRouter();
   const { session, removeSession } = useAuthProvider();
