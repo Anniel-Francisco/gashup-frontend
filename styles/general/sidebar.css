@@ -1,11 +1,12 @@
 .sidebar {
-  position: sticky;
-  top: 60px;
-  height: 100%;
-  width: 240px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
 }
-.link:hover {
-  background-color: var(--effect);
+
+.link:hover{
+    background-color: var(--effect);
 }
 
 .link:hover > .name {
@@ -20,7 +21,8 @@
   color: var(--primary);
 }
 @media (max-width: 1024px) {
-  .sidebar {
-    display: none;
+    .sidebar {
+      display: none;
+    }
   }
-}
+

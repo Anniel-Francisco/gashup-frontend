@@ -23,13 +23,9 @@ export default function CreateButtons({
     }
   };
 
-  const handleSubmit = () => {
-    // Aquí puedes manejar el envío de las imágenes al backend
-  };
-
   return (
-    <div className="flex justify-between ">
-      <div className="flex gap-3 items-center">
+    <div className="flex justify-between items-center">
+      <div className="flex gap-3 items-center h-full">
         <ImageInputButton handleFileChange={handleImageSelection} />
         <button>
           <BiPoll className="fill-slate-500 w-7 h-7" />
@@ -38,7 +34,12 @@ export default function CreateButtons({
 
       <button
         onClick={onSubmit}
-        className="rounded-md outline-none p-2 bg-[#16a085] text-white px-5"
+        disabled={postData.description == "<p></p>" || !postData.description}
+        className={`${
+          postData.description == "<p></p>" || !postData.description
+            ? "bg-[#afafaf] cursor-not-allowed"
+            : "bg-[#c258df]"
+        } rounded-md outline-none p-2 text-white px-5`}
       >
         Post
       </button>
