@@ -138,7 +138,7 @@ export default function CreatePost({ className, community_id }: props) {
       {/* Alert */}
       <ToastContainer />
       {/* Spinner */}
-      <Spinner loading={loading} />
+      <Spinner loading={loading} message="posting..."/>
     </div>
   );
 }

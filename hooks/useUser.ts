@@ -19,9 +19,16 @@ export const useUpdateUser = (id: string, body: IUser): UseUpdateUserType => {
   formData.append("code", body.code ?? "");
   formData.append("email", body.email);
   formData.append("name", body.name);
-  formData.append("password", body.password ?? "");
   formData.append("phone", body.phone);
-  formData.append("img", body.img ?? "");
+  if (body.password) formData.append("password", body.password ?? "");
+  if (body.img) {
+    formData.append("img", body.img);
+  } else {
+    formData.append("img", null);
+  }
+  if (body.banner) {
+    formData.append("banner", body.banner);
+  } 
   async function load(): Promise<{
     response: IResponse | null;
     error: IError | null;

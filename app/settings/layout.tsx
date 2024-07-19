@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, redirect } from "next/navigation";
 // SESSION
@@ -27,22 +28,52 @@ export default function RootLayout({
   }, [session]);
 
   return (
-    <div className="flex flex-col pt-6 h-full">
+    <div className="flex flex-col pt-6 h-full w-full">
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <Avatar
-          size={60}
-          letterSize={30}
-          image={session?.img}
-          session={session}
-          styles={{ borderWidth: 2, borderColor: "#2c3e50" }}
-        />
-        <span className="text-3xl text-[#2c3e50] font-bold">
-          {session?.name}
-        </span>
+      <div className="relative">
+        {session?.banner && (
+          <div className="w-full">
+            <img
+              src={session?.banner ?? ""}
+              alt="banner"
+              style={{
+                width: "100%",
+                height: 100,
+                borderRadius: 10,
+              }}
+            />
+          </div>
+        )}
+        <div
+          className="flex items-center gap-2 mx-auto w-full"
+          style={
+            session?.banner
+              ? {
+                  position: "absolute",
+                  top: 80,
+                }
+              : undefined
+          }
+        >
+          <Avatar
+            size={session?.banner ? 80 : 65}
+            letterSize={30}
+            image={session?.img}
+            session={session}
+            styles={{
+              borderWidth: session?.banner ? 4 : 3,
+              borderColor: session?.banner ? "#fff" : "#2c3e50",
+            }}
+          />
+          <span className="text-3xl text-[#2c3e50] font-bold">
+            {session?.name}
+          </span>
+        </div>
       </div>
-
-      <div className="flex navigation-container items-center w-full gap-4 p-2">
+      <div
+        className="flex navigation-container items-center w-full gap-4 p-2"
+        style={{ marginTop: session?.banner ? "55px" : 0 }}
+      >
         {navigation.map((nav, index) => {
           return (
             <Link
@@ -60,7 +91,7 @@ export default function RootLayout({
           );
         })}
       </div>
-      <div className="pt-2 px-2 flex-grow">{children}</div>
+      <div className="pt-2 flex-grow">{children}</div>
     </div>
   );
 }

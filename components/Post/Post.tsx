@@ -9,7 +9,6 @@ import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
 import { ImageCarousel } from "./ImageCarousel";
 import { useLikePost } from "@/hooks/usePost";
-import { useAuthProvider } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import Settings from "./Settings";
 
@@ -19,7 +18,7 @@ interface props {
   setPosts: Function;
 }
 
-// import { useAuthProvider } from "@/context/AuthContext";
+import { useAuthProvider } from "@/context/AuthContext";
 export default function Post({ data, post, setPosts }: props) {
   const router = useRouter();
   const { session, removeSession } = useAuthProvider();
