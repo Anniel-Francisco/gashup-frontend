@@ -11,9 +11,16 @@ import { ImageCarousel } from "./ImageCarousel";
 import { useLikePost } from "@/hooks/usePost";
 import { useAuthProvider } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
+import Settings from "./Settings";
+
+interface props {
+  data: IPost;
+  post: Array<IPost>;
+  setPosts: Function;
+}
 
 // import { useAuthProvider } from "@/context/AuthContext";
-export default function Post({ data }: { data: IPost }) {
+export default function Post({ data, post, setPosts }: props) {
   const router = useRouter();
   const { session, removeSession } = useAuthProvider();
   const [loading, load] = useLikePost(data?._id ?? "", session?._id ?? "");
@@ -22,6 +29,15 @@ export default function Post({ data }: { data: IPost }) {
   const [userLikesAmount, setUserLikesAmount] = useState<number>(
     data.user_likes?.length ?? 0
   );
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleClickSettings = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseSettings = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     const findLike = data.user_likes?.find((item) => item == session?._id);
@@ -47,9 +63,15 @@ export default function Post({ data }: { data: IPost }) {
   };
 
   const goToRoute = () => {
-    if (data._id === session?._id) {
-      router.push("/profile/posts");
-    }
+    if (typeof data.user !== "string")
+      if (data.user?._id == session?._id) {
+        router.push("/profile/posts");
+      }
+  };
+
+  const goToCommunity = () => {
+    if (typeof data.community !== "string")
+      router.push(`/communities/${data.community._id}`);
   };
 
   return (
@@ -66,9 +88,17 @@ export default function Post({ data }: { data: IPost }) {
           />
           <div className="flex flex-col">
             <div className="font-bold flex items-center flex-row gap-1">
-              {typeof data.user !== "string" ? data.user?.name : ""}
+              <span
+                className="cursor-pointer hover:text-gray-700"
+                onClick={goToRoute}
+              >
+                {typeof data.user !== "string" ? data.user?.name : ""}
+              </span>
               <span>{"•"}</span>
-              <span className="font-normal text-sm">
+              <span
+                className="font-normal text-sm cursor-pointer hover:text-gray-700"
+                onClick={goToCommunity}
+              >
                 {typeof data.community !== "string" && data?.community?.name}
               </span>
             </div>
@@ -77,23 +107,14 @@ export default function Post({ data }: { data: IPost }) {
         </div>
         {session?._id ==
           (typeof data.user !== "string" ? data.user?._id : data.user) && (
-          <SlOptionsVertical className="w-6 h-6 fill-black cursor-pointer" />
+          // <SlOptionsVertical className="w-6 h-6 fill-black cursor-pointer" />
+          <Settings id={data._id ?? ""} post={post} setPosts={setPosts} />
         )}
       </div>
       <div
         className="pl-4"
         dangerouslySetInnerHTML={{ __html: data.description }}
       />
-      {/* 
-        {data?.images?.map((item) => (
-          <Image
-            src={item.toString()} // Display the first image
-            alt="Post image"
-            width={200}
-            height={200}
-            className="w-[100%]"
-          />
-        ))} */}
 
       {data?.images && data?.images?.length > 0 && (
         <ImageCarousel items={data?.images} />

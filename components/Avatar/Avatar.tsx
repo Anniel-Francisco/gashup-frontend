@@ -24,7 +24,7 @@ export function Avatar({
 }: Props) {
   return (
     <div
-      className="bg-center bg-cover flex items-center justify-center rounded-full"
+      className="bg-center bg-cover flex items-center justify-center rounded-full border-[.5px] border-gray-500"
       style={{
         backgroundColor: image ? "#d3d3d3" : "#2c3e50",
         backgroundImage: image ? `url('${image}')` : "",

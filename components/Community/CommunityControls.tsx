@@ -6,6 +6,7 @@ import { useJoinCommunity, useLeaveCommunity } from "@/hooks/useCommunity";
 import { IUser } from "@/types/user";
 import { useEffect, useState } from "react";
 import { Auth } from "../General/Auth";
+import { Button } from "@mui/material";
 
 interface props {
   id: string;
@@ -79,7 +80,7 @@ export default function CommunityControls({ id, members }: props) {
   const remainingMembersCount = (members?.length || 0) - 3;
 
   return (
-    <div className="flex w-full mt-14 justify-between px-3 pb-2 items-center border-b-[1px] border-gray-400 mb-2">
+    <div className="flex w-full mt-14 justify-between px-3 pb-2 items-center">
       <div className="flex flex-row items-center gap-3 ">
         <span>{members?.length ? members?.length : 0} Miembros</span>
 
@@ -94,14 +95,21 @@ export default function CommunityControls({ id, members }: props) {
           )}
         </div>
       </div>
-      <button
+      {/* <button
         onClick={() => (session?._id ? handleJoinLeave() : openLogInModal())}
         className={`${
           joined ? "bg-[#aa40c7]" : "bg-[#afafaf]"
         } p-2 rounded-md text-white`}
       >
         {joined ? "Unido" : "Unirse"}
-      </button>
+      </button> */}
+      <Button
+        variant="contained"
+        color={`${joined ? "primary" : "secondary"}`}
+        onClick={() => (session?._id ? handleJoinLeave() : openLogInModal())}
+      >
+        {joined ? "Unido" : "Unirse"}
+      </Button>
     </div>
   );
 }

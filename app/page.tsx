@@ -1,4 +1,4 @@
 import "@/styles/pages/home.css";
 export default function Home() {
-  return <></>;
+  return <div className="w-full">hola</div>;
 }

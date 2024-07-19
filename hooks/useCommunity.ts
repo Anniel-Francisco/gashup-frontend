@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IResponse, IError } from "@/types/response";
 import { IPost } from "@/types/post";
 import { createPost, getAllPostByCommunity, likePost } from "@/services/Post";
-import { getCommunity, joinCommunity, leaveCommunity } from "@/services/Community";
+import { getCommunity, getHotCommunity, joinCommunity, leaveCommunity } from "@/services/Community";
 
 type UseReponseType = [
   boolean,
@@ -62,7 +62,8 @@ export const useGetCommunity = (id: string, objectData: Object): UseReponseType 
   ];
 };
 
-export const useLikePost = (id: string, userId: string): UseReponseType => {
+export const useGetHotCommunities = (
+): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
     response: IResponse | null;
@@ -70,7 +71,7 @@ export const useLikePost = (id: string, userId: string): UseReponseType => {
   }> {
     try {
       setLoading(true);
-      const data = await likePost(id, userId);
+      const data = await getHotCommunity();
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

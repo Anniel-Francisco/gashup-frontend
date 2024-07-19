@@ -61,8 +61,9 @@ export default function SideBar() {
   };
   return (
     <div
-      style={{ flex: pathName === "/" || pathName === "/popular" ? 2 : 1.4 }}
-      className="flex flex-col p-2 gap-4 sidebar bg-[#fdfbfb]"
+      // style={{ flex: pathName === "/" || pathName === "/popular" ? 2 : 1.4 }}
+      style={{ flex: 2}}
+      className="flex flex-col p-2 gap-4 sidebar bg-[#fdfbfb] sticky"
     >
       {links.map((item, index) => {
         return (

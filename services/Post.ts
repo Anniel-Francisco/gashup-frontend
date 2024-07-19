@@ -1,8 +1,8 @@
 import http from "@/utils/http";
 
 // TYPES
-import { IPost } from "@/types/post";
-import { IComment } from "@/types/community";
+import { IPost, ISubComment } from "@/types/post";
+import { IComment } from "@/types/post";
 
 // POST
 
@@ -32,10 +32,17 @@ export async function createComment(body: IComment) {
   return http.post(`post/comment`, body).then((data) => data);
 }
 
+export async function responseComment(body: ISubComment) {
+  return http.post(`post/responseComment`, body).then((data) => data);
+}
+
 // GET
 
 export async function getAllPostByCommunity(id: string) {
-  return http.get(`post/getAllPostByCommunity/${id}`).then((data) => data);
+  const noCache = `noCache=${new Date().getTime()}`;
+  return http
+    .get(`post/getAllPostByCommunity/${id}??${noCache}`)
+    .then((data) => data);
 }
 
 export async function getPostById(id: string) {
@@ -46,6 +53,10 @@ export async function getCommentsByPost(id: string) {
   return http.get(`post/getCommentsByPost/${id}`).then((data) => data);
 }
 
+export async function getSubCommentsByComment(id: string) {
+  return http.get(`post/getSubCommentsByComment/${id}`).then((data) => data);
+}
+
 // PUT
 
 export async function updatePost(id: string, body: IPost) {
@@ -54,6 +65,10 @@ export async function updatePost(id: string, body: IPost) {
 
 export async function likePost(id: string, user: string) {
   return http.put(`post/likePost/${id}`, { user }).then((data) => data);
+}
+
+export async function likeComment(id: string, user: string) {
+  return http.put(`post/likeComment/${id}`, { user }).then((data) => data);
 }
 
 // DELETE

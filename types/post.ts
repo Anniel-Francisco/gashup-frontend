@@ -1,4 +1,4 @@
-import { IComment, ICommunity } from "./community";
+import { ICommunity } from "./community";
 import { IUser } from "./user";
 interface ITypePost{
     name: string;
@@ -15,3 +15,24 @@ export interface IPost {
   images?: (File | Blob | string)[] | null;
   postDate?: string;
 }
+
+export interface IComment {
+  _id?: string;
+  description: string;
+  user_id: string | IUser | null;
+  post_id: string | IPost;
+  commentDate?: string;
+  user_likes?: Array<string>;
+  subComments?: Array<ISubComment>
+}
+
+export interface ISubComment {
+  _id?: string;
+  description: string;
+  user_id: string | IUser | null;
+  comment_id: string | IComment;
+  commentDate?: string;
+  user_likes?: Array<string>;
+}
+
+

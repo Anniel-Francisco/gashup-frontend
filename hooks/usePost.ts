@@ -1,9 +1,19 @@
 import { useState } from "react";
 import { IResponse, IError } from "@/types/response";
-import { IPost } from "@/types/post";
-import { createComment, createPost, getAllPostByCommunity, getPostById, likePost } from "@/services/Post";
+import { IPost, ISubComment } from "@/types/post";
+import {
+  createComment,
+  createPost,
+  deletePost,
+  getAllPostByCommunity,
+  getPostById,
+  getSubCommentsByComment,
+  likeComment,
+  likePost,
+  responseComment,
+} from "@/services/Post";
 import { getPostByUserId } from "@/services/Post";
-import { IComment } from "@/types/community";
+import { IComment } from "@/types/post";
 import { getCommentsByPost } from "@/services/Post";
 
 type UseReponseType = [
@@ -48,6 +58,31 @@ export const useCreateComment = (body: IComment): UseReponseType => {
     try {
       setLoading(true);
       const data = await createComment(body);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useCreateSubComment = (body: ISubComment): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await responseComment(body);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };
@@ -112,7 +147,7 @@ export const useGetPostByUserId = (id: string): UseReponseType => {
     //methods
     load,
   ];
-}
+};
 
 export const useGetCommentsByPost = (id: string): UseReponseType => {
   const [loadingComments, setLoadingComments] = useState<boolean>(false);
@@ -136,6 +171,31 @@ export const useGetCommentsByPost = (id: string): UseReponseType => {
     loadingComments,
     //methods
     loadComments,
+  ];
+};
+
+export const useGetSubCommentsByComment = (id: string): UseReponseType => {
+  const [loadingSubComments, setLoadingSubComments] = useState<boolean>(false);
+  async function loadSubComments(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoadingSubComments(true);
+      const data = await getSubCommentsByComment(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoadingSubComments(false);
+    }
+  }
+
+  return [
+    //states
+    loadingSubComments,
+    //methods
+    loadSubComments,
   ];
 };
 
@@ -164,7 +224,6 @@ export const useGetPostById = (id: string): UseReponseType => {
   ];
 };
 
-
 export const useLikePost = (id: string, userId: string): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
@@ -174,6 +233,56 @@ export const useLikePost = (id: string, userId: string): UseReponseType => {
     try {
       setLoading(true);
       const data = await likePost(id, userId);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useLikeComment = (id: string, userId: string): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await likeComment(id, userId);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useDeletePost = (id: string): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await deletePost(id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

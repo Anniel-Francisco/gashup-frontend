@@ -8,11 +8,12 @@ import { IPost } from "@/types/post";
 
 interface props {
     className: string;
+    _id: string
 }
 
-export default function MappedPosts({ className }: props) {
+export default function MappedPosts({ className, _id }: props) {
   const [post, setPosts] = useState<IPost[]>([]);
-  const [loading, load] = useGetAllPostByCommunity("666f2c85cdb1f3d0279f892d");
+  const [loading, load] = useGetAllPostByCommunity(_id);
 
   const getPosts = async () => {
     const { response, error } = await load();
@@ -28,7 +29,7 @@ export default function MappedPosts({ className }: props) {
   return (
     <div className={className}>
       {post.map((item: IPost) => (
-        <Post key={item._id} data={item} />
+        <Post key={item._id} data={item} post={post} setPosts={setPosts} />
       ))}
     </div>
   );

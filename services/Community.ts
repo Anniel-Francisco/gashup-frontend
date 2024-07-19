@@ -15,6 +15,10 @@ export async function getCommunity(id: string) {
   return http.get(`community/getCommunity/${id}`).then((data) => data);
 }
 
+export async function getHotCommunity() {
+  return http.get(`community/hotCommunity`).then((data) => data);
+}
+
 // POST
 
 export async function joinCommunity(id: string, data: Object) {

@@ -11,6 +11,8 @@ import { useGetCommunity, useJoinCommunity } from "@/hooks/useCommunity";
 import { ICommunity } from "@/types/community";
 import CreatePost from "@/components/Post/CreatePost";
 import { IUser } from "@/types/user";
+import { Spinner } from "@/components/Spinner/Spinner";
+import { Divider } from "@mui/material";
 
 export default function CommunityPage({ params }: { params: { id: string } }) {
   const { session } = useAuthProvider();
@@ -39,8 +41,18 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
       ? (community.members_id as IUser[])
       : [];
 
+  const admins =
+    Array.isArray(community?.admins_id) &&
+    (community.admins_id as IUser[]).every(
+      (member) => typeof member === "object"
+    )
+      ? (community.admins_id as IUser[])
+      : [];
+
   return (
     <div className="flex flex-col min-h-screen">
+      <Spinner loading={loading} />
+
       {/* Header */}
       <CommunityHeader
         name={community?.name}
@@ -53,20 +65,31 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
         <div className="w-full md:w-[70%]">
           {/* Controls */}
           <CommunityControls id={params.id} members={members} />
+          <Divider
+            component="li"
+            className="flex justify-center items-center mb-3"
+          />
+
           <div className="w-full pr-2">
             {/* Create post */}
             <CreatePost className="w-full" community_id={params.id} />
             {/* Posts */}
-            <MappedPosts className="w-full" />
+            <MappedPosts className="w-full" _id={params.id} />
           </div>
         </div>
 
         <div className="hidden md:flex flex-col gap-2 w-[30%] border-l-1 border-black">
-          <CommunityDescription
-            name={community?.name}
-            description={community?.description}
-          />
-          <MembersBar />
+          <div className="flex flex-col gap-2 sticky top-12 overflow-y-scroll">
+            <CommunityDescription
+              name={community?.name}
+              description={community?.description}
+              owner={community?.owner_id}
+              admins={admins}
+              members={members}
+              rank={community?.rank ?? 0}
+            />
+            <MembersBar />
+          </div>
         </div>
       </div>
     </div>
