@@ -1,13 +1,38 @@
+"use client"
 import "@/styles/general/communities.css";
 import CreatePost from "@/components/Post/CreatePost";
 import MappedPosts from "@/components/Post/MappedPosts";
+import { useGetCommunities } from "@/hooks/useCommunity";
+import { useEffect, useState } from "react";
+import { ICommunity } from "@/types/community";
+import CommunityCard from "@/components/Community/CommunityCard";
+import { Spinner } from "@/components/Spinner/Spinner";
 
 export default function Communities() {
+  const [loading, load] = useGetCommunities();
+  const [communities, setCommunities] = useState<Array<ICommunity>>([]);
+
+  useEffect(() => {
+    getCommunity();
+  }, []);
+
+  const getCommunity = async () => {
+    const { response, error } = await load();
+    if (response?.data.ok) {
+      setCommunities(response.data.data);
+    }
+  };
+
   return (
     <div className="w-full">
-      {/* <CreatePost /> */}
+      <Spinner loading={loading} />
+      <h1 className="font-bold text-3xl my-5">Comunidades</h1>
+      <div className="w-full flex flex-col gap-2">
+      {communities.map((item: ICommunity) => (
+        <CommunityCard key={item._id} data={item} />
+      ))}
+      </div>
       {/* <MappedPosts className="" _i/> */}
-      hola
     </div>
   );
 }

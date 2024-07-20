@@ -1,5 +1,5 @@
 .rightbar {
-  flex: 3.5;
+  /* flex: 3.5; */
 }
 
 .rightbar-element {
@@ -40,7 +40,7 @@
 }
 
 .join-button {
-  padding: 2px 20px;
+  /* padding: 2px 20px; */
   background-color: var(--primary);
   color: white;
   font-weight: 600;
@@ -52,7 +52,7 @@
 
 
 @media (max-width: 1024px) {
-  .rightbar {
+  /* .rightbar {
     display: none;
-  }
+  } */
 }

@@ -1,12 +1,12 @@
 "use client";
 import { useRouter, usePathname } from "next/navigation";
-// STYLES
 import "@/styles/general/rightbar.css";
 import { useGetHotCommunities } from "@/hooks/useCommunity";
 import { useEffect, useState } from "react";
 import { ICommunity } from "@/types/community";
 import { Avatar } from "../Avatar/Avatar";
 import { Button } from "@mui/material";
+
 export interface Rightbar {
   image?: string;
   name: string;
@@ -17,7 +17,7 @@ export default function RightBar() {
   const router = useRouter();
   const path = usePathname();
   const [loading, load] = useGetHotCommunities();
-  const [communities, setCommnuties] = useState<Array<ICommunity>>([]);
+  const [communities, setCommunities] = useState<Array<ICommunity>>([]);
 
   useEffect(() => {
     getHotCommunities();
@@ -27,18 +27,9 @@ export default function RightBar() {
     const { response, error } = await load();
     if (response?.data.ok) {
       console.log(response.data.data, "FAMOUS");
-      setCommnuties(response.data.data);
+      setCommunities(response.data.data);
     }
   };
-
-  // const data: Rightbar[] = [
-  //   { name: "Vegeta777", followers: 1000000 },
-  //   { name: "Save The World", followers: 235000 },
-  //   { name: "Anime", followers: 220000 },
-  //   { name: "Anime Zone", followers: 200000 },
-  //   { name: "Food War", followers: 300000 },
-  //   { name: "Sport", followers: 5000000 },
-  // ];
 
   function formatNumber(number: number) {
     return number.toLocaleString("en-US");
@@ -50,50 +41,53 @@ export default function RightBar() {
 
   function RightBar() {
     return (
-      <div className="rightbar pt-2">
-        <div className="rightbar-element p-4 max-md">
-          <h3 className="rightbar-head text-lg font-semibold">
-            Comunidades mas famosas
-          </h3>
-          <div className="rightbar-item-container overflow-y-scroll pr-1">
-            {communities.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className="flex flex-row justify-between items-center
-                   mt-2 pt-2 pr-2 pb-2"
-                >
-                  <div className="flex flex-row gap-4 items-center">
-                    <Avatar
-                      size={50}
-                      image={item?.img?.toString()}
-                      onClick={() => goToCommunity(item?._id ?? "")}
-                      styles={{ cursor: "pointer" }}
-                    />
-                    <div className="text-span flex flex-col">
-                      <span className="font-medium">{item.name}</span>
-                      <span className="font-light">
-                        {item.members_id?.length} Miembros
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      href={`/communities/${item._id}`}
-                    >
-                      Unirte
-                    </Button>
-                  </div>
+      <div className="hidden sm:flex flex-col bg-gray-200 w-[25%] px-2 py-4 md:p-4 ">
+        <h3 className="rightbar-head text-md md:text-lg font-semibold mb-5">
+          Comunidades más famosas
+        </h3>
+        <div className="rightbar-item-container overflow-y-scroll pr-1 flex flex-col gap-3">
+          {communities.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-row justify-between items-center"
+            >
+              <div className="flex flex-row gap-3 items-center">
+                <Avatar
+                  className="w-8 h-8 md:w-10 md:h-10 lg:h-12 lg:w-12 rounded-full"
+                  image={item?.img?.toString()}
+                  onClick={() => goToCommunity(item?._id ?? "")}
+                  styles={{ cursor: "pointer" }}
+                />
+                <div className="text-span flex flex-col">
+                  <span
+                    onClick={() => goToCommunity(item?._id ?? "")}
+                    className="text-xs md:text-sm lg:text-md font-medium hover:text-gray-700 cursor-pointer"
+                  >
+                    {item.name}
+                  </span>
+                  <span className="text-xs md:text-sm lg:text-md font-light">
+                    {item.members_id?.length} Miembros
+                  </span>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+              <div className="ml-3">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  href={`/communities/${item._id}`}
+                >
+                  <span className="text-sm">
+                  Unirte
+                  </span>
+                </Button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
   }
+
   return path === "/" || path === "/popular" || path === "/communities" ? (
     <RightBar />
   ) : (

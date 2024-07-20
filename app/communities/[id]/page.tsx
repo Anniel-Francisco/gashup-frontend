@@ -22,7 +22,7 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
     user_id: session?._id,
   });
 
-  const getPosts = async () => {
+  const getCommunity = async () => {
     const { response, error } = await load();
     if (response?.data.ok) {
       setCommunity(response.data.data);
@@ -30,7 +30,7 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
   };
 
   useEffect(() => {
-    getPosts();
+    getCommunity();
   }, []);
 
   const members =

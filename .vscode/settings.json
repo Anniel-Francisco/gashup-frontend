@@ -1,3 +1,7 @@
 {
-  "conventionalCommits.scopes": ["Post", "Community, Post, RightBar"]
+  "conventionalCommits.scopes": [
+    "Post",
+    "Community, Post, RightBar",
+    "Community"
+  ]
 }

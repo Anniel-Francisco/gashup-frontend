@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 // TYPES
 import { IUser } from "@/types/user";
 interface Props {
-  size: number;
+  size?: number;
   image?: Blob | undefined | string | null;
   onClick?: () => void;
   name?: string;
@@ -11,6 +11,7 @@ interface Props {
   onSetImage?: (image: string | Blob | null | undefined) => void;
   pointer?: boolean;
   styles?: CSSProperties;
+  className?: string;
 }
 
 export function Avatar({
@@ -22,10 +23,11 @@ export function Avatar({
   styles,
   letterSize,
   pointer,
+  className
 }: Props) {
   return (
     <div
-      className="bg-center bg-cover flex items-center justify-center rounded-full border-[.5px] border-gray-500"
+      className={`${className} bg-center bg-cover flex items-center justify-center rounded-full border-[.5px] border-gray-500`}
       style={{
         backgroundColor: image ? "#d3d3d3" : "#2c3e50",
         backgroundImage: image ? `url('${image}')` : "",
