@@ -119,14 +119,14 @@ export default function SignUp({ setAuthState }: Props) {
           showAlert(
             "error",
             error && error.response
-              ? error.response.data.message
+              ? error.response.data.mensaje
               : "The server may be experiencing problems"
           );
         } else if (response) {
           let fileInput = document.getElementById(
             "file-input"
           ) as HTMLInputElement;
-          showAlert("success", response.data.message);
+          showAlert("success", response.data.mensaje);
           setSignUpData({
             code: "USER",
             name: "",
@@ -156,14 +156,14 @@ export default function SignUp({ setAuthState }: Props) {
         <FaArrowLeftLong
           fontSize={25}
           onClick={setAuthState}
-          className="icon p-1 cursor-pointer rounded-full"
+          className="hover:bg-[#9b26b6] hover:text-white p-1 cursor-pointer rounded-full"
         />
       </div>
       {/* Content */}
       <div className="flex flex-col flex-grow justify-evenly px-8 max-md:px-6">
         {/* Head */}
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-3xl primary">Sign Up</h2>
+          <h2 className="font-bold text-3xl text-[#9b26b6]">Sign Up</h2>
         </div>
         {/* Form */}
         <div className="flex flex-col">
@@ -210,6 +210,7 @@ export default function SignUp({ setAuthState }: Props) {
             <TextField
               id="username-signup"
               label="Username"
+              inputProps={{ maxLength: 30 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

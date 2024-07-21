@@ -1,0 +1,19 @@
+.community-chats {
+  height: calc(100vh - 151px);
+  overflow-y: auto;
+}
+.community-chats::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.community-chatsr::-webkit-scrollbar-thumb {
+  background-color: var(--effect);
+  border-radius: 20px;
+}
+.community-chats::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.community-chats::-webkit-scrollbar-thumb {
+  background-color: var(--effect);
+}

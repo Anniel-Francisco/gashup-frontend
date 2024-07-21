@@ -1,10 +1,7 @@
 "use client";
 import { useAuthProvider } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
-import {
-  useGetCommentsByPost,
-  useGetPostById,
-} from "@/hooks/usePost";
+import { useGetCommentsByPost, useGetPostById } from "@/hooks/usePost";
 import { IPost, ISubComment } from "@/types/post";
 import Post from "@/components/Post/Post";
 import CommentInput from "@/components/Comments/CommentInput";
@@ -46,14 +43,14 @@ export default function PostPage({ params }: { params: { id: string } }) {
     }
   };
 
-    // const getSubCommentsByComment = async () => {
-    //   const { response, error } = await loadSubComments();
-    //   if (response?.data.ok) {
-    //     setSubComments(response.data.data);
-    //   } else {
-    //     setSubComments([]);
-    //   }
-    // };
+  // const getSubCommentsByComment = async () => {
+  //   const { response, error } = await loadSubComments();
+  //   if (response?.data.ok) {
+  //     setSubComments(response.data.data);
+  //   } else {
+  //     setSubComments([]);
+  //   }
+  // };
 
   const addNewComment = (item: IComment) => {
     getPost();
@@ -73,7 +70,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
   }, []);
 
   const toggleSubCommentActive = (commentId: string) => {
-       setSubCommentActive((prev) => (prev === commentId ? null : commentId));
+    setSubCommentActive((prev) => (prev === commentId ? null : commentId));
   };
 
   return (
@@ -85,8 +82,9 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
       <div className="flex flex-col gap-3 mt-3">
         {comments.length > 0 ? (
-          comments.map((item) => (
+          comments.map((item, index) => (
             <Comment
+              key={index}
               item={item}
               subCommentActive={subCommentActive}
               toggleSubCommentActive={toggleSubCommentActive}

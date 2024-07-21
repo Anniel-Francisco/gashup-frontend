@@ -61,11 +61,8 @@ export default function Post({ data, post, setPosts }: props) {
     }
   };
 
-  const goToRoute = () => {
-    if (typeof data.user !== "string")
-      if (data.user?._id == session?._id) {
-        router.push("/profile/posts");
-      }
+  const goToRoute = (id: string) => {
+    router.push(`/user/${id}`);
   };
 
   const goToCommunity = () => {
@@ -82,7 +79,7 @@ export default function Post({ data, post, setPosts }: props) {
             image={
               typeof data.user !== "string" ? data.user?.img?.toString() : ""
             }
-            onClick={goToRoute}
+            onClick={() => goToRoute(data._id ?? "")}
             styles={{ cursor: "pointer" }}
           />
           <div className="flex flex-col">
@@ -128,7 +125,9 @@ export default function Post({ data, post, setPosts }: props) {
         />
         <PostButton
           Icon={FaComments}
-          amount={Number(data.comments?.length)}
+          amount={
+            !Number(data.comments?.length) ? 0 : Number(data.comments?.length)
+          }
           callback={() => router.push(`/post/${data._id}`)}
         />
         <PostButton Icon={FaShare} amount={0} callback={() => {}} />

@@ -68,7 +68,7 @@ export default function LogIn({ onClose, setAuthState }: Props) {
         showAlert(
           "error",
           error && error.response
-            ? error.response.data.message
+            ? error.response.data.mensaje
             : "The server may be experiencing problems"
         );
       } else if (response) {
@@ -87,13 +87,13 @@ export default function LogIn({ onClose, setAuthState }: Props) {
         <IoCloseOutline
           fontSize={25}
           onClick={onClose}
-          className="icon cursor-pointer rounded-full"
+          className="hover:bg-[#9b26b6] hover:text-white cursor-pointer rounded-full"
         />
       </div>
       {/* Content */}
       <div className="flex flex-col flex-grow justify-evenly px-8 max-md:px-6">
         {/* Head */}
-        <h2 className="font-bold text-3xl primary">Log In</h2>
+        <h2 className="font-bold text-3xl text-[#9b26b6]">Log In</h2>
         {/* Form */}
         <div className="flex flex-col">
           <FormControl className="gap-2">
@@ -165,6 +165,7 @@ export default function LogIn({ onClose, setAuthState }: Props) {
             <span
               onClick={setAuthState}
               className="primary hover:underline cursor-pointer font-bold"
+              style={{color: '#9b26b6'}}
             >
               Sign Up
             </span>

@@ -4,7 +4,7 @@ import { useAuthProvider } from "@/context/AuthContext";
 import { IResponse, IError } from "@/types/response";
 import { IUser } from "@/types/user";
 
-type UseUpdateUserType = [
+type UseUserType = [
   boolean,
   () => Promise<{
     response: IResponse | null;
@@ -12,7 +12,7 @@ type UseUpdateUserType = [
   }>
 ];
 
-export const useUpdateUser = (id: string, body: IUser): UseUpdateUserType => {
+export const useUpdateUser = (id: string, body: IUser): UseUserType => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setSessionState } = useAuthProvider();
   const formData = new FormData();
@@ -28,7 +28,7 @@ export const useUpdateUser = (id: string, body: IUser): UseUpdateUserType => {
   }
   if (body.banner) {
     formData.append("banner", body.banner);
-  } 
+  }
   async function load(): Promise<{
     response: IResponse | null;
     error: IError | null;
@@ -53,15 +53,7 @@ export const useUpdateUser = (id: string, body: IUser): UseUpdateUserType => {
   ];
 };
 
-type UseUserByIdType = [
-  boolean,
-  () => Promise<{
-    response: IResponse | null;
-    error: IError | null;
-  }>
-];
-
-export const useUserById = (id: string): UseUserByIdType => {
+export const useUserById = (id: string): UseUserType => {
   const [loading, setLoading] = useState<boolean>(false);
 
   async function load(): Promise<{

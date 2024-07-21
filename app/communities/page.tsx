@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import "@/styles/general/communities.css";
 import CreatePost from "@/components/Post/CreatePost";
 import MappedPosts from "@/components/Post/MappedPosts";
@@ -25,12 +25,12 @@ export default function Communities() {
 
   return (
     <div className="w-full">
-      <Spinner loading={loading} />
+      <Spinner loading={loading} message="cargando" />
       <h1 className="font-bold text-3xl my-5">Comunidades</h1>
       <div className="w-full flex flex-col gap-2">
-      {communities.map((item: ICommunity) => (
-        <CommunityCard key={item._id} data={item} />
-      ))}
+        {communities.map((item: ICommunity) => (
+          <CommunityCard key={item._id} data={item} />
+        ))}
       </div>
       {/* <MappedPosts className="" _i/> */}
     </div>

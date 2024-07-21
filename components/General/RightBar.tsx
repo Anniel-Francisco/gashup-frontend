@@ -20,13 +20,12 @@ export default function RightBar() {
   const [communities, setCommunities] = useState<Array<ICommunity>>([]);
 
   useEffect(() => {
-    getHotCommunities();
+    if (path !== "/chats") getHotCommunities();
   }, []);
 
   const getHotCommunities = async () => {
     const { response, error } = await load();
     if (response?.data.ok) {
-      console.log(response.data.data, "FAMOUS");
       setCommunities(response.data.data);
     }
   };
@@ -76,9 +75,7 @@ export default function RightBar() {
                   color="primary"
                   href={`/communities/${item._id}`}
                 >
-                  <span className="text-sm">
-                  Unirte
-                  </span>
+                  <span className="text-sm">Unirte</span>
                 </Button>
               </div>
             </div>

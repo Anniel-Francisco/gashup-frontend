@@ -64,9 +64,10 @@ export function BannerPreview({ image, modal, onClose }: Props) {
     } else {
       const { response, error } = await load();
       if (error) {
-        showAlert("error", error.response.data.message);
+        showAlert("error", error.response.data.mensaje);
       } else if (response) {
-        showAlert("success", response.data.message);
+        showAlert("success", response.data.mensaje);
+        onClose();
       }
     }
   };
@@ -80,7 +81,7 @@ export function BannerPreview({ image, modal, onClose }: Props) {
             <IoCloseOutline
               fontSize={25}
               onClick={onClose}
-              className="icon cursor-pointer rounded-full"
+              className="hover:bg-[#9b26b6] hover:text-white cursor-pointer rounded-full"
             />
           </span>
         </div>
@@ -96,7 +97,7 @@ export function BannerPreview({ image, modal, onClose }: Props) {
               />
             </div>
           ) : (
-            <span className="text-xl font-semibold">Select an image</span>
+            <span className="text-xl font-semibold">Selecciona una imagen</span>
           )}
         </div>
         <div className="mt-4 w-full">
@@ -104,7 +105,7 @@ export function BannerPreview({ image, modal, onClose }: Props) {
             onClick={onUpdate}
             className="w-full"
             variant="contained"
-            style={{ backgroundColor: "#2c3e50" }}
+            style={{ backgroundColor: "#9b26b6" }}
           >
             Update
           </Button>
