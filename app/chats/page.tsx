@@ -6,7 +6,7 @@ import { useAuthProvider } from "@/context/AuthContext";
 import { useGetCommunityChats, useGetChats } from "@/hooks/useChats";
 // TYPES
 import { IDataResponse } from "@/types/response";
-import { ICommunityChats } from "@/types/chats";
+import { IChat, ICommunityChats } from "@/types/chats";
 // COMPONENTS
 import { CommunityChats } from "@/components/Chats/CommunityChats";
 import { Chat } from "@/components/Chats/Chat";
@@ -17,6 +17,7 @@ export default function Chats() {
   const { session } = useAuthProvider();
   const [data, setData] = useState<IDataResponse | null>(null);
   const [search, setSearch] = useState<string>("");
+  const [chats, setChats] = useState<IChat[] | null>(null);
   const [selectedChat, setSelectedChat] = useState<ICommunityChats | null>(
     null
   );
@@ -39,6 +40,7 @@ export default function Chats() {
   const setChat = (selectedChat: ICommunityChats) => {
     setSelectedChat(selectedChat);
   };
+
   useEffect(() => {
     getCommunityChats();
   }, []);

@@ -20,7 +20,7 @@ export default function RightBar() {
   const [communities, setCommunities] = useState<Array<ICommunity>>([]);
 
   useEffect(() => {
-    if (path !== "/chats") getHotCommunities();
+    getHotCommunities();
   }, []);
 
   const getHotCommunities = async () => {
@@ -85,7 +85,10 @@ export default function RightBar() {
     );
   }
 
-  return path === "/" || path === "/popular" || path === "/communities" ? (
+  return path === "/" ||
+    path === "/popular" ||
+    path === "/communities" ||
+    path === "/user" ? (
     <RightBar />
   ) : (
     ""

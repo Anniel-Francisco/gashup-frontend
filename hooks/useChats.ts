@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { IResponse, IError } from "@/types/response";
-import { getCommunityChats, postMessage } from "@/services/Chats";
+import {
+  getCommunityChats,
+  postMessage,
+  joinChat,
+  leaveChat,
+} from "@/services/Chats";
 import { getChat } from "@/utils/chat";
 
 import { database } from "@/utils/config";
@@ -103,6 +108,64 @@ export const usePostMessage = (
     try {
       setLoading(true);
       const data = await postMessage(body, communityId, chatId);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+// body
+// {
+//   "chatID": "",
+//   "userID": ""
+// }
+export const useJoinChat = (body: any, communityId: string): UseChatsType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await joinChat(body, communityId);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+// body
+// {
+//   "userID": ""
+// }
+export const useLeaveChat = (body: any, chatId: string): UseChatsType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await leaveChat(body, chatId);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

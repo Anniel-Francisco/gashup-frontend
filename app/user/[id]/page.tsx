@@ -9,13 +9,18 @@ import { useAuthProvider } from "@/context/AuthContext";
 // COMPONENTS
 import { Avatar } from "@/components/Avatar/Avatar";
 import Post from "@/components/Post/Post";
+import { Button } from "@mui/material";
 import { Spinner } from "@/components/Spinner/Spinner";
 // HOOKS
 import { useGetPostByUserId } from "@/hooks/usePost";
+import { useFollowUser, useUnFollowUser } from "@/hooks/useUser";
 export default function User({ params }: { params: { id: string } }) {
-  const [post, setPosts] = useState<IPost[]>([]);
-  const [data, setData] = useState<IDataResponse | null>(null);
   const { session } = useAuthProvider();
+  const [post, setPosts] = useState<IPost[]>([]);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [data, setData] = useState<IDataResponse | null>(null);
+  const [, loadFollow] = useFollowUser(session?._id ?? "");
+  const [, loadUnFollow] = useUnFollowUser(session?._id ?? "");
   const [loading, load] = useGetPostByUserId(params.id);
   async function loadUserProfile() {
     const { response, error } = await load();
@@ -31,11 +36,23 @@ export default function User({ params }: { params: { id: string } }) {
   }, [session]);
 
   useEffect(() => {
+    const isUserFollowed = session?.followed.includes(params.id);
+    setIsFollowing(!!isUserFollowed);
     loadUserProfile();
   }, [params.id]);
+
+  const handleFollow = async () => {
+    const findUser = session?.followed.includes(params.id);
+    if (findUser) {
+      await loadUnFollow({ userToFollow: params.id });
+    } else {
+      await loadFollow({ userToFollow: params.id });
+    }
+  };
+
   return (
     <>
-      {data?.user?.banner ? (
+      {data && data?.user?.banner ? (
         <div
           className="relative flex items-end w-full h-44 bg-cover bg-center pl-8 bg-no-repeat"
           style={{
@@ -61,15 +78,59 @@ export default function User({ params }: { params: { id: string } }) {
           )}
         </div>
       ) : (
-        <div className="flex items-center w-full gap-4 mt-2">
-          <Avatar size={90} image={data?.user?.img} session={null} />
-          <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
-            {data?.user?.name}
-          </span>
-        </div>
+        data && (
+          <div className="flex items-center gap-2 w-full mt-2">
+            <Avatar
+              size={90}
+              name={data?.user?.name}
+              image={data?.user?.img}
+              session={null}
+            />
+            <div>
+              <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
+                {data?.user?.name}
+              </span>
+              <div className="flex mt-2">
+                <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: isFollowing ? "#9b26b6" : "#afafaf",
+                  }}
+                >
+                  <span className="text-sm">
+                    {isFollowing ? "Siguiendo" : "Seguir"}
+                  </span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )
       )}
-
-      <div className="mt-16">
+      {data?.user?.banner ? (
+        <div
+          className="flex justify-end pb-2"
+          style={{
+            borderColor: "#999999",
+            borderBottomWidth: 1,
+            marginTop: data?.user?.banner ? 30 : 0,
+          }}
+        >
+          <Button
+            onClick={handleFollow}
+            variant="contained"
+            style={{
+              backgroundColor: isFollowing ? "#9b26b6" : "#afafaf",
+            }}
+          >
+            <span className="text-sm">
+              {isFollowing ? "Siguiendo" : "Seguir"}
+            </span>
+          </Button>
+        </div>
+      ) : (
+        ""
+      )}
+      <div>
         {data?.posts &&
           data?.posts.map((item, index) => {
             return (
@@ -78,7 +139,7 @@ export default function User({ params }: { params: { id: string } }) {
           })}
       </div>
       {/* Spinner */}
-      <Spinner loading={loading} message="wait" />
+      <Spinner loading={loading} message="cargando" />
     </>
   );
 }

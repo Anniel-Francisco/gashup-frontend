@@ -188,6 +188,7 @@ export default function Account() {
         <TextField
           id="username-signup"
           label="Username"
+          inputProps={{ maxLength: 30 }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -328,7 +329,7 @@ export default function Account() {
       {/* Spinner */}
       <Spinner
         loading={loading || loadingUpdate}
-        message={loading ? "loading data" : loadingUpdate ? "updating" : ""}
+        message={loading ? "loading data" : loadingUpdate ? "actualizando" : ""}
       />
     </div>
   );

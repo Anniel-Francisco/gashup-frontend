@@ -112,7 +112,7 @@ export function BannerPreview({ image, modal, onClose }: Props) {
         </div>
       </div>
       {/* Spinner */}
-      <Spinner loading={loading} message="updating" />
+      <Spinner loading={loading} message="actualizando" />
     </Modal>
   );
 }

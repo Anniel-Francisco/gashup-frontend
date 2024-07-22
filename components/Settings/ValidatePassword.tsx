@@ -35,9 +35,9 @@ export function ValidatePassword({
       setCurrentPassword(password);
     } else {
       if (!password) {
-        showAlert("warning", "Empty Field");
+        showAlert("warning", "Campo vacío");
       } else {
-        showAlert("warning", "Incorrect Password");
+        showAlert("warning", "Contraseña incorrecta");
       }
     }
   };

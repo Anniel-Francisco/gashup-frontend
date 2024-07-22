@@ -46,6 +46,7 @@ export default function RootLayout({
               size={100}
               image={session?.img}
               session={null}
+              name={session.name}
               styles={{ borderWidth: 3, borderColor: "#fff" }}
             />
             <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
@@ -54,8 +55,13 @@ export default function RootLayout({
           </div>
         </div>
       ) : (
-        <div className="flex items-center w-full gap-4 mt-2">
-          <Avatar size={90} image={session?.img} session={null} />
+        <div className="flex items-center w-full gap-2 mt-2">
+          <Avatar
+            size={90}
+            name={session?.name}
+            letterSize={45}
+            image={session?.img}
+          />
           <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
             {session?.name}
           </span>

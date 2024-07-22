@@ -14,3 +14,15 @@ export async function postMessage(
     .post(`chat/sendMessage/${communityId}/${chatId}`, body)
     .then((data) => data);
 }
+
+export async function joinChat(body: any, communityId: string) {
+  return http
+    .post(`community/joinChatCommunity/${communityId}`, body)
+    .then((data) => data);
+}
+
+export async function leaveChat(body: any, chatId: string) {
+  return http
+    .put(`community/leaveChatCommunity/${chatId}`, body)
+    .then((data) => data);
+}

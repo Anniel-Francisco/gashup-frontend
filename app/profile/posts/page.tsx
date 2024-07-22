@@ -38,7 +38,7 @@ export default function Posts() {
           })}
       </div>
       {/* Spinner */}
-      <Spinner loading={loading} message="wait" />
+      <Spinner loading={loading} message="cargando" />
     </div>
   );
 }

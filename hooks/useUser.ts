@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { updateUser, getUserById } from "@/services/User";
+import {
+  updateUser,
+  getUserById,
+  followUser,
+  unfollowUser,
+} from "@/services/User";
 import { useAuthProvider } from "@/context/AuthContext";
 import { IResponse, IError } from "@/types/response";
 import { IUser } from "@/types/user";
@@ -63,6 +68,66 @@ export const useUserById = (id: string): UseUserType => {
     try {
       setLoading(true);
       const data = await getUserById(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+type UseFollowUserType = [
+  boolean,
+  (body: { userToFollow: string }) => Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }>
+];
+
+export const useFollowUser = (id: string): UseFollowUserType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(body: { userToFollow: string }): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await followUser(body, id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useUnFollowUser = (id: string): UseFollowUserType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(body: { userToFollow: string }): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await unfollowUser(body, id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

@@ -26,12 +26,9 @@ export default function CommunityControls({ id, members }: props) {
     userID: session?._id,
   });
 
-  console.log(members);
-
   useEffect(() => {
     if (members) {
       const findUser = members.find((item) => item._id === session?._id);
-      console.log(findUser);
       if (findUser) {
         setJoined(true);
       } else {

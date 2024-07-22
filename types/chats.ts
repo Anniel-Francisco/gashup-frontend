@@ -6,6 +6,7 @@ export interface ICommunityChats {
   name: string;
   img: string;
   isDeleted: boolean;
+  miembro: boolean;
   isActive: boolean;
 }
 
