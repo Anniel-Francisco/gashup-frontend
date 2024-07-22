@@ -93,6 +93,7 @@ export default function User({ params }: { params: { id: string } }) {
               <div className="flex mt-2">
                 <Button
                   variant="contained"
+                  onClick={handleFollow}
                   style={{
                     backgroundColor: isFollowing ? "#9b26b6" : "#afafaf",
                   }}
