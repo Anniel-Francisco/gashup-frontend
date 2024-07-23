@@ -1,5 +1,5 @@
 .primary {
-  color: var(--primary);
+  color: var(--effect);
 }
 .icon {
   color: var(--primary);
@@ -11,7 +11,7 @@
 
 .btn-auth {
   outline: none;
-  background-color: var(--primary);
+  background-color: var(--effect);
 }
 .image-container {
   background-color: var(--default-color);

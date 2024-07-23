@@ -4,7 +4,7 @@ import { IResponse, IError } from "@/types/response";
 import { useAuthProvider } from "@/context/AuthContext";
 import { IUser } from "@/types/user";
 
-type UseLogInType = [
+type UseAuthType = [
   boolean,
   () => Promise<{
     response: IResponse | null;
@@ -14,7 +14,7 @@ type UseLogInType = [
 
 type LogiDataType = Pick<IUser, "email" | "password">;
 
-export const useLogIn = (body: LogiDataType): UseLogInType => {
+export const useLogIn = (body: LogiDataType): UseAuthType => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setSessionState } = useAuthProvider();
   async function load(): Promise<{
@@ -41,15 +41,7 @@ export const useLogIn = (body: LogiDataType): UseLogInType => {
   ];
 };
 
-type UseSingUpType = [
-  boolean,
-  () => Promise<{
-    response: IResponse | null;
-    error: IError | null;
-  }>
-];
-
-export const useSingUp = (body: IUser): UseSingUpType => {
+export const useSingUp = (body: IUser): UseAuthType => {
   const [loading, setLoading] = useState<boolean>(false);
   const formData = new FormData();
   formData.append("code", body.code ?? "");

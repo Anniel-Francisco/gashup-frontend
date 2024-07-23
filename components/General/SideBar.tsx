@@ -32,7 +32,7 @@ export default function SideBar() {
     },
     {
       icon: <FaRegFaceSmile fontSize={20} className="icon" />,
-      name: "Communities",
+      name: "Comunidades",
       link: "/communities",
     },
     {
@@ -42,7 +42,7 @@ export default function SideBar() {
     },
     {
       icon: <IoBookmarkOutline fontSize={25} className="icon" />,
-      name: "My Communities",
+      name: "Mis Comunidades",
       link: "/my-communities",
     },
   ]);
@@ -71,7 +71,7 @@ export default function SideBar() {
             key={index}
             onClick={() => goToRoute(item.link)}
             style={{
-              backgroundColor: item.link === pathName ? "#16a085" : "",
+              backgroundColor: item.link === pathName ? "#9b26b6" : "",
             }}
             className="link flex cursor-pointer items-center pt-2 pb-2 pl-4 rounded-lg "
           >

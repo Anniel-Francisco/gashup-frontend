@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, ReactNode } from "react";
-import Link from "next/link";
 import { usePathname, redirect, useRouter } from "next/navigation";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext";
@@ -19,8 +18,8 @@ export default function RootLayout({
   //
   const navigation = [
     { name: "Posts", route: "/profile/posts" },
-    { name: "Following", route: "/profile/following" },
-    { name: "About", route: "/profile/about" },
+    { name: "Siguiendo", route: "/profile/following" },
+    { name: "Acerca de", route: "/profile/about" },
   ];
   useEffect(() => {
     if (!session) {
@@ -33,20 +32,94 @@ export default function RootLayout({
   return (
     <div className="flex flex-col pt-6 h-full w-full">
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <Avatar
-          size={60}
-          letterSize={30}
-          image={session?.img}
-          session={session}
-          styles={{ borderWidth: 2, borderColor: "#2c3e50" }}
-        />
-        <span className="text-3xl text-[#2c3e50] font-bold">
-          {session?.name}
-        </span>
-      </div>
-
-      <div className="flex navigation-container items-center w-full gap-4 p-2">
+      {session?.banner ? (
+        <div
+          className="relative flex items-end w-full h-44 bg-cover bg-center pl-8 bg-no-repeat"
+          style={{
+            backgroundImage: session?.banner
+              ? `url(${session?.banner})`
+              : "none",
+          }}
+        >
+          <div className="flex items-end gap-2 absolute bottom-[-40px]">
+            <Avatar
+              size={100}
+              image={session?.img}
+              session={null}
+              name={session.name}
+              styles={
+                session?.img ? { borderWidth: 3, borderColor: "#2c3e50" } : {}
+              }
+            />
+            <div className="flex flex-col relative top-6">
+              <div>
+                <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
+                  {session?.name}
+                </span>
+              </div>
+              <div className="flex flex-row items-center gap-2">
+                <span>
+                  <span className="font-semibold">
+                    {session?.followed.length}
+                  </span>
+                  <span className="font-normal"> siguiendo</span>
+                </span>
+                <span>
+                  <span className="font-semibold">
+                    {session?.followers.length}
+                  </span>
+                  <span className="font-normal">
+                    {session?.followers && session?.followers.length > 1
+                      ? " seguidores"
+                      : " seguidor"}
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center w-full gap-2">
+          <Avatar
+            size={90}
+            name={session?.name}
+            letterSize={45}
+            image={session?.img}
+            styles={
+              session?.img ? { borderWidth: 3, borderColor: "#2c3e50" } : {}
+            }
+          />
+          <div className="flex flex-col">
+            <div>
+              <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
+                {session?.name}
+              </span>
+            </div>
+            <div className="flex flex-row items-center gap-2">
+              <span>
+                <span className="font-semibold">
+                  {session?.followed.length}
+                </span>
+                <span className="font-normal"> siguiendo</span>
+              </span>
+              <span>
+                <span className="font-semibold">
+                  {session?.followers.length}
+                </span>
+                <span className="font-normal">
+                  {session?.followers && session?.followers.length > 1
+                    ? " seguidores"
+                    : " seguidor"}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+      <div
+        className="flex navigation-container items-center w-full gap-4 p-2"
+        style={{ marginTop: session?.banner ? "65px" : 0 }}
+      >
         {navigation.map((nav, index) => {
           return (
             <div
@@ -56,7 +129,7 @@ export default function RootLayout({
             >
               <span className="text-[#2c3e50]">{nav.name}</span>
               {nav.route === pathName ? (
-                <div className="w-full rounded-full h-1  bg-[#16a085]" />
+                <div className="w-full rounded-full h-1  bg-[#9b26b6]" />
               ) : (
                 ""
               )}
@@ -64,7 +137,7 @@ export default function RootLayout({
           );
         })}
       </div>
-      <div className="pt-2 px-2 flex-grow">{children}</div>
+      <div className="pt-2 flex-grow">{children}</div>
     </div>
   );
 }

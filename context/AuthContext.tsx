@@ -15,12 +15,14 @@ interface SessionState {
   session: IUser | null;
   setSessionState: (session: IUser | null) => void;
   removeSession: () => void;
+  handleFollowed: (id: string, type: string) => void;
 }
 
 const defaultState: SessionState = {
   session: null,
   setSessionState: (userSession: IUser | null) => {}, // Placeholder, should match actual implementation
   removeSession: () => {},
+  handleFollowed: (id: string, type: string) => {},
 };
 
 export const AuthContext = createContext<SessionState>(defaultState);
@@ -46,12 +48,27 @@ export function AuthProvider({ children }: Props) {
     setSession(null);
   };
 
+  const handleFollowed = (id: string, type: string) => {
+    if (session) {
+      let followed;
+      if (type === "unfollow") {
+        followed = session.followed.filter((item) => item !== id);
+      } else {
+        followed = [...session.followed, id];
+      }
+      const updatedSession = { ...session, followed };
+      setSession(updatedSession);
+      localStorage.setItem("session", JSON.stringify(updatedSession));
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         session,
         setSessionState,
         removeSession,
+        handleFollowed,
       }}
     >
       {children}
