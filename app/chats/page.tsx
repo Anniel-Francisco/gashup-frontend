@@ -28,11 +28,8 @@ export default function Chats() {
   const [selectedChat, setSelectedChat] = useState<ICommunityChats | null>(
     null
   );
-  const [loadingFindChat, loadFindChat] = useFindChat(
-    search,
-    session?._id ?? ""
-  );
-  const [loading, load] = useGetCommunityChats(session?._id ?? "");
+  const [, loadFindChat] = useFindChat(search, session?._id ?? "");
+  const [, load] = useGetCommunityChats(session?._id ?? "");
   const [messages, loadMessages, loadingMessages] = useGetChats(
     selectedChat?.community_id ?? "",
     selectedChat?._id ?? ""
@@ -110,7 +107,7 @@ export default function Chats() {
         handleJoinChat={handleJoinChat}
       />
       {/* Spinner */}
-      <Spinner loading={loading || loadingMessages} message="cargando" />
+      <Spinner loading={loadingMessages} message="cargando" />
       {/* Alert */}
       <ToastContainer />
     </div>
