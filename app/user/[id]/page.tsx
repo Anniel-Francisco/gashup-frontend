@@ -19,8 +19,8 @@ export default function User({ params }: { params: { id: string } }) {
   const [post, setPosts] = useState<IPost[]>([]);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [data, setData] = useState<IDataResponse | null>(null);
-  const [loadingFollow, loadFollow] = useFollowUser(session?._id ?? "");
-  const [loadingUnFollow, loadUnFollow] = useUnFollowUser(session?._id ?? "");
+  const [, loadFollow] = useFollowUser(session?._id ?? "");
+  const [, loadUnFollow] = useUnFollowUser(session?._id ?? "");
   const [loading, load] = useGetPostByUserId(params.id);
   async function loadUserProfile() {
     const { response } = await load();
@@ -199,10 +199,7 @@ export default function User({ params }: { params: { id: string } }) {
           })}
       </div>
       {/* Spinner */}
-      <Spinner
-        loading={loading || loadingFollow || loadingUnFollow}
-        message="cargando"
-      />
+      <Spinner loading={!data ? loading : false} message="cargando" />
     </>
   );
 }
