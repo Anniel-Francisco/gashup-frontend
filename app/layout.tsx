@@ -73,7 +73,10 @@ export default function RootLayout({
                         pathName !== "/" &&
                         pathName !== "/popular" &&
                         pathName !== "/communities"
-                          ? 10.1
+                          ? pathName.startsWith("/user/") ||
+                            pathName.startsWith("/profile/")
+                            ? 7
+                            : 10.1
                           : 7,
                     }}
                     className="px-2"

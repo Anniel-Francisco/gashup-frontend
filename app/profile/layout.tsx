@@ -30,7 +30,7 @@ export default function RootLayout({
     router.push(route);
   };
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col pt-6 h-full w-full">
       {/* Header */}
       {session?.banner ? (
         <div
@@ -55,7 +55,7 @@ export default function RootLayout({
           </div>
         </div>
       ) : (
-        <div className="flex items-center w-full gap-2 mt-2">
+        <div className="flex items-center w-full gap-2">
           <Avatar
             size={90}
             name={session?.name}

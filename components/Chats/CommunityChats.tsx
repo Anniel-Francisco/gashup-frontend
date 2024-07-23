@@ -4,8 +4,17 @@ import { ICommunityChats } from "@/types/chats";
 interface Props {
   communityChats: ICommunityChats[] | null;
   setChat: (value: ICommunityChats) => void;
+  selectedChat: ICommunityChats | null;
+  onSetSearch: (value: string) => void;
+  search: string;
 }
-export function CommunityChats({ communityChats, setChat }: Props) {
+export function CommunityChats({
+  communityChats,
+  setChat,
+  selectedChat,
+  onSetSearch,
+  search,
+}: Props) {
   function onSelectCommunity(value: ICommunityChats) {
     setChat(value);
   }
@@ -21,6 +30,8 @@ export function CommunityChats({ communityChats, setChat }: Props) {
         <FiSearch size={20} className="absolute left-2 " color="#2c3e50" />
         <input
           placeholder="Buscar por nombre"
+          onInput={(e) => onSetSearch((e.target as HTMLInputElement).value)}
+          value={search}
           className="w-full outline-none bg-transparent pl-8 border-2 py-2 rounded-md"
           style={{
             borderColor: "#2c3e50",
@@ -28,17 +39,24 @@ export function CommunityChats({ communityChats, setChat }: Props) {
         />
       </div>
       <div className="flex flex-col gap-2 mt-1 pb-2 community-chats">
-        {communityChats?.map((item, index) => {
-          return (
-            <CommunityItem
-              key={index}
-              image={item?.img}
-              name={item.name}
-              members={item.members_id.length}
-              onClick={() => onSelectCommunity(item)}
-            />
-          );
-        })}
+        {communityChats && communityChats?.length > 0 ? (
+          communityChats?.map((item, index) => {
+            return (
+              <CommunityItem
+                key={index}
+                image={item?.img}
+                name={item.name}
+                members={item.members_id.length}
+                isSelected={selectedChat?._id === item._id}
+                onClick={() => onSelectCommunity(item)}
+              />
+            );
+          })
+        ) : (
+          <span className="font-medium text-[#2c3e50] text-start">
+            No se encontraron chats
+          </span>
+        )}
       </div>
     </div>
   );

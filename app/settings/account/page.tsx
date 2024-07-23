@@ -315,7 +315,7 @@ export default function Account() {
           style={{ backgroundColor: "#9b26b6" }}
           className="w-[35%] max-md:w-[100%] text-white p-2 rounded-md font-semibold"
         >
-          Update
+          Actualizar
         </Button>
       </div>
 

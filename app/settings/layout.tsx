@@ -32,7 +32,7 @@ export default function RootLayout({
       <div className="relative">
         <div className="flex items-center gap-2 mx-auto w-full">
           <Avatar
-            size={70}
+            size={90}
             letterSize={30}
             image={session?.img}
             session={session}

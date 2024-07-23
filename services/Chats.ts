@@ -26,3 +26,7 @@ export async function leaveChat(body: any, chatId: string) {
     .put(`community/leaveChatCommunity/${chatId}`, body)
     .then((data) => data);
 }
+
+export async function findChat(search: string, id: string) {
+  return http.get(`chat/findChat/${id}/${search}`).then((data) => data);
+}

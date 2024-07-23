@@ -117,11 +117,18 @@ export const useFollowUser = (id: string): UseFollowUserType => {
     load,
   ];
 };
+type UseUnFollowUserType = [
+  boolean,
+  (body: { userToUnFollow: string }) => Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }>
+];
 
-export const useUnFollowUser = (id: string): UseFollowUserType => {
+export const useUnFollowUser = (id: string): UseUnFollowUserType => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  async function load(body: { userToFollow: string }): Promise<{
+  async function load(body: { userToUnFollow: string }): Promise<{
     response: IResponse | null;
     error: IError | null;
   }> {

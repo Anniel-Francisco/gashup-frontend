@@ -13,8 +13,16 @@ interface Props {
   currentChat: ICommunityChats | null;
   messages: IChat[] | null;
   userID: string;
+  isJoined: boolean;
+  handleJoinChat: () => void;
 }
-export function Chat({ currentChat, messages, userID }: Props) {
+export function Chat({
+  currentChat,
+  messages,
+  userID,
+  isJoined,
+  handleJoinChat,
+}: Props) {
   const [message, setMessage] = useState<string>("");
   const [showAlert] = useAlert();
   const [loadingJoin, laodJoin] = useJoinChat(
@@ -35,6 +43,7 @@ export function Chat({ currentChat, messages, userID }: Props) {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   const onSetMessage = (message: string) => {
     setMessage(message);
   };
@@ -56,11 +65,13 @@ export function Chat({ currentChat, messages, userID }: Props) {
     }
   };
 
-  const handleChatState = async (isInChat: boolean) => {
-    if (isInChat) {
+  const handleChatState = async () => {
+    if (isJoined) {
       await laodLeave();
+      handleJoinChat();
     } else {
       await laodJoin();
+      handleJoinChat();
     }
 
     // window.location.reload();
@@ -85,12 +96,12 @@ export function Chat({ currentChat, messages, userID }: Props) {
         <div>
           <Button
             variant="contained"
-            style={{backgroundColor: currentChat.miembro ? '#9b26b6' : '#afafaf'}}
-            onClick={() => handleChatState(currentChat.miembro)}
+            style={{
+              backgroundColor: isJoined ? "#9b26b6" : "#afafaf",
+            }}
+            onClick={handleChatState}
           >
-            <span className="text-sm">
-              {currentChat.miembro ? "Unido" : "Unirte"}
-            </span>
+            <span className="text-sm">{isJoined ? "Unido" : "Unirse"}</span>
           </Button>
         </div>
       </div>
@@ -105,7 +116,7 @@ export function Chat({ currentChat, messages, userID }: Props) {
         <div ref={chatEndRef} />
       </div>
       {/* Input */}
-      {currentChat.miembro ? (
+      {isJoined ? (
         <div className="px-4">
           <div className="relative">
             <input
@@ -131,7 +142,9 @@ export function Chat({ currentChat, messages, userID }: Props) {
     </div>
   ) : (
     <div className="flex flex-grow items-center justify-center  w-[75%]">
-      <span className="font-semibold text-3xl">Selecciona un chat</span>
+      <span className="font-semibold text-3xl text-[#2c3e50]">
+        Selecciona un chat
+      </span>
     </div>
   );
 }

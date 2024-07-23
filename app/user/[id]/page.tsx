@@ -15,15 +15,15 @@ import { Spinner } from "@/components/Spinner/Spinner";
 import { useGetPostByUserId } from "@/hooks/usePost";
 import { useFollowUser, useUnFollowUser } from "@/hooks/useUser";
 export default function User({ params }: { params: { id: string } }) {
-  const { session } = useAuthProvider();
+  const { session, handleFollowed } = useAuthProvider();
   const [post, setPosts] = useState<IPost[]>([]);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [data, setData] = useState<IDataResponse | null>(null);
-  const [, loadFollow] = useFollowUser(session?._id ?? "");
-  const [, loadUnFollow] = useUnFollowUser(session?._id ?? "");
+  const [loadingFollow, loadFollow] = useFollowUser(session?._id ?? "");
+  const [loadingUnFollow, loadUnFollow] = useUnFollowUser(session?._id ?? "");
   const [loading, load] = useGetPostByUserId(params.id);
   async function loadUserProfile() {
-    const { response, error } = await load();
+    const { response } = await load();
     if (response) {
       setData(response.data);
       setPosts(response.data.posts);
@@ -37,100 +37,159 @@ export default function User({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const isUserFollowed = session?.followed.includes(params.id);
-    setIsFollowing(!!isUserFollowed);
+    if (isUserFollowed) {
+      setIsFollowing(true);
+    } else {
+      setIsFollowing(false);
+    }
     loadUserProfile();
   }, [params.id]);
 
   const handleFollow = async () => {
     const findUser = session?.followed.includes(params.id);
     if (findUser) {
-      await loadUnFollow({ userToFollow: params.id });
+      await loadUnFollow({ userToUnFollow: params.id });
+      setIsFollowing(false);
+      handleFollowed(params.id, "unfollow");
+      loadUserProfile()
     } else {
       await loadFollow({ userToFollow: params.id });
+      setIsFollowing(true);
+      handleFollowed(params.id, "follow");
+      loadUserProfile()
     }
   };
 
   return (
     <>
       {data && data?.user?.banner ? (
-        <div
-          className="relative flex items-end w-full h-44 bg-cover bg-center pl-8 bg-no-repeat"
-          style={{
-            backgroundImage: data?.user?.banner
-              ? `url(${data?.user?.banner})`
-              : "none",
-          }}
-        >
-          {params.id ? (
-            <div className="flex items-end gap-2 absolute bottom-[-40px]">
-              <Avatar
-                size={100}
-                image={data?.user?.img}
-                session={null}
-                styles={{ borderWidth: 3, borderColor: "#fff" }}
-              />
-              <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
-                {data?.user?.name}
+        <div>
+          <div
+            className="relative flex items-end w-full h-44 bg-cover bg-center pl-8 bg-no-repeat"
+            style={{
+              backgroundImage: data?.user?.banner
+                ? `url(${data?.user?.banner})`
+                : "none",
+            }}
+          >
+            {params.id ? (
+              <div className="flex items-end gap-2 absolute bottom-[-40px]">
+                <Avatar
+                  size={100}
+                  image={data?.user?.img}
+                  session={null}
+                  styles={{ borderWidth: 3, borderColor: "#fff" }}
+                />
+                <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
+                  {data?.user?.name}
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+          <div
+            className="flex justify-between items-end pb-2"
+            style={{
+              borderColor: "#999999",
+              borderBottomWidth: 1,
+              marginTop: 40,
+            }}
+          >
+            <div className="flex flex-row items-center gap-2">
+              <span>
+                <span className="font-semibold">
+                  {data.user?.followed.length}
+                </span>
+                <span className="font-normal"> siguiendo</span>
+              </span>
+              <span>
+                <span className="font-semibold">
+                  {data.user?.followers.length}
+                </span>
+                <span className="font-normal">
+                  {data.user?.followers && data.user?.followers.length > 1
+                    ? " seguidores"
+                    : " seguidor"}
+                </span>
               </span>
             </div>
-          ) : (
-            ""
-          )}
+            <Button
+              onClick={handleFollow}
+              variant="contained"
+              style={{
+                backgroundColor: isFollowing ? "#9b26b6" : "#afafaf",
+              }}
+            >
+              <span className="text-sm">
+                {isFollowing ? "Siguiendo" : "Seguir"}
+              </span>
+            </Button>
+          </div>
         </div>
       ) : (
         data && (
-          <div className="flex items-center gap-2 w-full mt-2">
-            <Avatar
-              size={90}
-              name={data?.user?.name}
-              image={data?.user?.img}
-              session={null}
-            />
-            <div>
-              <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
-                {data?.user?.name}
-              </span>
-              <div className="flex mt-2">
-                <Button
-                  variant="contained"
-                  onClick={handleFollow}
-                  style={{
-                    backgroundColor: isFollowing ? "#9b26b6" : "#afafaf",
-                  }}
-                >
-                  <span className="text-sm">
-                    {isFollowing ? "Siguiendo" : "Seguir"}
+          <div
+            className="flex flex-row items-end justify-between gap-2 w-full mt-2 pb-2"
+            style={{
+              borderColor: "#999999",
+              borderBottomWidth: 1,
+            }}
+          >
+            <div className="flex flex-row items-end gap-2">
+              <Avatar
+                size={80}
+                letterSize={40}
+                styles={{ borderWidth: 3, borderColor: "#9b26b6" }}
+                name={data?.user?.name}
+                image={data?.user?.img}
+                session={null}
+              />
+              <div className="flex flex-col">
+                <div>
+                  <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
+                    {data?.user?.name}
                   </span>
-                </Button>
+                </div>
+                <div className="flex flex-row items-center gap-2">
+                  <span>
+                    <span className="font-semibold">
+                      {data.user?.followed.length}
+                    </span>
+                    <span className="font-normal"> siguiendo</span>
+                  </span>
+                  <span>
+                    <span className="font-semibold">
+                      {data.user?.followers.length}
+                    </span>
+                    <span className="font-normal">
+                      {data.user?.followers && data.user?.followers.length > 1
+                        ? " seguidores"
+                        : " seguidor"}
+                    </span>
+                  </span>
+                </div>
               </div>
+            </div>
+
+            <div className="flex mt-2">
+              <Button
+                variant="contained"
+                onClick={handleFollow}
+                className="w-full"
+                style={{
+                  backgroundColor: isFollowing ? "#9b26b6" : "#afafaf",
+                }}
+              >
+                <span className="text-sm">
+                  {isFollowing ? "Siguiendo" : "Seguir"}
+                </span>
+              </Button>
             </div>
           </div>
         )
       )}
-      {data?.user?.banner ? (
-        <div
-          className="flex justify-end pb-2"
-          style={{
-            borderColor: "#999999",
-            borderBottomWidth: 1,
-            marginTop: data?.user?.banner ? 30 : 0,
-          }}
-        >
-          <Button
-            onClick={handleFollow}
-            variant="contained"
-            style={{
-              backgroundColor: isFollowing ? "#9b26b6" : "#afafaf",
-            }}
-          >
-            <span className="text-sm">
-              {isFollowing ? "Siguiendo" : "Seguir"}
-            </span>
-          </Button>
-        </div>
-      ) : (
-        ""
-      )}
+
       <div>
         {data?.posts &&
           data?.posts.map((item, index) => {
@@ -140,7 +199,10 @@ export default function User({ params }: { params: { id: string } }) {
           })}
       </div>
       {/* Spinner */}
-      <Spinner loading={loading} message="cargando" />
+      <Spinner
+        loading={loading || loadingFollow || loadingUnFollow}
+        message="cargando"
+      />
     </>
   );
 }

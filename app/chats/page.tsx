@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext";
 // HOOKS
-import { useGetCommunityChats, useGetChats } from "@/hooks/useChats";
+import {
+  useGetCommunityChats,
+  useGetChats,
+  useFindChat,
+} from "@/hooks/useChats";
 // TYPES
 import { IDataResponse } from "@/types/response";
 import { IChat, ICommunityChats } from "@/types/chats";
@@ -16,10 +20,17 @@ import "@/styles/chats/chats.css";
 export default function Chats() {
   const { session } = useAuthProvider();
   const [data, setData] = useState<IDataResponse | null>(null);
+  const [isJoined, setIsJoined] = useState<boolean>(false);
+  const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
+    null
+  );
   const [search, setSearch] = useState<string>("");
-  const [chats, setChats] = useState<IChat[] | null>(null);
   const [selectedChat, setSelectedChat] = useState<ICommunityChats | null>(
     null
+  );
+  const [loadingFindChat, loadFindChat] = useFindChat(
+    search,
+    session?._id ?? ""
   );
   const [loading, load] = useGetCommunityChats(session?._id ?? "");
   const [messages, loadMessages, loadingMessages] = useGetChats(
@@ -37,25 +48,66 @@ export default function Chats() {
   async function getChats() {
     loadMessages();
   }
+  const onSetSearch = (value: string) => {
+    setSearch(value);
+  };
   const setChat = (selectedChat: ICommunityChats) => {
     setSelectedChat(selectedChat);
   };
-
-  useEffect(() => {
+  const handleJoinChat = () => {
+    setIsJoined(!isJoined);
     getCommunityChats();
-  }, []);
+  };
+  const onFindChat = async () => {
+    const { response } = await loadFindChat();
+    if (response) {
+      setFilterChats([...response.data.data]);
+    }
+  };
+  useEffect(() => {
+    if (search) {
+      onFindChat();
+    } else {
+      setFilterChats(null);
+    }
+  }, [search]);
+  useEffect(() => {
+    if (selectedChat?.isMember) {
+      setIsJoined(true);
+    } else {
+      setIsJoined(false);
+    }
+  }, [selectedChat, session]);
+  useEffect(() => {
+    if (!session) {
+      setData(null);
+      setSelectedChat(null);
+    } else {
+      getCommunityChats();
+    }
+  }, [session]);
 
   useEffect(() => {
-    if (selectedChat) getChats();
+    if (selectedChat) {
+      getChats();
+    }
   }, [selectedChat]);
 
   return (
     <div className="flex flex-row" style={{ height: "calc(100vh - 60px)" }}>
-      <CommunityChats communityChats={data?.data} setChat={setChat} />
+      <CommunityChats
+        onSetSearch={onSetSearch}
+        communityChats={filterChats ? filterChats : data?.data}
+        setChat={setChat}
+        search={search}
+        selectedChat={selectedChat}
+      />
       <Chat
         currentChat={selectedChat}
         messages={messages}
         userID={session?._id ?? ""}
+        isJoined={isJoined}
+        handleJoinChat={handleJoinChat}
       />
       {/* Spinner */}
       <Spinner loading={loading || loadingMessages} message="cargando" />

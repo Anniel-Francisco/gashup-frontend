@@ -1,11 +1,12 @@
 import { Avatar } from "../Avatar/Avatar";
 import { FaUserGroup } from "react-icons/fa6";
 import { BsFillPersonFill } from "react-icons/bs";
-
+import { ICommunityChats } from "@/types/chats";
 interface Props {
   image: string;
   name: string;
   members: number;
+  isSelected: boolean;
   onClick: () => void;
 }
 export function CommunityItem(props: Props) {
@@ -13,6 +14,7 @@ export function CommunityItem(props: Props) {
     <div
       onClick={props.onClick}
       className="flex items-center gap-2 justify-between rounded-md hover:bg-[#e5e7eb] cursor-pointer p-2 mr-1"
+      style={{ backgroundColor: props.isSelected ? "#e5e7eb" : "" }}
     >
       <div className="flex flex-row items-center gap-4">
         <Avatar image={props.image} size={40} pointer />

@@ -42,7 +42,7 @@ export function Message({ message, userID }: Props) {
             size={30}
             image={message.img}
             name={message.username}
-            onClick={() => goToPerfil(message.userID)} 
+            onClick={() => goToPerfil(message.userID)}
             pointer
           />
         </div>

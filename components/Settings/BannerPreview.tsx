@@ -97,7 +97,7 @@ export function BannerPreview({ image, modal, onClose }: Props) {
               />
             </div>
           ) : (
-            <span className="text-xl font-semibold">Selecciona una imagen</span>
+            <span className="text-xl font-semibold text-[#2c3e50]">Selecciona una imagen</span>
           )}
         </div>
         <div className="mt-4 w-full">
@@ -107,7 +107,7 @@ export function BannerPreview({ image, modal, onClose }: Props) {
             variant="contained"
             style={{ backgroundColor: "#9b26b6" }}
           >
-            Update
+            Actualizar
           </Button>
         </div>
       </div>

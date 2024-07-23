@@ -12,6 +12,6 @@ export async function followUser(body: { userToFollow: string }, id: string) {
   return http.put(`user/follow/${id}`, body).then((data) => data);
 }
 
-export async function unfollowUser(body: { userToFollow: string }, id: string) {
+export async function unfollowUser(body: { userToUnFollow: string }, id: string) {
   return http.put(`user/unfollow/${id}`, body).then((data) => data);
 }
