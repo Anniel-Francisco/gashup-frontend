@@ -17,7 +17,7 @@ export function CommunityItem(props: Props) {
       style={{ backgroundColor: props.isSelected ? "#e5e7eb" : "" }}
     >
       <div className="flex flex-row items-center gap-4">
-        <Avatar image={props.image} size={40} pointer />
+        <Avatar name={props.name} image={props.image} size={40} pointer />
         <div>
           <div>
             <span className="font-semibold text-md text-[#2c3e50]">

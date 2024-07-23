@@ -88,7 +88,11 @@ export function Chat({
         }}
       >
         <div className="flex flex-row items-center gap-3">
-          <Avatar size={50} image={currentChat?.img ? currentChat.img : ""} />
+          <Avatar
+            size={50}
+            name={currentChat.name}
+            image={currentChat?.img ? currentChat.img : ""}
+          />
           <span className="font-bold text-xl text-[#2c3e50]">
             {currentChat?.name}
           </span>
