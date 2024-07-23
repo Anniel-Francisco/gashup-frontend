@@ -51,19 +51,19 @@ export default function User({ params }: { params: { id: string } }) {
       await loadUnFollow({ userToUnFollow: params.id });
       setIsFollowing(false);
       handleFollowed(params.id, "unfollow");
-      loadUserProfile()
+      loadUserProfile();
     } else {
       await loadFollow({ userToFollow: params.id });
       setIsFollowing(true);
       handleFollowed(params.id, "follow");
-      loadUserProfile()
+      loadUserProfile();
     }
   };
 
   return (
     <>
       {data && data?.user?.banner ? (
-        <div>
+        <>
           <div
             className="relative flex items-end w-full h-44 bg-cover bg-center pl-8 bg-no-repeat"
             style={{
@@ -78,7 +78,7 @@ export default function User({ params }: { params: { id: string } }) {
                   size={100}
                   image={data?.user?.img}
                   session={null}
-                  styles={{ borderWidth: 3, borderColor: "#fff" }}
+                  styles={{ borderWidth: 3, borderColor: "#2c3e50" }}
                 />
                 <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
                   {data?.user?.name}
@@ -126,7 +126,7 @@ export default function User({ params }: { params: { id: string } }) {
               </span>
             </Button>
           </div>
-        </div>
+        </>
       ) : (
         data && (
           <div
@@ -140,7 +140,7 @@ export default function User({ params }: { params: { id: string } }) {
               <Avatar
                 size={80}
                 letterSize={40}
-                styles={{ borderWidth: 3, borderColor: "#9b26b6" }}
+                styles={{ borderWidth: 3, borderColor: "#2c3e50" }}
                 name={data?.user?.name}
                 image={data?.user?.img}
                 session={null}

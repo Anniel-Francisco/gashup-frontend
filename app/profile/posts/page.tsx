@@ -28,8 +28,8 @@ export default function Posts() {
   }, []);
 
   return (
-    <div>
-      <div className="mt-4">
+    <>
+      <div>
         {data?.posts &&
           data?.posts.map((item, index) => {
             return (
@@ -39,6 +39,6 @@ export default function Posts() {
       </div>
       {/* Spinner */}
       <Spinner loading={loading} message="cargando" />
-    </div>
+    </>
   );
 }

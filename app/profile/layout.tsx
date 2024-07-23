@@ -47,11 +47,35 @@ export default function RootLayout({
               image={session?.img}
               session={null}
               name={session.name}
-              styles={{ borderWidth: 3, borderColor: "#fff" }}
+              styles={
+                session?.img ? { borderWidth: 3, borderColor: "#2c3e50" } : {}
+              }
             />
-            <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
-              {session?.name}
-            </span>
+            <div className="flex flex-col relative top-6">
+              <div>
+                <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
+                  {session?.name}
+                </span>
+              </div>
+              <div className="flex flex-row items-center gap-2">
+                <span>
+                  <span className="font-semibold">
+                    {session?.followed.length}
+                  </span>
+                  <span className="font-normal"> siguiendo</span>
+                </span>
+                <span>
+                  <span className="font-semibold">
+                    {session?.followers.length}
+                  </span>
+                  <span className="font-normal">
+                    {session?.followers && session?.followers.length > 1
+                      ? " seguidores"
+                      : " seguidor"}
+                  </span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       ) : (
@@ -61,15 +85,40 @@ export default function RootLayout({
             name={session?.name}
             letterSize={45}
             image={session?.img}
+            styles={
+              session?.img ? { borderWidth: 3, borderColor: "#2c3e50" } : {}
+            }
           />
-          <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
-            {session?.name}
-          </span>
+          <div className="flex flex-col">
+            <div>
+              <span className="text-3xl drop-shadow-lg text-[#2c3e50] font-bold">
+                {session?.name}
+              </span>
+            </div>
+            <div className="flex flex-row items-center gap-2">
+              <span>
+                <span className="font-semibold">
+                  {session?.followed.length}
+                </span>
+                <span className="font-normal"> siguiendo</span>
+              </span>
+              <span>
+                <span className="font-semibold">
+                  {session?.followers.length}
+                </span>
+                <span className="font-normal">
+                  {session?.followers && session?.followers.length > 1
+                    ? " seguidores"
+                    : " seguidor"}
+                </span>
+              </span>
+            </div>
+          </div>
         </div>
       )}
       <div
         className="flex navigation-container items-center w-full gap-4 p-2"
-        style={{ marginTop: session?.banner ? "55px" : 0 }}
+        style={{ marginTop: session?.banner ? "65px" : 0 }}
       >
         {navigation.map((nav, index) => {
           return (
