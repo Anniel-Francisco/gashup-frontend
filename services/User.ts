@@ -8,10 +8,17 @@ export async function getUserById(id: string) {
   return http.get(`user/getuser/${id}`).then((data) => data);
 }
 
+export async function getFollowedUsers(id: string) {
+  return http.get(`user/getFollowersAndFollowed/${id}`).then((data) => data);
+}
+
 export async function followUser(body: { userToFollow: string }, id: string) {
   return http.put(`user/follow/${id}`, body).then((data) => data);
 }
 
-export async function unfollowUser(body: { userToUnFollow: string }, id: string) {
+export async function unfollowUser(
+  body: { userToUnFollow: string },
+  id: string
+) {
   return http.put(`user/unfollow/${id}`, body).then((data) => data);
 }

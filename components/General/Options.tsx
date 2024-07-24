@@ -23,13 +23,13 @@ export default function Options() {
   const options = [
     {
       icon: <MdLogin color="white" fontSize={20} className="font-semibold" />,
-      name: "Log In / Sign Up",
+      name: "Iniciar sesión",
       type: "login",
       showOption: !session,
     },
     {
       icon: <GoPerson color="white" fontSize={20} className="font-semibold" />,
-      name: "Profile",
+      name: "Perfil",
       type: "profile",
       showOption: session,
     },
@@ -41,13 +41,13 @@ export default function Options() {
           className="font-semibold"
         />
       ),
-      name: "Settings",
+      name: "Ajustes",
       type: "settings",
       showOption: session,
     },
     {
       icon: <CgLogOut color="white" fontSize={20} className="font-semibold" />,
-      name: "Log Out",
+      name: "Cerrar sesión",
       type: "logout",
       showOption: session,
     },

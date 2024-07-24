@@ -4,6 +4,7 @@ import {
   getUserById,
   followUser,
   unfollowUser,
+  getFollowedUsers,
 } from "@/services/User";
 import { useAuthProvider } from "@/context/AuthContext";
 import { IResponse, IError } from "@/types/response";
@@ -135,6 +136,32 @@ export const useUnFollowUser = (id: string): UseUnFollowUserType => {
     try {
       setLoading(true);
       const data = await unfollowUser(body, id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useGetFollowed = (id: string): UseUserType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await getFollowedUsers(id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

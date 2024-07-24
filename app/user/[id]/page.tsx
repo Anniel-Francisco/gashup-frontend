@@ -190,13 +190,17 @@ export default function User({ params }: { params: { id: string } }) {
         )
       )}
 
-      <div>
+      <div className="flex flex-col grow">
         {data?.posts &&
           data?.posts.map((item, index) => {
             return (
               <Post key={index} data={item} post={post} setPosts={setPosts} />
             );
           })}
+
+        {data?.posts?.length === 0 && (
+          <span className="font-semibold text-center w-full mt-2 text-xl text-[#2c3e50]">Este usuario no ha realizado publicación</span>
+        )}
       </div>
       {/* Spinner */}
       <Spinner loading={!data ? loading : false} message="cargando" />

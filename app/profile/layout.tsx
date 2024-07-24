@@ -19,7 +19,6 @@ export default function RootLayout({
   const navigation = [
     { name: "Posts", route: "/profile/posts" },
     { name: "Siguiendo", route: "/profile/following" },
-    { name: "Acerca de", route: "/profile/about" },
   ];
   useEffect(() => {
     if (!session) {
