@@ -89,6 +89,7 @@ export default function RightBar() {
     path === "/popular" ||
     path === "/communities" ||
     path.startsWith("/user/") ||
+    path === "/my-communities" ||
     path.startsWith("/profile/") ? (
     <RightBar />
   ) : (

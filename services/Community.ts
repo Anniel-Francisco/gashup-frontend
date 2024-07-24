@@ -23,6 +23,10 @@ export async function getHotCommunity() {
   return http.get(`community/hotCommunity`).then((data) => data);
 }
 
+export async function findCommunity(id: string) {
+  return http.get(`community/findCommunity/${id}`).then((data) => data);
+}
+
 // POST
 
 export async function joinCommunity(id: string, data: Object) {

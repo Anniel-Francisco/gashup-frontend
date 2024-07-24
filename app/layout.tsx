@@ -74,7 +74,8 @@ export default function RootLayout({
                         pathName !== "/popular" &&
                         pathName !== "/communities"
                           ? pathName.startsWith("/user/") ||
-                            pathName.startsWith("/profile/")
+                            pathName.startsWith("/profile/") ||
+                             pathName === "/my-communities"
                             ? 7
                             : 10.1
                           : 7,

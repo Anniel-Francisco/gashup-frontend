@@ -2,7 +2,14 @@ import { useState } from "react";
 import { IResponse, IError } from "@/types/response";
 import { IPost } from "@/types/post";
 import { createPost, getAllPostByCommunity, likePost } from "@/services/Post";
-import { getCommunities, getCommunity, getHotCommunity, joinCommunity, leaveCommunity } from "@/services/Community";
+import {
+  getCommunities,
+  getCommunity,
+  getHotCommunity,
+  joinCommunity,
+  leaveCommunity,
+  findCommunity,
+} from "@/services/Community";
 
 type UseReponseType = [
   boolean,
@@ -12,8 +19,7 @@ type UseReponseType = [
   }>
 ];
 
-export const useGetCommunities = (
-): UseReponseType => {
+export const useGetCommunities = (): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
     response: IResponse | null;
@@ -38,7 +44,10 @@ export const useGetCommunities = (
   ];
 };
 
-export const useGetCommunity = (id: string, objectData: Object): UseReponseType => {
+export const useGetCommunity = (
+  id: string,
+  objectData: Object
+): UseReponseType => {
   const [loadingCommunity, setLoadingCommunity] = useState<boolean>(false);
   async function loadCommunity(): Promise<{
     response: IResponse | null;
@@ -63,8 +72,7 @@ export const useGetCommunity = (id: string, objectData: Object): UseReponseType 
   ];
 };
 
-export const useGetHotCommunities = (
-): UseReponseType => {
+export const useGetHotCommunities = (): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
     response: IResponse | null;
@@ -89,7 +97,10 @@ export const useGetHotCommunities = (
   ];
 };
 
-export const useJoinCommunity = (id: string, objectData: Object): UseReponseType => {
+export const useJoinCommunity = (
+  id: string,
+  objectData: Object
+): UseReponseType => {
   const [loadingJoin, setLoadingJoin] = useState<boolean>(false);
   async function loadJoin(): Promise<{
     response: IResponse | null;
@@ -112,9 +123,12 @@ export const useJoinCommunity = (id: string, objectData: Object): UseReponseType
     //methods
     loadJoin,
   ];
-}
+};
 
-export const useLeaveCommunity = (id: string, objectData: Object): UseReponseType => {
+export const useLeaveCommunity = (
+  id: string,
+  objectData: Object
+): UseReponseType => {
   const [loadingLeave, setLoadingLeave] = useState<boolean>(false);
   async function loadLeave(): Promise<{
     response: IResponse | null;
@@ -139,5 +153,27 @@ export const useLeaveCommunity = (id: string, objectData: Object): UseReponseTyp
   ];
 };
 
+export const useFindCommunity = (id: string): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await findCommunity(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
 
-
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
