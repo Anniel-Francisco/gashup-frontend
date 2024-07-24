@@ -29,7 +29,7 @@ export default function RootLayout({
     router.push(route);
   };
   return (
-    <div className="flex flex-col pt-6 h-full w-full">
+    <div className="flex flex-col h-full w-full">
       {/* Header */}
       {session?.banner ? (
         <div
