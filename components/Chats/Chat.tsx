@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import moment from "moment";
 import { IoSend } from "react-icons/io5";
 // COMPONENTS
 import { Avatar } from "../Avatar/Avatar";
@@ -9,6 +10,7 @@ import { ICommunityChats, IChat } from "@/types/chats";
 // HOOKS
 import { usePostMessage, useJoinChat, useLeaveChat } from "@/hooks/useChats";
 import { useAlert } from "@/hooks/useAlert";
+
 interface Props {
   currentChat: ICommunityChats | null;
   messages: IChat[] | null;
@@ -16,6 +18,12 @@ interface Props {
   isJoined: boolean;
   handleJoinChat: () => void;
 }
+
+interface MessageGroupedByDate {
+  date: string;
+  messages: IChat[];
+}
+
 export function Chat({
   currentChat,
   messages,
@@ -47,6 +55,7 @@ export function Chat({
   const onSetMessage = (message: string) => {
     setMessage(message);
   };
+
   const sendMessage = async () => {
     if (message) {
       const { response, error } = await load();
@@ -59,6 +68,7 @@ export function Chat({
       showAlert("warning", "Debes escribir un mensaje");
     }
   };
+
   const onPressEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       sendMessage();
@@ -73,9 +83,21 @@ export function Chat({
       await laodJoin();
       handleJoinChat();
     }
-
-    // window.location.reload();
   };
+
+  const groupedMessages = messages?.reduce<MessageGroupedByDate[]>(
+    (acc, message) => {
+      const date = moment(message.publicationDate).format("YYYY-MM-DD");
+      const existingGroup = acc.find((group) => group.date === date);
+      if (existingGroup) {
+        existingGroup.messages.push(message);
+      } else {
+        acc.push({ date, messages: [message] });
+      }
+      return acc;
+    },
+    [] as MessageGroupedByDate[]
+  );
 
   return currentChat ? (
     <div className="flex flex-col w-[75%] max-lg:w-[100%] mb-4">
@@ -114,9 +136,16 @@ export function Chat({
         className="flex-grow px-4 overflow-auto"
         style={{ height: "calc(100vh - 76px)" }}
       >
-        {messages?.map((message, index) => {
-          return <Message key={index} message={message} userID={userID} />;
-        })}
+        {groupedMessages?.map((group, groupIndex) => (
+          <div key={groupIndex}>
+            <h3 className="font-semibold text-center mt-2 text-md text-[#2c3e50]">
+              <span className="bg-[#e5e7eb] p-1 rounded-md">{moment(group.date).format("DD/MM/YYYY")}</span>
+            </h3>
+            {group.messages.map((msg, index) => (
+              <Message key={index} message={msg} userID={userID} />
+            ))}
+          </div>
+        ))}
         <div ref={chatEndRef} />
       </div>
       {/* Input */}
@@ -145,7 +174,7 @@ export function Chat({
       )}
     </div>
   ) : (
-    <div className="flex flex-grow items-center justify-center  w-[75%]">
+    <div className="flex flex-grow items-center justify-center w-[75%]">
       <span className="font-semibold text-3xl text-[#2c3e50]">
         Selecciona un chat
       </span>
