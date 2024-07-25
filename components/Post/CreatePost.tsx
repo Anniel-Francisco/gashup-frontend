@@ -58,7 +58,7 @@ export default function CreatePost({ className, community_id }: props) {
       return showAlert(
         "error",
         error && error.response
-          ? error.response.data.message
+          ? error.response.data.mensaje
           : "The server may be experiencing problems"
       );
     }

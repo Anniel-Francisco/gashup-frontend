@@ -18,7 +18,7 @@ export default function CommunityDescription({
   owner,
   admins,
   members,
-  rank
+  rank,
 }: props) {
   return (
     <div className="flex flex-col justify-between items-center pt-5 p-4 bg-gray-100 mt-2 rounded-md">
@@ -51,9 +51,7 @@ export default function CommunityDescription({
         </div>
 
         <div className="flex flex-col items-center gap-1 font-medium">
-          {rank
-          
-          }
+          {rank}
           <span className="text-sm font-light text-gray-600">Rango</span>
         </div>
       </div>

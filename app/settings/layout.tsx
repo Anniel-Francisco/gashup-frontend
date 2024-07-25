@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, redirect } from "next/navigation";
 // SESSION
@@ -18,8 +17,8 @@ export default function RootLayout({
   const { session } = useAuthProvider();
   //
   const navigation = [
-    { name: "Account", route: "/settings/account" },
-    { name: "Profile", route: "/settings/profile" },
+    { name: "Cuenta", route: "/settings/account" },
+    { name: "Perfil", route: "/settings/profile" },
   ];
   useEffect(() => {
     if (!session) {
@@ -31,49 +30,19 @@ export default function RootLayout({
     <div className="flex flex-col pt-6 h-full w-full">
       {/* Header */}
       <div className="relative">
-        {session?.banner && (
-          <div className="w-full">
-            <img
-              src={session?.banner as string ?? ""}
-              alt="banner"
-              style={{
-                width: "100%",
-                height: 100,
-                borderRadius: 10,
-              }}
-            />
-          </div>
-        )}
-        <div
-          className="flex items-center gap-2 mx-auto w-full"
-          style={
-            session?.banner
-              ? {
-                  position: "absolute",
-                  top: 80,
-                }
-              : undefined
-          }
-        >
+        <div className="flex items-center gap-2 mx-auto w-full">
           <Avatar
-            size={session?.banner ? 80 : 65}
+            size={90}
             letterSize={30}
             image={session?.img}
             session={session}
-            styles={{
-              borderWidth: session?.banner ? 4 : 3,
-              borderColor: session?.banner ? "#fff" : "#2c3e50",
-            }}
           />
           <span className="text-3xl text-[#2c3e50] font-bold">
             {session?.name}
           </span>
         </div>
       </div>
-      <div
-        className="flex navigation-container items-center w-full gap-4 p-2"
-        style={{ marginTop: session?.banner ? "55px" : 0 }}
-      >
+      <div className="flex navigation-container items-center w-full gap-4 p-2">
         {navigation.map((nav, index) => {
           return (
             <Link
@@ -83,7 +52,7 @@ export default function RootLayout({
             >
               <span className="text-[#2c3e50]">{nav.name}</span>
               {nav.route === pathName ? (
-                <div className="w-full rounded-full h-1  bg-[#16a085]" />
+                <div className="w-full rounded-full h-1  bg-[#9b26b6]" />
               ) : (
                 ""
               )}

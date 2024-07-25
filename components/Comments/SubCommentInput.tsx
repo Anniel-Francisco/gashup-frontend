@@ -59,7 +59,7 @@ export default function SubCommentInput({
       return showAlert(
         "error",
         error && error.response
-          ? error.response.data.message
+          ? error.response.data.mensaje
           : "The server may be experiencing problems"
       );
     }

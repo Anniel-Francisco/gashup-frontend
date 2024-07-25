@@ -31,6 +31,10 @@ export async function getCategories() {
   return http.get(`community/getCategories`).then((data) => data);
 }
 
+export async function findCommunity(id: string) {
+  return http.get(`community/findCommunity/${id}`).then((data) => data);
+}
+
 // POST
 
 export async function createCommunity(data: ICommunity) {

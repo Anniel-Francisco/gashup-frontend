@@ -35,9 +35,9 @@ export function ValidatePassword({
       setCurrentPassword(password);
     } else {
       if (!password) {
-        showAlert("warning", "Empty Field");
+        showAlert("warning", "Campo vacío");
       } else {
-        showAlert("warning", "Incorrect Password");
+        showAlert("warning", "Contraseña incorrecta");
       }
     }
   };
@@ -57,7 +57,7 @@ export function ValidatePassword({
     <Modal height={200} modal={modal} onClose={onClose}>
       <div className="p-5">
         <h2 className="text-center text-lg font-semibold text-[#2c3e50]">
-          Password Verification
+          Verificación de Contraseña
         </h2>
         <div className="mt-4">
           <FormControl variant="outlined" className="w-full">
@@ -93,9 +93,9 @@ export function ValidatePassword({
             onClick={onClose}
             className="w-full"
             variant="contained"
-            style={{ backgroundColor: "#2c3e50" }}
+            style={{ backgroundColor: "#9b26b6" }}
           >
-            Confirm
+            Confirmar
           </Button>
         </div>
       </div>

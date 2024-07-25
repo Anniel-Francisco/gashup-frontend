@@ -1,5 +1,5 @@
 import { IUser } from "./user";
-
+import { IPost } from "./post";
 export interface IResponse {
   data: IDataResponse | any;
   status: number;
@@ -11,6 +11,8 @@ export interface IDataResponse {
   message: string;
   ok: boolean;
   user?: IUser;
+  posts?: IPost[];
+  data?: any;
 }
 
 export interface IError {

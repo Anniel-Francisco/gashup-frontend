@@ -7,7 +7,7 @@ export default function Profile() {
   const options = [
     {
       name: "Banner",
-      description: "Here you can add your profile banner",
+      description: "Aquí puedes agregar el banner de tu perfil.",
       showIcon: true,
     },
   ];

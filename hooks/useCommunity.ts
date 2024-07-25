@@ -13,8 +13,7 @@ type UseReponseType = [
   }>
 ];
 
-export const useGetCommunities = (
-): UseReponseType => {
+export const useGetCommunities = (): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
     response: IResponse | null;
@@ -64,8 +63,7 @@ export const useGetCommunity = (id: string, user_id: string): UseReponseType => 
   ];
 };
 
-export const useGetHotCommunities = (
-): UseReponseType => {
+export const useGetHotCommunities = (): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
     response: IResponse | null;
@@ -138,9 +136,12 @@ export const useJoinCommunity = (id: string, objectData: Object): UseReponseType
     //methods
     loadJoin,
   ];
-}
+};
 
-export const useLeaveCommunity = (id: string, objectData: Object): UseReponseType => {
+export const useLeaveCommunity = (
+  id: string,
+  objectData: Object
+): UseReponseType => {
   const [loadingLeave, setLoadingLeave] = useState<boolean>(false);
   async function loadLeave(): Promise<{
     response: IResponse | null;
@@ -216,4 +217,10 @@ export const useUpdateCommunity = (id: string, objectData: ICommunity): UseRepon
 };
 
 
-
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};

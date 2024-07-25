@@ -3,7 +3,6 @@ import { AiFillLike } from "react-icons/ai";
 import { FaComments } from "react-icons/fa";
 import { FaShare } from "react-icons/fa";
 import PostButton from "./PostButton";
-import { SlOptionsVertical } from "react-icons/sl";
 import { IPost } from "@/types/post";
 import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
@@ -61,11 +60,12 @@ export default function Post({ data, post, setPosts }: props) {
     }
   };
 
-  const goToRoute = () => {
-    if (typeof data.user !== "string")
-      if (data.user?._id == session?._id) {
-        router.push("/profile/posts");
-      }
+  const goToPerfil = (id: string) => {
+    if (id === session?._id) {
+      router.push(`/profile/posts`);
+    } else {
+      router.push(`/user/${id}`);
+    }
   };
 
   const goToCommunity = () => {
@@ -82,14 +82,14 @@ export default function Post({ data, post, setPosts }: props) {
             image={
               typeof data.user !== "string" ? data.user?.img?.toString() : ""
             }
-            onClick={goToRoute}
+            onClick={() => goToPerfil(data?.user?._id)}
             styles={{ cursor: "pointer" }}
           />
           <div className="flex flex-col">
             <div className="font-bold flex items-center flex-row gap-1">
               <span
                 className="cursor-pointer hover:text-gray-700"
-                onClick={goToRoute}
+                onClick={() => goToPerfil(data?.user?._id)}
               >
                 {typeof data.user !== "string" ? data.user?.name : ""}
               </span>
@@ -128,7 +128,9 @@ export default function Post({ data, post, setPosts }: props) {
         />
         <PostButton
           Icon={FaComments}
-          amount={Number(data.comments?.length)}
+          amount={
+            !Number(data.comments?.length) ? 0 : Number(data.comments?.length)
+          }
           callback={() => router.push(`/post/${data._id}`)}
         />
         <PostButton Icon={FaShare} amount={0} callback={() => {}} />

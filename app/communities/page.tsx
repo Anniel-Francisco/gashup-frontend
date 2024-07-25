@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import "@/styles/general/communities.css";
 import CreatePost from "@/components/Post/CreatePost";
 import MappedPosts from "@/components/Post/MappedPosts";

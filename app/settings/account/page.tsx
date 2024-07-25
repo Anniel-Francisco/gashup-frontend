@@ -72,7 +72,7 @@ export default function Account() {
     const { response, error } = await load();
 
     if (error) {
-      showAlert("error", error.response.data.message);
+      showAlert("error", error.response.data.mensaje);
     } else if (response) {
       setUpdateData({
         ...updateData,
@@ -120,11 +120,11 @@ export default function Account() {
           showAlert(
             "error",
             error && error.response
-              ? error.response.data.message
+              ? error.response.data.mensaje
               : "The server may be experiencing problems"
           );
         } else if (response) {
-          showAlert("success", response.data.message);
+          showAlert("success", response.data.mensaje);
           setUpdateData({ ...updateData, img: response.data.update.img });
         }
       } else {
@@ -188,6 +188,7 @@ export default function Account() {
         <TextField
           id="username-signup"
           label="Username"
+          inputProps={{ maxLength: 30 }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -311,10 +312,10 @@ export default function Account() {
         <Button
           onClick={onUpdate}
           variant="contained"
-          style={{ backgroundColor: "#2c3e50" }}
+          style={{ backgroundColor: "#9b26b6" }}
           className="w-[35%] max-md:w-[100%] text-white p-2 rounded-md font-semibold"
         >
-          Update
+          Actualizar
         </Button>
       </div>
 
@@ -328,7 +329,7 @@ export default function Account() {
       {/* Spinner */}
       <Spinner
         loading={loading || loadingUpdate}
-        message={loading ? "loading data" : loadingUpdate ? "updating" : ""}
+        message={loading ? "loading data" : loadingUpdate ? "actualizando" : ""}
       />
     </div>
   );

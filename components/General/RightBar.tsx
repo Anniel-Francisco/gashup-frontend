@@ -75,9 +75,7 @@ export default function RightBar() {
                   color="primary"
                   href={`/communities/${item._id}`}
                 >
-                  <span className="text-sm">
-                  Unirte
-                  </span>
+                  <span className="text-sm">Unirte</span>
                 </Button>
               </div>
             </div>
@@ -87,7 +85,12 @@ export default function RightBar() {
     );
   }
 
-  return path === "/" || path === "/popular" || path === "/communities" ? (
+  return path === "/" ||
+    path === "/popular" ||
+    path === "/communities" ||
+    path.startsWith("/user/") ||
+    path === "/my-communities" ||
+    path.startsWith("/profile/") ? (
     <RightBar />
   ) : (
     ""
