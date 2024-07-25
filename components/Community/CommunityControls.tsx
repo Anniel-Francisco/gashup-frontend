@@ -7,15 +7,19 @@ import { IUser } from "@/types/user";
 import { useEffect, useState } from "react";
 import { Auth } from "../General/Auth";
 import { Button } from "@mui/material";
+import { IoIosSettings } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 interface props {
   id: string;
   members?: IUser[] | undefined;
+  owner?: IUser
 }
 
-export default function CommunityControls({ id, members }: props) {
+export default function CommunityControls({ id, members, owner }: props) {
   const { session } = useAuthProvider();
   const [showAlert] = useAlert();
+  const router = useRouter();
   const [joined, setJoined] = useState<boolean>(false);
 
   const [loadingJoin, loadJoin] = useJoinCommunity(id, {
@@ -103,13 +107,16 @@ export default function CommunityControls({ id, members }: props) {
       >
         {joined ? "Unido" : "Unirse"}
       </button> */}
-      <Button
+      {owner?._id != session?._id ? <Button
         variant="contained"
         color={`${joined ? "primary" : "secondary"}`}
         onClick={() => (session?._id ? handleJoinLeave() : openLogInModal())}
       >
         {joined ? "Unido" : "Unirse"}
-      </Button>
+      </Button> : <div>
+        <IoIosSettings onClick={() => {router.push(`/edit-community/${id}`)
+        }} className="fill-gray-500 cursor-pointer h-9 w-9 hover:fill-gray-600 transition-all"/>
+        </div>}
     </div>
   );
 }

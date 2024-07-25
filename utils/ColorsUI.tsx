@@ -14,6 +14,18 @@ const theme = createTheme({
       dark: "#878787",
       contrastText: "#fff",
     },
+    customBlack: {
+      light: "#484848",
+      main: "#000000",
+      dark: "#0d0d0d",
+      contrastText: "#ffffff",
+    },
+    customColor2: {
+      light: "#b2ff59",
+      main: "#76ff03",
+      dark: "#64dd17",
+      contrastText: "#000",
+    },
   },
 });
 

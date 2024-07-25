@@ -2,7 +2,8 @@ import { useState } from "react";
 import { IResponse, IError } from "@/types/response";
 import { IPost } from "@/types/post";
 import { createPost, getAllPostByCommunity, likePost } from "@/services/Post";
-import { getCommunities, getCommunity, getHotCommunity, joinCommunity, leaveCommunity } from "@/services/Community";
+import { createCommunity, getCategories, getCommunities, getCommunity, getHotCommunity, joinCommunity, leaveCommunity, updateCommunity } from "@/services/Community";
+import { ICommunity } from "@/types/community";
 
 type UseReponseType = [
   boolean,
@@ -38,7 +39,7 @@ export const useGetCommunities = (
   ];
 };
 
-export const useGetCommunity = (id: string, objectData: Object): UseReponseType => {
+export const useGetCommunity = (id: string, user_id: string): UseReponseType => {
   const [loadingCommunity, setLoadingCommunity] = useState<boolean>(false);
   async function loadCommunity(): Promise<{
     response: IResponse | null;
@@ -46,7 +47,7 @@ export const useGetCommunity = (id: string, objectData: Object): UseReponseType 
   }> {
     try {
       setLoadingCommunity(true);
-      const data = await getCommunity(id);
+      const data = await getCommunity(id, user_id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };
@@ -86,6 +87,31 @@ export const useGetHotCommunities = (
     loading,
     //methods
     load,
+  ];
+};
+
+export const useGetCategories = (): UseReponseType => {
+  const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
+  async function loadCategories(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoadingCategories(true);
+      const data = await getCategories();
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoadingCategories(false);
+    }
+  }
+
+  return [
+    //states
+    loadingCategories,
+    //methods
+    loadCategories,
   ];
 };
 
@@ -136,6 +162,56 @@ export const useLeaveCommunity = (id: string, objectData: Object): UseReponseTyp
     loadingLeave,
     //methods
     loadLeave,
+  ];
+};
+
+export const useCreateCommunity = (objectData: ICommunity): UseReponseType => {
+  const [loadingCreate, setLoadingCreate] = useState<boolean>(false);
+  async function loadCreate(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoadingCreate(true);
+      const data = await createCommunity(objectData);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoadingCreate(false);
+    }
+  }
+
+  return [
+    //states
+    loadingCreate,
+    //methods
+    loadCreate,
+  ];
+};
+
+export const useUpdateCommunity = (id: string, objectData: ICommunity): UseReponseType => {
+  const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
+  async function loadUpdate(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoadingUpdate(true);
+      const data = await updateCommunity(id, objectData);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoadingUpdate(false);
+    }
+  }
+
+  return [
+    //states
+    loadingUpdate,
+    //methods
+    loadUpdate,
   ];
 };
 

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ICommunity } from "@/types/community";
 import CommunityCard from "@/components/Community/CommunityCard";
 import { Spinner } from "@/components/Spinner/Spinner";
+import { Button } from "@mui/material";
 
 export default function Communities() {
   const [loading, load] = useGetCommunities();
@@ -26,11 +27,18 @@ export default function Communities() {
   return (
     <div className="w-full">
       <Spinner loading={loading} />
-      <h1 className="font-bold text-3xl my-5">Comunidades</h1>
+      <div className="flex flex-row justify-between items-center">
+        <h1 className="font-bold text-3xl my-5">Comunidades</h1>
+        <div>
+          <Button variant="outlined" color="primary" href={`/create-community`}>
+            Crear comunidad
+          </Button>
+        </div>
+      </div>
       <div className="w-full flex flex-col gap-2">
-      {communities.map((item: ICommunity) => (
-        <CommunityCard key={item._id} data={item} />
-      ))}
+        {communities.map((item: ICommunity) => (
+          <CommunityCard key={item._id} data={item} />
+        ))}
       </div>
       {/* <MappedPosts className="" _i/> */}
     </div>

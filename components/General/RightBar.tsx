@@ -26,7 +26,6 @@ export default function RightBar() {
   const getHotCommunities = async () => {
     const { response, error } = await load();
     if (response?.data.ok) {
-      console.log(response.data.data, "FAMOUS");
       setCommunities(response.data.data);
     }
   };

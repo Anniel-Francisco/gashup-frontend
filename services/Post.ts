@@ -57,6 +57,10 @@ export async function getSubCommentsByComment(id: string) {
   return http.get(`post/getSubCommentsByComment/${id}`).then((data) => data);
 }
 
+export async function getTimeLine(id: string) {
+  return http.get(`post/timeLine/${id}`).then((data) => data);
+}
+
 // PUT
 
 export async function updatePost(id: string, body: IPost) {

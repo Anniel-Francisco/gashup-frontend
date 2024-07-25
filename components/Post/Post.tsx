@@ -14,8 +14,8 @@ import Settings from "./Settings";
 
 interface props {
   data: IPost;
-  post: Array<IPost>;
-  setPosts: Function;
+  post?: Array<IPost>;
+  setPosts?: Function;
 }
 
 import { useAuthProvider } from "@/context/AuthContext";
@@ -107,7 +107,7 @@ export default function Post({ data, post, setPosts }: props) {
         {session?._id ==
           (typeof data.user !== "string" ? data.user?._id : data.user) && (
           // <SlOptionsVertical className="w-6 h-6 fill-black cursor-pointer" />
-          <Settings id={data._id ?? ""} post={post} setPosts={setPosts} />
+          <Settings id={data._id ?? ""} post={post ?? []} setPosts={setPosts ?? Function} />
         )}
       </div>
       <div

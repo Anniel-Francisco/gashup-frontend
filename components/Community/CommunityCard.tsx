@@ -12,7 +12,7 @@ export default function CommunityCard({ data }: props) {
     <div className="w-full flex flex-row gap-4 bg-[#e0e0e0] rounded-md max-h-40 overflow-hidden">
       <div className="bg-slate-400 w-[20%] md:w-[15%] rounded-l-md overflow-hidden">
         <Image
-          src={data.img}
+          src={data.img as string ?? ""}
           alt={data.name}
           height={100}
           width={100}

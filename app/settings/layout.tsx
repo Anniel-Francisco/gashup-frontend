@@ -34,7 +34,7 @@ export default function RootLayout({
         {session?.banner && (
           <div className="w-full">
             <img
-              src={session?.banner ?? ""}
+              src={session?.banner as string ?? ""}
               alt="banner"
               style={{
                 width: "100%",

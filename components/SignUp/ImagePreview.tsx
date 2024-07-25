@@ -21,7 +21,7 @@ export function ImagePreview({ modal, onClose, image }: Props) {
 
       return () => URL.revokeObjectURL(objectUrl);
     } else {
-      setImageSrc(null);
+      setImageSrc(image ?? null);
     }
   }, [image]);
   return (

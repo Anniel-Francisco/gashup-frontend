@@ -23,7 +23,7 @@ export interface IComment {
   post_id: string | IPost;
   commentDate?: string;
   user_likes?: Array<string>;
-  subComments?: Array<ISubComment>
+  subComments?: Array<ISubComment> | ISubComment[]
 }
 
 export interface ISubComment {

@@ -1,31 +1,48 @@
 "use client";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useAuthProvider } from "@/context/AuthContext";
 import CommunityHeader from "@/components/Community/CommunityHeader";
 import CommunityControls from "@/components/Community/CommunityControls";
 import CommunityDescription from "@/components/Community/CommunityDescription";
 import MembersBar from "@/components/Community/MembersBar";
 import MappedPosts from "@/components/Post/MappedPosts";
-import { useEffect, useState } from "react";
-import { useGetCommunity, useJoinCommunity } from "@/hooks/useCommunity";
-import { ICommunity } from "@/types/community";
 import CreatePost from "@/components/Post/CreatePost";
-import { IUser } from "@/types/user";
 import { Spinner } from "@/components/Spinner/Spinner";
 import { Divider } from "@mui/material";
+import MessageDialog from "@/components/MessageDialog";
+import { useGetCommunity } from "@/hooks/useCommunity";
+import { IUser } from "@/types/user";
+import { ICommunity } from "@/types/community";
 
 export default function CommunityPage({ params }: { params: { id: string } }) {
   const { session } = useAuthProvider();
+  const router = useRouter();
 
-  const [community, setCommunity] = useState<ICommunity>();
-  const [loading, load] = useGetCommunity(params.id, {
-    user_id: session?._id,
-  });
+  const [community, setCommunity] = useState<ICommunity | undefined>();
+  const [loading, load] = useGetCommunity(params.id, session?._id ?? "");
+  const [userBanned, setUserBanned] = useState<boolean>(false);
+  const [isMember, setIsMember] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const getCommunity = async () => {
     const { response, error } = await load();
+
     if (response?.data.ok) {
       setCommunity(response.data.data);
+      setIsMember(
+        response.data.data.members_id?.some(
+          (member: IUser) => member._id === session?._id
+        )
+      );
+      setIsAdmin(
+        session?._id == response.data.data.owner_id ||
+          response.data.data.admins_id?.some(
+            (member: IUser) => member._id === session?._id
+          )
+      );
+    } else if (response?.data.banned) {
+      setUserBanned(true);
     }
   };
 
@@ -33,21 +50,20 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
     getCommunity();
   }, []);
 
-  const members =
-    Array.isArray(community?.members_id) &&
-    (community.members_id as IUser[]).every(
-      (member) => typeof member === "object"
-    )
-      ? (community.members_id as IUser[])
-      : [];
-
-  const admins =
-    Array.isArray(community?.admins_id) &&
-    (community.admins_id as IUser[]).every(
-      (member) => typeof member === "object"
-    )
-      ? (community.admins_id as IUser[])
-      : [];
+  if (userBanned) {
+    return (
+      <MessageDialog
+        setOpen={setUserBanned}
+        open={userBanned}
+        titleText="Baneado"
+        confirmationText="Has sido baneado de esta comunidad"
+        confirmButtonText="OK"
+        callback={() => {
+          router.push("/");
+        }}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -56,15 +72,19 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
       {/* Header */}
       <CommunityHeader
         name={community?.name}
-        img={community?.img}
-        banner={community?.banner}
+        img={community?.img as string}
+        banner={community?.banner as string}
       />
 
       {/* Body */}
       <div className="w-full flex flex-row">
         <div className="w-full md:w-[70%]">
           {/* Controls */}
-          <CommunityControls id={params.id} members={members} />
+          <CommunityControls
+            id={params.id}
+            members={community?.members_id as IUser[]}
+            owner={community?.owner_id as IUser}
+          />
           <Divider
             component="li"
             className="flex justify-center items-center mb-3"
@@ -72,7 +92,9 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
 
           <div className="w-full pr-2">
             {/* Create post */}
-            <CreatePost className="w-full" community_id={params.id} />
+            {isMember && (
+              <CreatePost className="w-full" community_id={params.id} />
+            )}
             {/* Posts */}
             <MappedPosts className="w-full" _id={params.id} />
           </div>
@@ -83,9 +105,9 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
             <CommunityDescription
               name={community?.name}
               description={community?.description}
-              owner={community?.owner_id}
-              admins={admins}
-              members={members}
+              owner={community?.owner_id as IUser}
+              admins={community?.admins_id as IUser[]}
+              members={community?.members_id as IUser[]}
               rank={community?.rank ?? 0}
             />
             <MembersBar />

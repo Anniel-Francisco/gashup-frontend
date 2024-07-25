@@ -8,6 +8,7 @@ import {
   getAllPostByCommunity,
   getPostById,
   getSubCommentsByComment,
+  getTimeLine,
   likeComment,
   likePost,
   responseComment,
@@ -208,6 +209,31 @@ export const useGetPostById = (id: string): UseReponseType => {
     try {
       setLoading(true);
       const data = await getPostById(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useGetTimeLine = (id: string): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await getTimeLine(id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

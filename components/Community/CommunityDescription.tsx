@@ -38,7 +38,7 @@ export default function CommunityDescription({
 
       <div className="w-full flex flex-col gap-2 font-medium text-gray-600">
         <span>Moderadores</span>
-        {admins.map((item: IUser) => (
+        {admins?.map((item: IUser) => (
           <AdminCard item={item} />
         ))}
       </div>
@@ -46,7 +46,7 @@ export default function CommunityDescription({
 
       <div className="w-full flex flex-row justify-between">
         <div className="flex flex-col items-center gap-1 font-medium">
-          {members.length}
+          {members?.length}
           <span className="text-sm font-light text-gray-600">Miembros</span>
         </div>
 

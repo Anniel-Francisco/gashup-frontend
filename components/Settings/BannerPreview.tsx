@@ -38,7 +38,7 @@ export function BannerPreview({ image, modal, onClose }: Props) {
     banner: null,
   });
   const [showAlert] = useAlert();
-  const [loading, load] = useUpdateUser(session?._id, user);
+  const [loading, load] = useUpdateUser(session?._id as string, user as IUser);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   useEffect(() => {
