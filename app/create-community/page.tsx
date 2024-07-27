@@ -65,7 +65,7 @@ export default function CreateCommunity() {
     owner_id: session?._id as string,
     img: "",
     banner: "",
-    admins_id: [],
+    // admins_id: [],
     communityCategory_id: [],
   };
 
@@ -102,6 +102,7 @@ export default function CreateCommunity() {
   };
 
   const onSubmit = async () => {
+    setOpenConfirmationModal(false)
     // e.preventDefault();
 
     if (!communityData.img) {
@@ -241,6 +242,7 @@ export default function CreateCommunity() {
           {/* Alert */}
           <ToastContainer />
           <Spinner loading={loading} />
+          <Spinner loading={loadingCreate} />
           <ImagePreview
             modal={modal || modalBanner}
             onClose={onClose}
@@ -273,8 +275,8 @@ export default function CreateCommunity() {
               <Box
                 component="form"
                 onSubmit={(e) => {
-                  e.preventDefault()
-                  setOpenConfirmationModal(true)
+                  e.preventDefault();
+                  setOpenConfirmationModal(true);
                 }}
                 sx={{ mt: 3 }}
               >

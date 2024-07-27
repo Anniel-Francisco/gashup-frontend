@@ -9,11 +9,17 @@ import MembersBar from "@/components/Community/MembersBar";
 import MappedPosts from "@/components/Post/MappedPosts";
 import CreatePost from "@/components/Post/CreatePost";
 import { Spinner } from "@/components/Spinner/Spinner";
-import { Divider } from "@mui/material";
+import { Box, Divider, Tab, Tabs } from "@mui/material";
 import MessageDialog from "@/components/MessageDialog";
 import { useGetCommunity } from "@/hooks/useCommunity";
 import { IUser } from "@/types/user";
 import { ICommunity } from "@/types/community";
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
 
 export default function CommunityPage({ params }: { params: { id: string } }) {
   const { session } = useAuthProvider();
@@ -24,6 +30,11 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
   const [userBanned, setUserBanned] = useState<boolean>(false);
   const [isMember, setIsMember] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const getCommunity = async () => {
     const { response, error } = await load();
@@ -49,6 +60,29 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     getCommunity();
   }, []);
+
+  function CustomTabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box>{children}</Box>}
+      </div>
+    );
+  }
+
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
 
   if (userBanned) {
     return (
@@ -91,12 +125,52 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
           />
 
           <div className="w-full pr-2">
-            {/* Create post */}
-            {isMember && (
-              <CreatePost className="w-full" community_id={params.id} />
-            )}
-            {/* Posts */}
-            <MappedPosts className="w-full" _id={params.id} />
+            <div className="flex flex-col md:hidden">
+              <Box
+                sx={{
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  padding: 0,
+                  marginBottom: 2,
+                }}
+              >
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="basic tabs example"
+                >
+                  <Tab label="Publicaciones" {...a11yProps(0)} />
+                  <Tab label="Descripción" {...a11yProps(1)} />
+                </Tabs>
+              </Box>
+              <CustomTabPanel value={value} index={0}>
+                {/* Create post */}
+                {isMember && (
+                  <CreatePost className="w-full" community_id={params.id} />
+                )}
+                {/* Posts */}
+                <MappedPosts className="w-full" _id={params.id} />
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={1}>
+                <CommunityDescription
+                  name={community?.name}
+                  description={community?.description}
+                  owner={community?.owner_id as IUser}
+                  admins={community?.admins_id as IUser[]}
+                  members={community?.members_id as IUser[]}
+                  rank={community?.rank ?? 0}
+                />
+              </CustomTabPanel>
+            </div>
+
+            <div className="hidden md:flex flex-col">
+              {/* Create post */}
+              {isMember && (
+                <CreatePost className="w-full" community_id={params.id} />
+              )}
+              {/* Posts */}
+              <MappedPosts className="w-full" _id={params.id} />
+            </div>
           </div>
         </div>
 

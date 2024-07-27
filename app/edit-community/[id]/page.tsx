@@ -66,7 +66,7 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
   const communityInit: ICommunity = {
     name: "",
     description: "",
-    userID: session?._id as string,
+    // userID: session?._id as string,
     img: "",
     banner: "",
     admins_id: [],
@@ -101,7 +101,8 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
       const { owner_id, ...data} = response.data.data
       setCommunityData({
         ...data,
-        userID: session?._id as string,
+        // userID: session?._id as string,
+        members_id: response.data.data.members_id.map((item: any) => item._id)
       });
       setSelectedCategories(response.data.data.communityCategory_id);
       setMembers(response.data.data.members_id);

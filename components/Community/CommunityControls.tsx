@@ -9,6 +9,7 @@ import { Auth } from "../General/Auth";
 import { Button } from "@mui/material";
 import { IoIosSettings } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { BsChatSquareFill } from "react-icons/bs";
 
 interface props {
   id: string;
@@ -104,16 +105,39 @@ export default function CommunityControls({ id, members, owner }: props) {
       >
         {joined ? "Unido" : "Unirse"}
       </button> */}
-      {owner?._id != session?._id ? <Button
-        variant="contained"
-        color={`${joined ? "primary" : "secondary"}`}
-        onClick={() => (session?._id ? handleJoinLeave() : openLogInModal())}
-      >
-        {joined ? "Unido" : "Unirse"}
-      </Button> : <div>
-        <IoIosSettings onClick={() => {router.push(`/edit-community/${id}`)
-        }} className="fill-gray-500 cursor-pointer h-9 w-9 hover:fill-gray-600 transition-all"/>
-        </div>}
+      <div className="flex flex-row gap-3">
+        <Button
+          variant="contained"
+          color={"primary"}
+          className="flex flex-row gap-2"
+          onClick={() => router.push(`/chats/${id}`)}
+        >
+          {"CHATS"}
+
+          <BsChatSquareFill className="w-5 h-5 fill-white" />
+        </Button>
+
+        {owner?._id != session?._id ? (
+          <Button
+            variant="contained"
+            color={`${joined ? "primary" : "secondary"}`}
+            onClick={() =>
+              session?._id ? handleJoinLeave() : openLogInModal()
+            }
+          >
+            {joined ? "Unido" : "Unirse"}
+          </Button>
+        ) : (
+          <div>
+            <IoIosSettings
+              onClick={() => {
+                router.push(`/edit-community/${id}`);
+              }}
+              className="fill-gray-500 cursor-pointer h-9 w-9 hover:fill-gray-600 transition-all"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -216,11 +216,3 @@ export const useUpdateCommunity = (id: string, objectData: ICommunity): UseRepon
   ];
 };
 
-
-  return [
-    //states
-    loading,
-    //methods
-    load,
-  ];
-};
