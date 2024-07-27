@@ -2,7 +2,17 @@ import { useState } from "react";
 import { IResponse, IError } from "@/types/response";
 import { IPost } from "@/types/post";
 import { createPost, getAllPostByCommunity, likePost } from "@/services/Post";
-import { createCommunity, getCategories, getCommunities, getCommunity, getHotCommunity, joinCommunity, leaveCommunity, updateCommunity } from "@/services/Community";
+import {
+  createCommunity,
+  getCategories,
+  getCommunities,
+  getCommunity,
+  getHotCommunity,
+  joinCommunity,
+  leaveCommunity,
+  updateCommunity,
+  findCommunity,
+} from "@/services/Community";
 import { ICommunity } from "@/types/community";
 
 type UseReponseType = [
@@ -38,7 +48,10 @@ export const useGetCommunities = (): UseReponseType => {
   ];
 };
 
-export const useGetCommunity = (id: string, user_id: string): UseReponseType => {
+export const useGetCommunity = (
+  id: string,
+  user_id: string
+): UseReponseType => {
   const [loadingCommunity, setLoadingCommunity] = useState<boolean>(false);
   async function loadCommunity(): Promise<{
     response: IResponse | null;
@@ -113,7 +126,10 @@ export const useGetCategories = (): UseReponseType => {
   ];
 };
 
-export const useJoinCommunity = (id: string, objectData: Object): UseReponseType => {
+export const useJoinCommunity = (
+  id: string,
+  objectData: Object
+): UseReponseType => {
   const [loadingJoin, setLoadingJoin] = useState<boolean>(false);
   async function loadJoin(): Promise<{
     response: IResponse | null;
@@ -191,7 +207,10 @@ export const useCreateCommunity = (objectData: ICommunity): UseReponseType => {
   ];
 };
 
-export const useUpdateCommunity = (id: string, objectData: ICommunity): UseReponseType => {
+export const useUpdateCommunity = (
+  id: string,
+  objectData: ICommunity
+): UseReponseType => {
   const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
   async function loadUpdate(): Promise<{
     response: IResponse | null;
@@ -216,3 +235,27 @@ export const useUpdateCommunity = (id: string, objectData: ICommunity): UseRepon
   ];
 };
 
+export const useFindCommunity = (id: string): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await findCommunity(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};

@@ -26,7 +26,7 @@ export default function Communities() {
 
   return (
     <div className="w-full">
-      <Spinner loading={loading} />
+      <Spinner loading={loading} message="cargando" />
       <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-3xl my-5">Comunidades</h1>
         <div>

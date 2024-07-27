@@ -53,7 +53,7 @@ export function ImagePreview({ modal, onClose, image }: Props) {
               />
             </div>
           ) : (
-            <span className="text-xl font-semibold">Select an image</span>
+            <span className="text-xl font-semibold">Seleciona una imagen</span>
           )}
         </div>
       </div>
