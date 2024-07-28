@@ -1,8 +1,13 @@
 import { database } from "./config";
 import { ref, onValue } from "firebase/database";
+import { showNotification } from "@/utils/notifications";
 // TYPES
 import { IChat } from "@/types/chats";
-export function getChat(communityID: string, chatID: string): Promise<IChat[]> {
+export function getChat(
+  bodyNotification: any,
+  communityID: string,
+  chatID: string
+): Promise<IChat[]> {
   return new Promise((resolve, reject) => {
     try {
       const db = database;
@@ -12,7 +17,7 @@ export function getChat(communityID: string, chatID: string): Promise<IChat[]> {
         if (snapshot.exists() && Object.keys(snapshot.val()).length > 0) {
           const data = snapshot.val();
           const messages: IChat[] = [];
-
+          if (bodyNotification.message) showNotification(bodyNotification);
           for (const key in data) {
             messages.push({
               id: key,

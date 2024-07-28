@@ -16,6 +16,7 @@ interface Props {
   currentChat: ICommunityChats | null;
   messages: IChat[] | null;
   userID: string;
+  onSetLastMessage: (value: string) => void;
 }
 
 interface MessageGroupedByDate {
@@ -23,23 +24,26 @@ interface MessageGroupedByDate {
   messages: IChat[];
 }
 
-export function Chat({ currentChat, messages, userID }: Props) {
+export function Chat({
+  currentChat,
+  messages,
+  userID,
+  onSetLastMessage,
+}: Props) {
   const [message, setMessage] = useState<string>("");
   const [showAlert] = useAlert();
   const { session } = useAuthProvider();
   const [loading, load] = usePostMessage(
-    {
-      name: currentChat?.name,
-      message,
-      img: currentChat?.img,
-      userId: session?._id ?? "",
-    },
     { message, userID },
     currentChat?.community_id ?? "",
     currentChat?._id ?? ""
   );
   const chatEndRef = useRef<HTMLDivElement | null>(null);
-
+  useEffect(() => {
+    if (messages && messages.length > 0) {
+      onSetLastMessage(messages[messages.length - 1].message);
+    }
+  }, [messages]);
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);

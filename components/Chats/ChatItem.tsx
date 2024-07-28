@@ -49,6 +49,8 @@ export function ChatItem({ chat, userID, getCommunityChats }: Props) {
           size={60}
           borderColor="#2c3e50"
           borderWidth={3}
+          name={chat.name}
+          letterSize={25}
         />
         <div className="flex flex-col">
           <span className="text-lg font-semibold text-[#2c3e50]">

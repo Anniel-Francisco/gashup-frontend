@@ -22,6 +22,7 @@ export default function Chats() {
   const [data, setData] = useState<IDataResponse | null>(null);
   const [search, setSearch] = useState<string>("");
   const [isResponsive, setIsResponsive] = useState<boolean>(false);
+  const [lastMessage, setLastMessage] = useState<string>("");
   const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
     null
   );
@@ -31,10 +32,19 @@ export default function Chats() {
   const [, loadFindChat] = useFindChat(search, session?._id ?? "");
   const [loading, load] = useGetCommunityChats(session?._id ?? "");
   const [messages, loadMessages, loadingMessages] = useGetChats(
+    {
+      name: selectedChat?.name,
+      message: lastMessage,
+      img: selectedChat?.img,
+      userId: session?._id ?? "",
+    },
     selectedChat?.community_id ?? "",
     selectedChat?._id ?? ""
   );
-
+  const onSetLastMessage = (value: string) => {
+    console.log(value);
+    setLastMessage(value);
+  };
   async function getCommunityChats() {
     const { response } = await load();
     if (response) {
@@ -94,6 +104,7 @@ export default function Chats() {
         currentChat={selectedChat}
         messages={messages}
         userID={session?._id ?? ""}
+        onSetLastMessage={onSetLastMessage}
       />
       {/* Spinner */}
       <Spinner loading={loadingMessages || loading} message="cargando" />
