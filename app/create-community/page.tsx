@@ -241,7 +241,7 @@ export default function CreateCommunity() {
         <div className="w-full h-full flex flex-row gap-4">
           {/* Alert */}
           <ToastContainer />
-          <Spinner loading={loading} />
+          <Spinner loading={loading} message="cargando" />
           <Spinner loading={loadingCreate} />
           <ImagePreview
             modal={modal || modalBanner}

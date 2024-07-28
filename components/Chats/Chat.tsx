@@ -8,15 +8,14 @@ import { Button } from "@mui/material";
 // TYPES
 import { ICommunityChats, IChat } from "@/types/chats";
 // HOOKS
-import { usePostMessage, useJoinChat, useLeaveChat } from "@/hooks/useChats";
+import { usePostMessage } from "@/hooks/useChats";
 import { useAlert } from "@/hooks/useAlert";
-
+// SESSION
+import { useAuthProvider } from "@/context/AuthContext";
 interface Props {
   currentChat: ICommunityChats | null;
   messages: IChat[] | null;
   userID: string;
-  isJoined: boolean;
-  handleJoinChat: () => void;
 }
 
 interface MessageGroupedByDate {
@@ -24,24 +23,17 @@ interface MessageGroupedByDate {
   messages: IChat[];
 }
 
-export function Chat({
-  currentChat,
-  messages,
-  userID,
-  isJoined,
-  handleJoinChat,
-}: Props) {
+export function Chat({ currentChat, messages, userID }: Props) {
   const [message, setMessage] = useState<string>("");
   const [showAlert] = useAlert();
-  const [loadingJoin, laodJoin] = useJoinChat(
-    { chatID: currentChat?._id, userID },
-    currentChat?.community_id ?? ""
-  );
-  const [loadingLeave, laodLeave] = useLeaveChat(
-    { userID },
-    currentChat?._id ?? ""
-  );
+  const { session } = useAuthProvider();
   const [loading, load] = usePostMessage(
+    {
+      name: currentChat?.name,
+      message,
+      img: currentChat?.img,
+      userId: session?._id ?? "",
+    },
     { message, userID },
     currentChat?.community_id ?? "",
     currentChat?._id ?? ""
@@ -75,16 +67,6 @@ export function Chat({
     }
   };
 
-  const handleChatState = async () => {
-    if (isJoined) {
-      await laodLeave();
-      handleJoinChat();
-    } else {
-      await laodJoin();
-      handleJoinChat();
-    }
-  };
-
   const groupedMessages = messages?.reduce<MessageGroupedByDate[]>(
     (acc, message) => {
       const date = moment(message.publicationDate).format("YYYY-MM-DD");
@@ -100,7 +82,10 @@ export function Chat({
   );
 
   return currentChat ? (
-    <div className="flex flex-col w-[75%] max-lg:w-[100%] mb-4">
+    <div
+      className="flex flex-col w-[75%] mb-4 messages-container"
+      style={{ borderColor: "#999999", borderLeftWidth: 1 }}
+    >
       {/* Community Name */}
       <div
         className="flex items-center justify-between px-4 py-2"
@@ -119,17 +104,6 @@ export function Chat({
             {currentChat?.name}
           </span>
         </div>
-        <div>
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: isJoined ? "#9b26b6" : "#afafaf",
-            }}
-            onClick={handleChatState}
-          >
-            <span className="text-sm">{isJoined ? "Unido" : "Unirse"}</span>
-          </Button>
-        </div>
       </div>
       {/* Chats */}
       <div
@@ -139,7 +113,9 @@ export function Chat({
         {groupedMessages?.map((group, groupIndex) => (
           <div key={groupIndex}>
             <h3 className="font-semibold text-center mt-2 text-md text-[#2c3e50]">
-              <span className="bg-[#e5e7eb] p-1 rounded-md">{moment(group.date).format("DD/MM/YYYY")}</span>
+              <span className="bg-[#e5e7eb] p-1 rounded-md">
+                {moment(group.date).format("DD/MM/YYYY")}
+              </span>
             </h3>
             {group.messages.map((msg, index) => (
               <Message key={index} message={msg} userID={userID} />
@@ -149,32 +125,30 @@ export function Chat({
         <div ref={chatEndRef} />
       </div>
       {/* Input */}
-      {isJoined ? (
-        <div className="px-4">
-          <div className="relative">
-            <input
-              placeholder="Ingrese su mensaje"
-              className="bg-transparent py-2 pl-4 w-full rounded-md outline-none"
-              style={{ borderColor: "#999999", borderWidth: 1 }}
-              onInput={(e) =>
-                onSetMessage((e.target as HTMLInputElement).value)
-              }
-              onKeyUp={onPressEnterKey}
-              value={message}
-            />
-            <IoSend
-              onClick={sendMessage}
-              className="absolute right-2 top-3 cursor-pointer"
-              color="#9b26b6"
-            />
-          </div>
+
+      <div className="px-4">
+        <div className="relative">
+          <input
+            placeholder="Ingrese su mensaje"
+            className="bg-transparent py-2 pl-4 w-full rounded-md outline-none"
+            style={{ borderColor: "#999999", borderWidth: 1 }}
+            onInput={(e) => onSetMessage((e.target as HTMLInputElement).value)}
+            onKeyUp={onPressEnterKey}
+            value={message}
+          />
+          <IoSend
+            onClick={sendMessage}
+            className="absolute right-2 top-3 cursor-pointer"
+            color="#9b26b6"
+          />
         </div>
-      ) : (
-        ""
-      )}
+      </div>
     </div>
   ) : (
-    <div className="flex flex-grow items-center justify-center w-[75%]">
+    <div
+      className="flex flex-grow items-center justify-center w-[75%] messages-container"
+      style={{ borderColor: "#999999", borderLeftWidth: 1 }}
+    >
       <span className="font-semibold text-3xl text-[#2c3e50]">
         Selecciona un chat
       </span>

@@ -14,7 +14,7 @@ import { BsChatSquareFill } from "react-icons/bs";
 interface props {
   id: string;
   members?: IUser[] | undefined;
-  owner?: IUser
+  owner?: IUser;
 }
 
 export default function CommunityControls({ id, members, owner }: props) {
@@ -105,17 +105,22 @@ export default function CommunityControls({ id, members, owner }: props) {
       >
         {joined ? "Unido" : "Unirse"}
       </button> */}
-      <div className="flex flex-row gap-3">
-        <Button
-          variant="contained"
-          color={"primary"}
-          className="flex flex-row gap-2"
-          onClick={() => router.push(`/chats/${id}`)}
-        >
-          {"CHATS"}
 
-          <BsChatSquareFill className="w-5 h-5 fill-white" />
-        </Button>
+      <div className="flex flex-row gap-3">
+        {joined || owner?._id == session?._id ? (
+          <Button
+            variant="contained"
+            color={"primary"}
+            className="flex flex-row gap-2"
+            onClick={() => router.push(`/chats/${id}`)}
+          >
+            {"CHATS"}
+
+            <BsChatSquareFill className="w-5 h-5 fill-white" />
+          </Button>
+        ) : (
+          ""
+        )}
 
         {owner?._id != session?._id ? (
           <Button

@@ -37,6 +37,11 @@ export default function Following() {
           return <Card key={index} followed={follow} onClick={goToProfile} />;
         })}
       </div>
+      {data?.followed?.length === 0 && (
+        <h3 className="font-semibold text-center w-full mt-2 text-xl text-[#2c3e50]">
+          No estas siguiendo a nadie
+        </h3>
+      )}
       <Spinner loading={loading} message="cargando" />
     </div>
   );

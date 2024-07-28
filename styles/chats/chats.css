@@ -6,7 +6,7 @@
   width: 6px;
   height: 6px;
 }
-.community-chatsr::-webkit-scrollbar-thumb {
+.community-chats::-webkit-scrollbar-thumb {
   background-color: var(--effect);
   border-radius: 20px;
 }
@@ -16,4 +16,15 @@
 
 .community-chats::-webkit-scrollbar-thumb {
   background-color: var(--effect);
+}
+
+@media (max-width: 768px) {
+  .messages-container {
+    display: none;
+  }
+
+  .chats-container{
+    width: 100%;
+    padding: 0;
+  }
 }

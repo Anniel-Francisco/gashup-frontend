@@ -57,7 +57,10 @@ export default function MyCommunities() {
           ""
         )}
         {data?.Menber && data?.Menber.length > 0 ? (
-          <div className="w-full">
+          <div
+            className="w-full"
+            style={{ marginTop: data?.Owner.length > 0 ? 10 : 0 }}
+          >
             <h2 className="text-2xl w-full font-semibold text-[#2c3e50]">
               Miembro
             </h2>

@@ -8,7 +8,7 @@ import {
   findChat,
 } from "@/services/Chats";
 import { getChat } from "@/utils/chat";
-
+import { showNotification } from "@/utils/notifications";
 import { database } from "@/utils/config";
 import { ref, push, set, update, remove, onValue } from "firebase/database";
 // TYPES
@@ -96,6 +96,7 @@ export const useGetChats = (
 };
 
 export const usePostMessage = (
+  bodyNotification: any,
   body: IPostMessage,
   communityId: string,
   chatId: string
@@ -109,6 +110,9 @@ export const usePostMessage = (
     try {
       setLoading(true);
       const data = await postMessage(body, communityId, chatId);
+      if (body.userID !== bodyNotification.userId) {
+        showNotification(bodyNotification);
+      }
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

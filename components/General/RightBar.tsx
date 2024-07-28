@@ -65,7 +65,10 @@ export default function RightBar() {
                     {item.name}
                   </span>
                   <span className="text-xs md:text-sm lg:text-md font-light">
-                    {item.members_id?.length} Miembros
+                    {item.members_id?.length}{" "}
+                    {item.members_id && item.members_id?.length > 1
+                      ? " Miembros"
+                      : " Miembro"}
                   </span>
                 </div>
               </div>

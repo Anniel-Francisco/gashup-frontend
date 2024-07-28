@@ -20,11 +20,11 @@ import "@/styles/chats/chats.css";
 export default function Chats() {
   const { session } = useAuthProvider();
   const [data, setData] = useState<IDataResponse | null>(null);
-  const [isJoined, setIsJoined] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const [isResponsive, setIsResponsive] = useState<boolean>(false);
   const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
     null
   );
-  const [search, setSearch] = useState<string>("");
   const [selectedChat, setSelectedChat] = useState<ICommunityChats | null>(
     null
   );
@@ -51,10 +51,7 @@ export default function Chats() {
   const setChat = (selectedChat: ICommunityChats) => {
     setSelectedChat(selectedChat);
   };
-  const handleJoinChat = () => {
-    setIsJoined(!isJoined);
-    getCommunityChats();
-  };
+
   const onFindChat = async () => {
     const { response } = await loadFindChat();
     if (response) {
@@ -68,13 +65,7 @@ export default function Chats() {
       setFilterChats(null);
     }
   }, [search]);
-  useEffect(() => {
-    if (selectedChat?.isMember) {
-      setIsJoined(true);
-    } else {
-      setIsJoined(false);
-    }
-  }, [selectedChat, session]);
+
   useEffect(() => {
     if (!session) {
       setData(null);
@@ -103,8 +94,6 @@ export default function Chats() {
         currentChat={selectedChat}
         messages={messages}
         userID={session?._id ?? ""}
-        isJoined={isJoined}
-        handleJoinChat={handleJoinChat}
       />
       {/* Spinner */}
       <Spinner loading={loadingMessages || loading} message="cargando" />
