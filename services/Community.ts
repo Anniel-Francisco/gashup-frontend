@@ -19,7 +19,9 @@ export async function getCommunities() {
 export async function getCommunity(id: string, user_id: string) {
   const noCache = `noCache=${new Date().getTime()}`;
   return http
-    .get(`community/getCommunity/${id}/${user_id}??${noCache}`)
+    .get(`community/getCommunity/${id}??${noCache}`, {
+      params: { user_id },
+    })
     .then((data) => data);
 }
 

@@ -19,11 +19,11 @@ export interface IPost {
 export interface IComment {
   _id?: string;
   description: string;
-  user_id: string | IUser | null;
+  user_id: string | IUser;
   post_id: string | IPost;
   commentDate?: string;
-  user_likes?: Array<string>;
-  subComments?: Array<ISubComment> | ISubComment[]
+  user_likes?: Array<string> | Array<IUser>;
+  subComments?: Array<ISubComment> 
 }
 
 export interface ISubComment {

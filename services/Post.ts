@@ -61,6 +61,10 @@ export async function getTimeLine(id: string) {
   return http.get(`post/timeLine/${id}`).then((data) => data);
 }
 
+export async function getPostByUserId(id: string) {
+  return http.get(`post/userProfile/${id}`).then((data) => data);
+}
+
 // PUT
 
 export async function updatePost(id: string, body: IPost) {
@@ -80,6 +84,12 @@ export async function likeComment(id: string, user: string) {
 export async function deletePost(id: string) {
   return http.delete(`post/deletePost/${id}`).then((data) => data);
 }
-export async function getPostByUserId(id: string) {
-  return http.get(`post/userProfile/${id}`).then((data) => data);
+
+export async function deleteComment(id: string) {
+  return http.delete(`post/deleteComment/${id}`).then((data) => data);
 }
+
+export async function deleteSubComment(id: string) {
+  return http.delete(`post/deleteResponseComment/${id}`).then((data) => data);
+}
+

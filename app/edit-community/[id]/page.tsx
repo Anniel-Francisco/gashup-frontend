@@ -28,9 +28,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { useAuthProvider } from "@/context/AuthContext";
-import { useEditor } from "@tiptap/react";
-import Placeholder from "@tiptap/extension-placeholder";
-import StarterKit from "@tiptap/starter-kit";
 import { useAlert } from "@/hooks/useAlert";
 import { useRouter } from "next/navigation";
 import CreateCommunityDescription from "@/components/Community/CreateCommunityDescription";
@@ -39,8 +36,6 @@ import { ICategory } from "@/types/Categories";
 import { MdPhotoLibrary } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { Visibility } from "@mui/icons-material";
-import { FaRegUserCircle } from "react-icons/fa";
-import { IoPhonePortraitOutline } from "react-icons/io5";
 import { ImagePreview } from "@/components/SignUp/ImagePreview";
 import { ToastContainer } from "react-toastify";
 import AlertDialog from "@/components/ConfirmationDialog";
@@ -84,11 +79,13 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
   const [bannerPreview, setBannerPreview] = useState<string>("");
 
   const [loadingUpdate, loadUpdate] = useUpdateCommunity(
-    communityData?._id ?? "", communityData
+    communityData?._id ?? "",
+    communityData
   );
   const [openConfimationModal, setOpenConfirmationModal] = useState(false);
   const [loading, load] = useGetCommunity(params.id, session?._id ?? "");
   const [members, setMembers] = useState<IUser[]>([]);
+  const [combinedUsers, setCombinedUsers] = useState<IUser[]>([]);
   const [selectedAdmins, setSelectedAdmins] = useState<string[]>([]);
   const [selectedBannedUsers, setSelectedBannedUsers] = useState<string[]>([]);
 
@@ -98,14 +95,24 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
       if (response.data.data.owner_id._id != session?._id) {
         router.push(`/communities/${response?.data?.data?._id}`);
       }
-      const { owner_id, ...data} = response.data.data
+      const { owner_id, ...data } = response.data.data;
       setCommunityData({
         ...data,
         // userID: session?._id as string,
-        members_id: response.data.data.members_id.map((item: any) => item._id)
+        members_id: response.data.data.members_id.map((item: any) => item._id),
       });
       setSelectedCategories(response.data.data.communityCategory_id);
+      setSelectedAdmins(
+        response.data.data.admins_id.map((item: any) => item._id)
+      );
+      setSelectedBannedUsers(
+        response.data.data.bannedUsers_id.map((item: any) => item._id)
+      );
       setMembers(response.data.data.members_id);
+      setCombinedUsers([
+        ...response.data.data.bannedUsers_id,
+        ...response.data.data.members_id,
+      ]);
       setImagePreview(response.data.data.img);
       setBannerPreview(response.data.data.banner);
     } else {
@@ -133,7 +140,7 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
   };
 
   const onSubmit = async () => {
-    setOpenConfirmationModal(false)
+    setOpenConfirmationModal(false);
 
     if (!communityData.img) {
       return showAlert("warning", "Debe agregar una imagen.");
@@ -302,7 +309,7 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
           <AlertDialog
             setOpen={setOpenConfirmationModal}
             open={openConfimationModal}
-            titleText={"Crear comunidad"}
+            titleText={"Edit comunidad"}
             confirmationText={"Estas seguro de editar esta comunidad?"}
             cancelButtonText={"Cancelar"}
             confirmButtonText={"Confirmar"}
@@ -476,7 +483,7 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
                           <Box
                             sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
                           >
-                            {members
+                            {combinedUsers
                               .filter((member) =>
                                 selected.includes(member._id as string)
                               )
@@ -487,7 +494,7 @@ export default function EditCommunity({ params }: { params: { id: string } }) {
                         )}
                         MenuProps={MenuProps}
                       >
-                        {members.map((member) => (
+                        {combinedUsers.map((member) => (
                           <MenuItem
                             key={member._id}
                             value={member._id}

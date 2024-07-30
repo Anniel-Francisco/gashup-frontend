@@ -11,9 +11,6 @@ import Comment from "@/components/Comments/Comment";
 import { Spinner } from "@/components/Spinner/Spinner";
 
 export default function PostPage({ params }: { params: { id: string } }) {
-  const { session } = useAuthProvider();
-  const router = useRouter();
-
   const [post, setPost] = useState<IPost | null>(null);
   const [comments, setComments] = useState<Array<IComment>>([]);
   const [subComments, setSubComments] = useState<Array<ISubComment>>([]);
@@ -59,8 +56,22 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
   const addNewSubComment = (item: ISubComment) => {
     getPost();
-    setSubComments((prev) => [item, ...prev]);
+    // setSubComments((prev) => [item, ...prev]);
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment._id === item.comment_id
+          ? {
+              ...comment,
+              subComments: comment.subComments
+                ? [...comment.subComments, item]
+                : [item],
+            }
+          : comment
+      )
+    );
   };
+
+  console.log(comments)
 
   useEffect(() => {
     getPost();
@@ -86,6 +97,8 @@ export default function PostPage({ params }: { params: { id: string } }) {
             <Comment
               key={index}
               item={item}
+              comments={comments}
+              setComments={setComments}
               subCommentActive={subCommentActive}
               toggleSubCommentActive={toggleSubCommentActive}
               callback={addNewSubComment}
