@@ -2,19 +2,22 @@
   height: calc(100vh - 151px);
   overflow-y: auto;
 }
-.community-chats::-webkit-scrollbar {
+.messages {
+  overflow-y: auto;
+}
+.community-chats .messages::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-.community-chats::-webkit-scrollbar-thumb {
+.community-chats .messages::-webkit-scrollbar-thumb {
   background-color: var(--effect);
   border-radius: 20px;
 }
-.community-chats::-webkit-scrollbar-track {
+.community-chats .messages::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-.community-chats::-webkit-scrollbar-thumb {
+.community-chats .messages::-webkit-scrollbar-thumb {
   background-color: var(--effect);
 }
 
@@ -23,7 +26,7 @@
     display: none;
   }
 
-  .chats-container{
+  .chats-container {
     width: 100%;
     padding: 0;
   }

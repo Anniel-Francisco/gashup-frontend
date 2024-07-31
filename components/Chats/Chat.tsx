@@ -1,22 +1,23 @@
 import { useState, useRef, useEffect } from "react";
 import moment from "moment";
+// ICONS
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 // COMPONENTS
 import { Avatar } from "../Avatar/Avatar";
 import { Message } from "./Message";
-import { Button } from "@mui/material";
+import AlertDialog from "@/components/ConfirmationDialog";
 // TYPES
 import { ICommunityChats, IChat } from "@/types/chats";
 // HOOKS
-import { usePostMessage } from "@/hooks/useChats";
+import { usePostMessage, useDeleteMessage } from "@/hooks/useChats";
 import { useAlert } from "@/hooks/useAlert";
-// SESSION
-import { useAuthProvider } from "@/context/AuthContext";
+
 interface Props {
   currentChat: ICommunityChats | null;
   messages: IChat[] | null;
   userID: string;
-  onSetLastMessage: (value: string) => void;
+  clearCurrentChat: () => void;
 }
 
 interface MessageGroupedByDate {
@@ -28,22 +29,20 @@ export function Chat({
   currentChat,
   messages,
   userID,
-  onSetLastMessage,
+  clearCurrentChat,
 }: Props) {
   const [message, setMessage] = useState<string>("");
   const [showAlert] = useAlert();
-  const { session } = useAuthProvider();
+  const [loadingDelete, loadDelete] = useDeleteMessage();
+  const [modal, setModal] = useState<boolean>(false);
+  const [messageId, setMessageId] = useState<string>("");
   const [loading, load] = usePostMessage(
     { message, userID },
     currentChat?.community_id ?? "",
     currentChat?._id ?? ""
   );
   const chatEndRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    if (messages && messages.length > 0) {
-      onSetLastMessage(messages[messages.length - 1].message);
-    }
-  }, [messages]);
+  const windowWidth = window.innerWidth;
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -51,7 +50,20 @@ export function Chat({
   const onSetMessage = (message: string) => {
     setMessage(message);
   };
-
+  const onDeleteMessage = async () => {
+    try {
+      await loadDelete(
+        currentChat?.community_id ?? "",
+        currentChat?._id ?? "",
+        messageId
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      showAlert("success", "Mensaje eliminado");
+      setModal(false);
+    }
+  };
   const sendMessage = async () => {
     if (message) {
       const { response, error } = await load();
@@ -84,12 +96,28 @@ export function Chat({
     },
     [] as MessageGroupedByDate[]
   );
-
+  const onDelete = (message: IChat) => {
+    if (message.userID === userID) {
+      setModal(!modal);
+      setMessageId(message.id);
+    }
+  };
   return currentChat ? (
     <div
-      className="flex flex-col w-[75%] mb-4 messages-container"
-      style={{ borderColor: "#999999", borderLeftWidth: 1 }}
+      className="flex flex-col w-[75%] max-md:w-[100%]  messages-container"
+      style={
+        windowWidth <= 768 ? {} : { borderColor: "#999999", borderLeftWidth: 1 }
+      }
     >
+      <AlertDialog
+        setOpen={setModal}
+        open={modal}
+        titleText={"Eliminar mensaje"}
+        confirmationText={"Estas seguro de eliminar este mensaje?"}
+        cancelButtonText={"Cancelar"}
+        confirmButtonText={"Confirmar"}
+        callback={onDeleteMessage}
+      />
       {/* Community Name */}
       <div
         className="flex items-center justify-between px-4 py-2"
@@ -99,9 +127,19 @@ export function Chat({
         }}
       >
         <div className="flex flex-row items-center gap-3">
+          {windowWidth <= 768 && (
+            <div>
+              <MdOutlineKeyboardBackspace
+                onClick={clearCurrentChat}
+                color="#2c3e50"
+                size={20}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+          )}
           <Avatar
             size={50}
-            name={currentChat.name}
+            name={currentChat?.name ?? ""}
             image={currentChat?.img ? currentChat.img : ""}
           />
           <span className="font-bold text-xl text-[#2c3e50]">
@@ -110,19 +148,21 @@ export function Chat({
         </div>
       </div>
       {/* Chats */}
-      <div
-        className="flex-grow px-4 overflow-auto"
-        style={{ height: "calc(100vh - 76px)" }}
-      >
+      <div className="flex-grow px-4 messages">
         {groupedMessages?.map((group, groupIndex) => (
           <div key={groupIndex}>
-            <h3 className="font-semibold text-center mt-2 text-md text-[#2c3e50]">
+            <h3 className="font-semibold text-center my-4 text-md text-[#2c3e50]">
               <span className="bg-[#e5e7eb] p-1 rounded-md">
                 {moment(group.date).format("DD/MM/YYYY")}
               </span>
             </h3>
             {group.messages.map((msg, index) => (
-              <Message key={index} message={msg} userID={userID} />
+              <Message
+                key={index}
+                message={msg}
+                userID={userID}
+                onDelete={onDelete}
+              />
             ))}
           </div>
         ))}
@@ -130,7 +170,7 @@ export function Chat({
       </div>
       {/* Input */}
 
-      <div className="px-4">
+      <div className="px-4 mb-2">
         <div className="relative">
           <input
             placeholder="Ingrese su mensaje"

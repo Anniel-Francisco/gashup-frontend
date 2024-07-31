@@ -13,6 +13,7 @@ import {
   updateCommunity,
   findCommunity,
   createCommunityChat,
+  updateCommunityChat,
   findCommunityChats,
 } from "@/services/Community";
 import { ICommunity } from "@/types/community";
@@ -291,7 +292,36 @@ export const useCreateCommunityChat = (body: any): UseReponseType => {
     load,
   ];
 };
+export const useUpdateCommunityChat = (
+  id: string,
+  body: any
+): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const formData = new FormData();
+  formData.append("name", body.name);
+  formData.append("img", body.img);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await updateCommunityChat(id, formData);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
 
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
 export const useFindCommunityChats = (
   id: string,
   userId: string

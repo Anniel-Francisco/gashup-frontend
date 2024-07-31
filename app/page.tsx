@@ -8,7 +8,7 @@ import { IPost } from "@/types/post";
 import { useEffect, useState } from "react";
 export default function Home() {
   const { session } = useAuthProvider();
-  const [loading, load] = useGetTimeLine(session?._id ?? "");
+  const [loading, load] = useGetTimeLine(session?._id ?? null);
   const [posts, setPosts] = useState<Array<IPost>>([]);
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import {
   useGetCommunityChats,
   useGetChats,
   useFindChat,
+  useDeleteMessage,
 } from "@/hooks/useChats";
 // TYPES
 import { IDataResponse } from "@/types/response";
@@ -16,13 +17,17 @@ import { CommunityChats } from "@/components/Chats/CommunityChats";
 import { Chat } from "@/components/Chats/Chat";
 import { ToastContainer } from "react-toastify";
 import { Spinner } from "@/components/Spinner/Spinner";
+
+// STYLES
 import "@/styles/chats/chats.css";
+
 export default function Chats() {
   const { session } = useAuthProvider();
   const [data, setData] = useState<IDataResponse | null>(null);
   const [search, setSearch] = useState<string>("");
-  const [isResponsive, setIsResponsive] = useState<boolean>(false);
-  const [lastMessage, setLastMessage] = useState<string>("");
+  const windowWidth = window.innerWidth;
+  const chatsRef = document.querySelector(".chats-container");
+  const chatRef = document.querySelector(".messages-container");
   const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
     null
   );
@@ -31,20 +36,12 @@ export default function Chats() {
   );
   const [, loadFindChat] = useFindChat(search, session?._id ?? "");
   const [loading, load] = useGetCommunityChats(session?._id ?? "");
+
   const [messages, loadMessages, loadingMessages] = useGetChats(
-    {
-      name: selectedChat?.name,
-      message: lastMessage,
-      img: selectedChat?.img,
-      userId: session?._id ?? "",
-    },
     selectedChat?.community_id ?? "",
     selectedChat?._id ?? ""
   );
-  const onSetLastMessage = (value: string) => {
-    console.log(value);
-    setLastMessage(value);
-  };
+
   async function getCommunityChats() {
     const { response } = await load();
     if (response) {
@@ -58,8 +55,19 @@ export default function Chats() {
   const onSetSearch = (value: string) => {
     setSearch(value);
   };
+  const clearSelectedChat = () => {
+    setSelectedChat(null);
+    chatRef.style.display = "none";
+    chatsRef.style.display = "block";
+  };
   const setChat = (selectedChat: ICommunityChats) => {
-    setSelectedChat(selectedChat);
+    if (windowWidth >= 768) {
+      setSelectedChat(selectedChat);
+    } else {
+      setSelectedChat(selectedChat);
+      chatRef.style.display = "flex";
+      chatsRef.style.display = "none";
+    }
   };
 
   const onFindChat = async () => {
@@ -68,6 +76,7 @@ export default function Chats() {
       setFilterChats([...response.data.data]);
     }
   };
+
   useEffect(() => {
     if (search) {
       onFindChat();
@@ -104,7 +113,7 @@ export default function Chats() {
         currentChat={selectedChat}
         messages={messages}
         userID={session?._id ?? ""}
-        onSetLastMessage={onSetLastMessage}
+        clearCurrentChat={clearSelectedChat}
       />
       {/* Spinner */}
       <Spinner loading={loadingMessages || loading} message="cargando" />

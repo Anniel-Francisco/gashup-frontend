@@ -226,7 +226,7 @@ export const useGetPostById = (id: string): UseReponseType => {
   ];
 };
 
-export const useGetTimeLine = (id: string): UseReponseType => {
+export const useGetTimeLine = (id: string | null): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
     response: IResponse | null;
@@ -234,7 +234,7 @@ export const useGetTimeLine = (id: string): UseReponseType => {
   }> {
     try {
       setLoading(true);
-      const data = await getTimeLine(id);
+      const data = await getTimeLine({ _id: id });
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

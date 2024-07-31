@@ -1,11 +1,10 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthProvider } from "@/context/AuthContext";
 import CommunityHeader from "@/components/Community/CommunityHeader";
 import CommunityControls from "@/components/Community/CommunityControls";
 import CommunityDescription from "@/components/Community/CommunityDescription";
-import MembersBar from "@/components/Community/MembersBar";
 import MappedPosts from "@/components/Post/MappedPosts";
 import CreatePost from "@/components/Post/CreatePost";
 import { Spinner } from "@/components/Spinner/Spinner";
@@ -60,7 +59,9 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     getCommunity();
   }, []);
-
+  useEffect(() => {
+    if (!session) redirect("/");
+  }, [session]);
   function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
@@ -184,7 +185,6 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
                   members={community?.members_id as IUser[]}
                   rank={community?.rank ?? 0}
                 />
-                <MembersBar />
               </div>
             </div>
           </div>

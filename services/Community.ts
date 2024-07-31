@@ -103,6 +103,12 @@ export async function likePost(id: string, user: string) {
   return http.put(`post/likePost/${id}`, { user }).then((data) => data);
 }
 
+export async function updateCommunityChat(id: string, body: any) {
+  return http
+    .put(`community/updateCommunityChat/${id}`, body)
+    .then((data) => data);
+}
+
 // DELETE
 
 export async function deletePost(id: string) {

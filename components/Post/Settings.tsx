@@ -83,9 +83,9 @@ export default function Settings({ id, post, setPosts }: props) {
         }}
       >
         <List>
-          <ListItem button>
+          {/* <ListItem button>
             <ListItemText primary="Editar publicación" />
-          </ListItem>
+          </ListItem> */}
           <ListItem button onClick={openConfirmation}>
             <ListItemText primary="Borrar publicación" />
           </ListItem>

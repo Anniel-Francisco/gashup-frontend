@@ -1,4 +1,6 @@
+"use client";
 import { useEffect, useState } from "react";
+
 // HOOKS
 import { useJoinChat, useLeaveChat } from "@/hooks/useChats";
 // COMPONENTS
@@ -8,17 +10,24 @@ import { Button } from "@mui/material";
 import { ICommunityChats } from "@/types/chats";
 // ICONS
 import { MdGroups } from "react-icons/md";
+import { HiPencil } from "react-icons/hi2";
 interface Props {
   chat: ICommunityChats;
   userID?: string;
   getCommunityChats: () => void;
+  goToEditChat: (value: string) => void;
 }
-export function ChatItem({ chat, userID, getCommunityChats }: Props) {
-  const [loadingJoin, laodJoin] = useJoinChat(
+export function ChatItem({
+  chat,
+  userID,
+  getCommunityChats,
+  goToEditChat,
+}: Props) {
+  const [, laodJoin] = useJoinChat(
     { chatID: chat?._id, userID },
     chat?.community_id ?? ""
   );
-  const [loadingLeave, laodLeave] = useLeaveChat({ userID }, chat?._id ?? "");
+  const [, laodLeave] = useLeaveChat({ userID }, chat?._id ?? "");
 
   const [isJoined, setIsJoined] = useState<boolean>(false);
   useEffect(() => {
@@ -41,6 +50,7 @@ export function ChatItem({ chat, userID, getCommunityChats }: Props) {
     setIsJoined(!isJoined);
     getCommunityChats();
   }
+
   return (
     <div className="flex flex-row items-center justify-between gap-2 border-b-2 pb-2 border-[#2c3e50] ">
       <div className="flex flex-row items-center gap-2">
@@ -61,6 +71,16 @@ export function ChatItem({ chat, userID, getCommunityChats }: Props) {
             <span className="text-md font-normal">
               {chat.members_id?.length}
             </span>
+            {chat.chatOwner_id === userID && (
+              <div>
+                <HiPencil
+                  size={20}
+                  color="#2c3e50"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => goToEditChat(chat._id)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

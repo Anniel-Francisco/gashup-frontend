@@ -6,6 +6,8 @@ import {
   joinChat,
   leaveChat,
   findChat,
+  getChatById,
+  deleteMessage,
 } from "@/services/Chats";
 import { getChat } from "@/utils/chat";
 
@@ -49,7 +51,6 @@ export const useGetCommunityChats = (id: string): UseChatsType => {
 };
 
 export const useGetChats = (
-  bodyNotification: any,
   communityId: string,
   chatId: string
 ): [messages: IChat[] | null, () => void, boolean] => {
@@ -84,7 +85,7 @@ export const useGetChats = (
   async function load() {
     setLoading(true);
     try {
-      const data = await getChat(bodyNotification, communityId, chatId);
+      const data = await getChat(communityId, chatId);
       setMessages(data);
     } catch (error) {
       console.error(error);
@@ -194,6 +195,71 @@ export const useFindChat = (search: string, id: string): UseChatsType => {
     try {
       setLoading(true);
       const data = await findChat(search, id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useGetChatById = (id: string): UseChatsType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await getChatById(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+type UseDeleteMessageType = [
+  boolean,
+  (
+    communityID: string,
+    chatID: string,
+    messageID: string
+  ) => Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }>
+];
+export const useDeleteMessage = (): UseDeleteMessageType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(
+    communityID: string,
+    chatID: string,
+    messageID: string
+  ): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await deleteMessage(communityID, chatID, messageID);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

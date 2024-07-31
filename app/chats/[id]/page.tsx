@@ -40,6 +40,10 @@ export default function Chats({ params }: { params: { id: string } }) {
     router.push(`/create-chat/${params.id}`);
   };
 
+  const goToEditChat = (id: string) => {
+    router.push(`/edit-chat/${id}`);
+  };
+
   return (
     <div className="w-full">
       <Spinner loading={loading} message="cargando" />
@@ -55,6 +59,7 @@ export default function Chats({ params }: { params: { id: string } }) {
             key={index}
             chat={item}
             userID={session?._id}
+            goToEditChat={goToEditChat}
             getCommunityChats={getCommunityChats}
           />
         ))}
