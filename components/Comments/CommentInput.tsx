@@ -26,7 +26,7 @@ export default function CommentInput({ className, post_id, callback }: props) {
   const comment: IComment = {
     description: "",
     post_id: post_id,
-    user_id: session?._id ? session?._id : null,
+    user_id: session?._id as string,
   };
 
   const router = useRouter();

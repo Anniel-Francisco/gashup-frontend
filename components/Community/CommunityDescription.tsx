@@ -1,7 +1,9 @@
 "use client";
 import { Avatar } from "@/components/Avatar/Avatar";
+import { useAuthProvider } from "@/context/AuthContext";
 import { IUser } from "@/types/user";
 import Divider from "@mui/material/Divider";
+import { useRouter } from "next/navigation";
 
 interface props {
   name?: string;
@@ -60,12 +62,23 @@ export default function CommunityDescription({
 }
 
 function AdminCard({ item }: { item: IUser }) {
+  const { session } = useAuthProvider();
+  const router = useRouter();
+
+  const goToPerfil = (id: string) => {
+    if (id === session?._id) {
+      router.push(`/profile/posts`);
+    } else {
+      router.push(`/user/${id}`);
+    }
+  };
+
   return (
     <div className="w-full flex flex-row items-center gap-3">
       <Avatar
         size={40}
         image={item?.img?.toString()}
-        // onClick={goToRoute}
+        onClick={() => goToPerfil(item._id as string)}
         styles={{ cursor: "pointer" }}
       />
       <div className="font-bold flex items-center flex-row gap-1">

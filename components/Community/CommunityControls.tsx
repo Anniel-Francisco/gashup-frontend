@@ -10,6 +10,7 @@ import { Button } from "@mui/material";
 import { IoIosSettings } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { BsChatSquareFill } from "react-icons/bs";
+import { ToastContainer } from "react-toastify";
 
 interface props {
   id: string;
@@ -73,7 +74,7 @@ export default function CommunityControls({ id, members, owner }: props) {
   };
 
   const openLogInModal = () => {
-    // setAuthModal(!authModal);
+    console.log("hola")
     return showAlert("warning", "Debes iniciar sesión para unirte");
   };
 
@@ -83,6 +84,8 @@ export default function CommunityControls({ id, members, owner }: props) {
 
   return (
     <div className="flex w-full mt-14 justify-between px-3 pb-2 items-center">
+      <ToastContainer />
+
       <div className="flex flex-row items-center gap-3 ">
         <span>{members?.length ? members?.length : 0} Miembros</span>
 

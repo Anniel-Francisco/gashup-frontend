@@ -53,6 +53,8 @@ export default function CreatePost({ className, community_id }: props) {
   };
 
   const onSubmit = async () => {
+    setOpenConfirmationModal(false);
+
     const { response, error } = await load();
     if (error) {
       return showAlert(
@@ -65,10 +67,8 @@ export default function CreatePost({ className, community_id }: props) {
 
     if (response?.data.ok) {
       clearData();
-      setOpenConfirmationModal(false);
       return showAlert("success", response?.data.mensaje);
     } else {
-      setOpenConfirmationModal(false)
       return showAlert("warning", response?.data.mensaje);
     }
   };
@@ -77,7 +77,7 @@ export default function CreatePost({ className, community_id }: props) {
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: "What are you thinking?",
+        placeholder: "Que estas pensando?",
         emptyEditorClass:
           "cursor-text before:content-[attr(data-placeholder)] before:absolute before:left-3 before:text-mauve-11 before:opacity-50 before-pointer-events-none",
       }),
@@ -138,7 +138,7 @@ export default function CreatePost({ className, community_id }: props) {
       {/* Alert */}
       <ToastContainer />
       {/* Spinner */}
-      <Spinner loading={loading} message="posting..."/>
+      <Spinner loading={loading} message="Publicando..."/>
     </div>
   );
 }

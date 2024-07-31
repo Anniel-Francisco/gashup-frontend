@@ -18,8 +18,12 @@ interface props {
 }
 
 import { useAuthProvider } from "@/context/AuthContext";
+import { useAlert } from "@/hooks/useAlert";
+import { ToastContainer } from "react-toastify";
 export default function Post({ data, post, setPosts }: props) {
   const router = useRouter();
+  const [showAlert] = useAlert();
+
   const { session, removeSession } = useAuthProvider();
   const [loading, load] = useLikePost(data?._id ?? "", session?._id ?? "");
   const [active, setActive] = useState(false);
@@ -47,6 +51,10 @@ export default function Post({ data, post, setPosts }: props) {
   }, []);
 
   const likePost = async () => {
+    if (!session?._id) {
+      return showAlert("warning", "Debes iniciar sessión");
+    }
+
     const { response, error } = await load();
 
     if (response?.data.ok) {
@@ -74,7 +82,10 @@ export default function Post({ data, post, setPosts }: props) {
   };
 
   return (
-    <div className="flex flex-col gap-3 border w-full border-r-2 rounded-md my-3">
+    <div className="flex flex-col gap-2 border w-full border-r-2 rounded-md my-3">
+      {/* Alert */}
+      <ToastContainer />
+
       <div className="flex justify-between px-4 pt-4">
         <div className="flex flex-row items-center gap-3">
           <Avatar
@@ -82,14 +93,24 @@ export default function Post({ data, post, setPosts }: props) {
             image={
               typeof data.user !== "string" ? data.user?.img?.toString() : ""
             }
-            onClick={() => goToPerfil(data?.user?._id)}
+            onClick={() => {
+              const id = typeof data?.user !== "string" && data?.user?._id;
+              if (typeof id === "string") {
+                goToPerfil(id);
+              }
+            }}
             styles={{ cursor: "pointer" }}
           />
           <div className="flex flex-col">
             <div className="font-bold flex items-center flex-row gap-1">
               <span
                 className="cursor-pointer hover:text-gray-700"
-                onClick={() => goToPerfil(data?.user?._id)}
+                onClick={() => {
+                  const id = typeof data?.user !== "string" && data?.user?._id;
+                  if (typeof id === "string") {
+                    goToPerfil(id);
+                  }
+                }}
               >
                 {typeof data.user !== "string" ? data.user?.name : ""}
               </span>
@@ -107,7 +128,11 @@ export default function Post({ data, post, setPosts }: props) {
         {session?._id ==
           (typeof data.user !== "string" ? data.user?._id : data.user) && (
           // <SlOptionsVertical className="w-6 h-6 fill-black cursor-pointer" />
-          <Settings id={data._id ?? ""} post={post ?? []} setPosts={setPosts ?? Function} />
+          <Settings
+            id={data._id ?? ""}
+            post={post ?? []}
+            setPosts={setPosts ?? Function}
+          />
         )}
       </div>
       <div
@@ -125,6 +150,7 @@ export default function Post({ data, post, setPosts }: props) {
           amount={userLikesAmount}
           callback={likePost}
           active={active}
+          classNameButton={"p-3"}
         />
         <PostButton
           Icon={FaComments}
@@ -132,8 +158,14 @@ export default function Post({ data, post, setPosts }: props) {
             !Number(data.comments?.length) ? 0 : Number(data.comments?.length)
           }
           callback={() => router.push(`/post/${data._id}`)}
+          classNameButton={"p-2"}
         />
-        <PostButton Icon={FaShare} amount={0} callback={() => {}} />
+        <PostButton
+          Icon={FaShare}
+          amount={0}
+          callback={() => {}}
+          classNameButton={"p-3"}
+        />
       </div>
     </div>
   );

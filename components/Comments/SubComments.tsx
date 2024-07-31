@@ -1,20 +1,30 @@
-import {  ISubComment } from "@/types/post";
+import { ISubComment } from "@/types/post";
 import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
 import SubCommentInput from "./SubCommentInput";
+import { useAuthProvider } from "@/context/AuthContext";
 
 interface props {
   item: ISubComment;
-//   subCommentActive: string | null;
-//   toggleSubCommentActive: Function;
-//   callback: (item: ISubComment) => void;
+  //   subCommentActive: string | null;
+  //   toggleSubCommentActive: Function;
+  //   callback: (item: ISubComment) => void;
 }
 
 export default function SubComment({
   item,
-//   callback,
-}: props) {
+}: //   callback,
+props) {
   const router = useRouter();
+  const { session } = useAuthProvider();
+
+  const goToPerfil = (id: string) => {
+    if (id === session?._id) {
+      router.push(`/profile/posts`);
+    } else {
+      router.push(`/user/${id}`);
+    }
+  };
 
   return (
     <>
@@ -24,7 +34,13 @@ export default function SubComment({
             <Avatar
               size={30}
               image={item?.user_id?.img}
-              onClick={() => router.push("/profile/posts")}
+              onClick={() => {
+                const id =
+                  typeof item?.user_id !== "string" && item?.user_id?._id;
+                if (typeof id === "string") {
+                  goToPerfil(id);
+                }
+              }}
               pointer
             />
           )}
@@ -34,7 +50,13 @@ export default function SubComment({
                 {typeof item?.user_id !== "string" && (
                   <span
                     className="font-bold text-sm cursor-pointer"
-                    onClick={() => router.push("/profile/posts")}
+                    onClick={() => {
+                      const id =
+                        typeof item?.user_id !== "string" && item?.user_id?._id;
+                      if (typeof id === "string") {
+                        goToPerfil(id);
+                      }
+                    }}
                   >
                     {item?.user_id?.name}
                   </span>
@@ -48,15 +70,17 @@ export default function SubComment({
               />
             </div>
 
-            <div className="flex pl-2 gap-2 mt-1">
-              <span>Like</span>
-              <span
-                className="cursor-pointer"
-                // onClick={() => toggleSubCommentActive(item?._id ?? "")}
-              >
-                Comment
-              </span>
-            </div>
+            {session?._id && (
+              <div className="flex pl-2 gap-2 mt-1 text-sm">
+                <span>Me gusta</span>
+                <span
+                  className="cursor-pointer"
+                  // onClick={() => toggleSubCommentActive(item?._id ?? "")}
+                >
+                  Comentar
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -260,11 +260,12 @@ export default function CreateCommunity() {
           />
           <div className="w-full md:w-[70%] p-1">
             <div className="flex flex-row justify-between items-center mt-2 mb-5">
-              <h1 className="font-bold text-3xl">Crear comunidad</h1>
+              <h1 className="font-bold text-xl md:text-3xl">Crear comunidad</h1>
               <div>
                 <Button
                   variant="outlined"
                   color="primary"
+                  size="small"
                   href={`/create-community`}
                 >
                   Cancelar
@@ -278,7 +279,7 @@ export default function CreateCommunity() {
                   e.preventDefault();
                   setOpenConfirmationModal(true);
                 }}
-                sx={{ mt: 3 }}
+                sx={{ mt: 1 }}
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
