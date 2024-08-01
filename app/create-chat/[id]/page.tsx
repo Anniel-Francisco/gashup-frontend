@@ -182,7 +182,7 @@ export default function CreateCommunityChat({
           />
           <div className="w-full md:w-[70%] p-1">
             <div className="flex flex-row justify-between items-center mt-2 mb-5">
-              <h1 className="font-bold text-3xl">Crear Chat</h1>
+              <h1 className="font-bold text-3xl text-[#2c3e76]">Crear Chat</h1>
               <div>
                 <Button
                   variant="outlined"

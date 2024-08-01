@@ -260,7 +260,7 @@ export default function CreateCommunity() {
           />
           <div className="w-full md:w-[70%] p-1">
             <div className="flex flex-row justify-between items-center mt-2 mb-5">
-              <h1 className="font-bold text-xl md:text-3xl">Crear comunidad</h1>
+              <h1 className="font-bold text-xl md:text-3xl text-[#2c3e76]">Crear comunidad</h1>
               <div>
                 <Button
                   variant="outlined"

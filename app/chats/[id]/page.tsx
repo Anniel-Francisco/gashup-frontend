@@ -48,7 +48,7 @@ export default function Chats({ params }: { params: { id: string } }) {
     <div className="w-full">
       <Spinner loading={loading} message="cargando" />
       <div className="flex flex-row justify-between items-center">
-        <h1 className="font-bold text-3xl my-5">CHATS</h1>
+        <h1 className="font-bold text-3xl my-5 text-[#2c3e76]">CHATS</h1>
         <Button variant="outlined" color="primary" onClick={goToCreateChat}>
           Crear Chat
         </Button>
