@@ -11,14 +11,14 @@ interface Props {
   longMessage?: boolean;
 }
 
-export function Spinner({ loading, message , longMessage}: Props) {
+export function Spinner({ loading, message, longMessage }: Props) {
   const override: CSSProperties = {
     display: "block",
     margin: "0 auto",
     borderColor: "red",
   };
   return loading ? (
-    <div className="spinner-modal-overlay z-50">
+    <div className="spinner-modal-overlay" style={{ zIndex: 10 }}>
       <div className="spinner-modal-content flex flex-col">
         <ClockLoader
           color="#fff"

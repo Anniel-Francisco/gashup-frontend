@@ -8,8 +8,9 @@ import { Avatar } from "../Avatar/Avatar";
 interface Props {
   message: IChat;
   userID: string;
+  onDelete: (message: IChat) => void;
 }
-export function Message({ message, userID }: Props) {
+export function Message({ message, userID, onDelete }: Props) {
   const router = useRouter();
   function formatHour(time: string) {
     if (time) {
@@ -36,6 +37,7 @@ export function Message({ message, userID }: Props) {
         style={{
           flexDirection: message.userID === userID ? "row-reverse" : "row",
         }}
+        onClick={() => onDelete(message)}
       >
         <div className="flex flex-col justify-end">
           <Avatar

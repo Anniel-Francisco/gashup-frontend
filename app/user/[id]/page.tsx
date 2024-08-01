@@ -96,7 +96,7 @@ export default function User({ params }: { params: { id: string } }) {
               marginTop: 40,
             }}
           >
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-row items-center gap-2 max-md:mt-6">
               <span>
                 <span className="font-semibold">
                   {data.user?.followed.length}

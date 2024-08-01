@@ -78,7 +78,7 @@ export default function RootLayout({
           </div>
         </div>
       ) : (
-        <div className="flex items-center w-full gap-2">
+        <div className="flex items-center w-full gap-2 mt-2">
           <Avatar
             size={90}
             name={session?.name}

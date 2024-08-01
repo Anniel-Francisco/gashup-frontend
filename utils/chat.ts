@@ -12,7 +12,6 @@ export function getChat(communityID: string, chatID: string): Promise<IChat[]> {
         if (snapshot.exists() && Object.keys(snapshot.val()).length > 0) {
           const data = snapshot.val();
           const messages: IChat[] = [];
-
           for (const key in data) {
             messages.push({
               id: key,

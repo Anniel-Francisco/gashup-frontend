@@ -7,6 +7,7 @@ import {
   useGetCommunityChats,
   useGetChats,
   useFindChat,
+  useDeleteMessage,
 } from "@/hooks/useChats";
 // TYPES
 import { IDataResponse } from "@/types/response";
@@ -16,20 +17,26 @@ import { CommunityChats } from "@/components/Chats/CommunityChats";
 import { Chat } from "@/components/Chats/Chat";
 import { ToastContainer } from "react-toastify";
 import { Spinner } from "@/components/Spinner/Spinner";
+
+// STYLES
 import "@/styles/chats/chats.css";
+
 export default function Chats() {
   const { session } = useAuthProvider();
   const [data, setData] = useState<IDataResponse | null>(null);
-  const [isJoined, setIsJoined] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const windowWidth = window.innerWidth;
+  const chatsRef = document.querySelector(".chats-container") as HTMLElement | null;
+  const chatRef = document.querySelector(".messages-container") as HTMLElement | null;
   const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
     null
   );
-  const [search, setSearch] = useState<string>("");
   const [selectedChat, setSelectedChat] = useState<ICommunityChats | null>(
     null
   );
   const [, loadFindChat] = useFindChat(search, session?._id ?? "");
   const [loading, load] = useGetCommunityChats(session?._id ?? "");
+
   const [messages, loadMessages, loadingMessages] = useGetChats(
     selectedChat?.community_id ?? "",
     selectedChat?._id ?? ""
@@ -48,19 +55,28 @@ export default function Chats() {
   const onSetSearch = (value: string) => {
     setSearch(value);
   };
+  const clearSelectedChat = () => {
+    setSelectedChat(null);
+    if (chatRef) chatRef.style.display = "none";
+    if (chatsRef) chatsRef.style.display = "block";
+  };
   const setChat = (selectedChat: ICommunityChats) => {
-    setSelectedChat(selectedChat);
+    if (windowWidth >= 768) {
+      setSelectedChat(selectedChat);
+    } else {
+      setSelectedChat(selectedChat);
+      if (chatRef) chatRef.style.display = "flex";
+      if (chatsRef) chatsRef.style.display = "none";
+    }
   };
-  const handleJoinChat = () => {
-    setIsJoined(!isJoined);
-    getCommunityChats();
-  };
+
   const onFindChat = async () => {
     const { response } = await loadFindChat();
     if (response) {
       setFilterChats([...response.data.data]);
     }
   };
+
   useEffect(() => {
     if (search) {
       onFindChat();
@@ -68,13 +84,7 @@ export default function Chats() {
       setFilterChats(null);
     }
   }, [search]);
-  useEffect(() => {
-    if (selectedChat?.isMember) {
-      setIsJoined(true);
-    } else {
-      setIsJoined(false);
-    }
-  }, [selectedChat, session]);
+
   useEffect(() => {
     if (!session) {
       setData(null);
@@ -103,8 +113,7 @@ export default function Chats() {
         currentChat={selectedChat}
         messages={messages}
         userID={session?._id ?? ""}
-        isJoined={isJoined}
-        handleJoinChat={handleJoinChat}
+        clearCurrentChat={clearSelectedChat}
       />
       {/* Spinner */}
       <Spinner loading={loadingMessages || loading} message="cargando" />

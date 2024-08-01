@@ -37,6 +37,12 @@ export async function findCommunity(id: string) {
   return http.get(`community/findCommunity/${id}`).then((data) => data);
 }
 
+export async function findCommunityChats(id: string, userId: string) {
+  return http
+    .get(`community/findCommunityChats/${id}/${userId}`)
+    .then((data) => data);
+}
+
 // POST
 
 export async function createCommunity(data: ICommunity) {
@@ -66,6 +72,9 @@ export async function leaveCommunity(id: string, data: Object) {
   return http.post(`community/leaveCommunity/${id}`, data).then((data) => data);
 }
 
+export async function createCommunityChat(body: FormData) {
+  return http.post(`community/createChatCommunity`, body).then((data) => data);
+}
 // PUT
 
 export async function updateCommunity(id: string, data: ICommunity) {
@@ -83,7 +92,7 @@ export async function updateCommunity(id: string, data: ICommunity) {
       formData.append(key, value);
     }
   });
-    const noCache = `noCache=${new Date().getTime()}`;
+  const noCache = `noCache=${new Date().getTime()}`;
 
   return http
     .put(`community/updateCommunity/${id}??${noCache}`, formData)
@@ -92,6 +101,12 @@ export async function updateCommunity(id: string, data: ICommunity) {
 
 export async function likePost(id: string, user: string) {
   return http.put(`post/likePost/${id}`, { user }).then((data) => data);
+}
+
+export async function updateCommunityChat(id: string, body: any) {
+  return http
+    .put(`community/updateCommunityChat/${id}`, body)
+    .then((data) => data);
 }
 
 // DELETE

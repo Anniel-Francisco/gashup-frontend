@@ -1,41 +1,67 @@
 "use client";
-import "@/styles/general/communities.css";
-import CreatePost from "@/components/Post/CreatePost";
-import MappedPosts from "@/components/Post/MappedPosts";
-import { useGetCommunities } from "@/hooks/useCommunity";
 import { useEffect, useState } from "react";
-import { ICommunity } from "@/types/community";
-import CommunityCard from "@/components/Community/CommunityCard";
+import { useRouter, redirect } from "next/navigation";
+// HOOKS
+import { useFindCommunityChats } from "@/hooks/useCommunity";
+// SESSION
+import { useAuthProvider } from "@/context/AuthContext";
+// COMPONENTS
+import { ChatItem } from "@/components/Chats/ChatItem";
 import { Spinner } from "@/components/Spinner/Spinner";
 import { Button } from "@mui/material";
-
-export default function Communities() {
-  const [loading, load] = useGetCommunities();
-  const [communities, setCommunities] = useState<Array<ICommunity>>([]);
+// TYPES
+import { ICommunityChats } from "@/types/chats";
+// STYLES
+import "@/styles/general/communities.css";
+export default function Chats({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const { session } = useAuthProvider();
+  const [loading, load] = useFindCommunityChats(params.id, session?._id ?? "");
+  const [chats, setChats] = useState<Array<ICommunityChats>>([]);
 
   useEffect(() => {
-    getCommunity();
+    getCommunityChats();
   }, []);
-
-  const getCommunity = async () => {
+  useEffect(() => {
+    if (!session) {
+      redirect("/");
+    }
+  }, [session]);
+  async function getCommunityChats() {
+    const body = {
+      userId: session?._id ?? "",
+    };
     const { response, error } = await load();
     if (response?.data.ok) {
-      setCommunities(response.data.data);
+      setChats(response.data.data);
     }
+  }
+  const goToCreateChat = () => {
+    router.push(`/create-chat/${params.id}`);
+  };
+
+  const goToEditChat = (id: string) => {
+    router.push(`/edit-chat/${id}`);
   };
 
   return (
     <div className="w-full">
-      <Spinner loading={loading} />
+      <Spinner loading={loading} message="cargando" />
       <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-3xl my-5">CHATS</h1>
-        <div className="">
-            Crear comunidad
-        </div>
+        <Button variant="outlined" color="primary" onClick={goToCreateChat}>
+          Crear Chat
+        </Button>
       </div>
-      <div className="w-full flex flex-col gap-2">
-        {communities.map((item: ICommunity) => (
-          <CommunityCard key={item._id} data={item} />
+      <div className="w-full grid grid-cols-4 max-md:grid-cols-1 gap-6">
+        {chats.map((item, index) => (
+          <ChatItem
+            key={index}
+            chat={item}
+            userID={session?._id}
+            goToEditChat={goToEditChat}
+            getCommunityChats={getCommunityChats}
+          />
         ))}
       </div>
       {/* <MappedPosts className="" _i/> */}

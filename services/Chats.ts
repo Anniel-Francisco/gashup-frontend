@@ -30,3 +30,16 @@ export async function leaveChat(body: any, chatId: string) {
 export async function findChat(search: string, id: string) {
   return http.get(`chat/findChat/${id}/${search}`).then((data) => data);
 }
+export async function getChatById(id: string) {
+  return http.get(`chat/getChatByID/${id}`).then((data) => data);
+}
+
+export async function deleteMessage(
+  communityID: string,
+  chatID: string,
+  messageID: string
+) {
+  return http
+    .delete(`chat/deleteMessage/${communityID}/${chatID}/${messageID}`)
+    .then((data) => data);
+}
