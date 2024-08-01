@@ -26,8 +26,8 @@ export default function Chats() {
   const [data, setData] = useState<IDataResponse | null>(null);
   const [search, setSearch] = useState<string>("");
   const windowWidth = window.innerWidth;
-  const chatsRef = document.querySelector(".chats-container");
-  const chatRef = document.querySelector(".messages-container");
+  const chatsRef = document.querySelector(".chats-container") as HTMLElement | null;
+  const chatRef = document.querySelector(".messages-container") as HTMLElement | null;
   const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
     null
   );
@@ -57,16 +57,16 @@ export default function Chats() {
   };
   const clearSelectedChat = () => {
     setSelectedChat(null);
-    chatRef.style.display = "none";
-    chatsRef.style.display = "block";
+    if (chatRef) chatRef.style.display = "none";
+    if (chatsRef) chatsRef.style.display = "block";
   };
   const setChat = (selectedChat: ICommunityChats) => {
     if (windowWidth >= 768) {
       setSelectedChat(selectedChat);
     } else {
       setSelectedChat(selectedChat);
-      chatRef.style.display = "flex";
-      chatsRef.style.display = "none";
+      if (chatRef) chatRef.style.display = "flex";
+      if (chatsRef) chatsRef.style.display = "none";
     }
   };
 
