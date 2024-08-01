@@ -238,7 +238,7 @@ export default function CreateCommunity() {
   return (
     <>
       {session?._id && (
-        <div className="w-full h-full flex flex-row gap-4">
+        <div className="w-full h-full flex flex-row">
           {/* Alert */}
           <ToastContainer />
           <Spinner loading={loading} message="cargando" />

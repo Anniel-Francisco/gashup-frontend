@@ -154,6 +154,9 @@ export default function CreateCommunityChat({
       fileInput.click();
     }
   };
+  const onCancel = () => {
+    router.push(`/chats/${params.id}`);
+  };
 
   return (
     <>
@@ -180,6 +183,16 @@ export default function CreateCommunityChat({
           <div className="w-full md:w-[70%] p-1">
             <div className="flex flex-row justify-between items-center mt-2 mb-5">
               <h1 className="font-bold text-3xl">Crear Chat</h1>
+              <div>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  onClick={onCancel}
+                >
+                  Cancelar
+                </Button>
+              </div>
             </div>
             <div className="bg-[#ece6f0] p-4 rounded-md">
               <Box

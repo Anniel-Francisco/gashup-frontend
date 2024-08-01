@@ -37,7 +37,7 @@ export default function MyCommunities() {
   }, [session]);
   return (
     <>
-      <div className="flex flex-col w-full mt-2">
+      <div className="flex flex-col w-full">
         {data?.Owner && data?.Owner.length > 0 ? (
           <div className="mt-4">
             <h2 className="text-2xl font-semibold text-[#2c3e50]">Creadas</h2>

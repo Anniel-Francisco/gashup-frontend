@@ -35,7 +35,7 @@ export default function Communities() {
           </Button>
         </div>
       </div>
-      <div className="w-full grid gap-4 sm:grid-cols-2 ">
+      <div className="w-full grid gap-4 sm:grid-cols-2 mb-2">
         {communities.map((item: ICommunity) => (
           <CommunityCard key={item._id} data={item} />
         ))}

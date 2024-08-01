@@ -47,6 +47,7 @@ export default function EditCommunityChat({
 
   const chat: ICommunityChats = {
     name: "",
+    community_id: "",
     img: "",
   };
 
@@ -70,7 +71,12 @@ export default function EditCommunityChat({
   const getData = async () => {
     const { response } = await laod();
     if (response) {
-      setChatData({ ...chatData, name: response.data.data.name,  img: response.data.data.img, });
+      setChatData({
+        ...chatData,
+        name: response.data.data.name,
+        img: response.data.data.img,
+        community_id: response.data.data.community_id,
+      });
     }
   };
 
@@ -92,7 +98,7 @@ export default function EditCommunityChat({
     }
 
     if (response?.data.ok) {
-      router.push(`/chats/${params.id}`);
+      router.push(`/chats/${chatData.community_id}`);
       setOpenConfirmationModal(false);
       return showAlert("success", response?.data.mensaje);
     } else {
@@ -160,7 +166,7 @@ export default function EditCommunityChat({
         <div className="w-full h-full flex flex-row ">
           {/* Alert */}
           <ToastContainer />
-          <Spinner loading={loadingEdit} message="creando" />
+          <Spinner loading={loadingEdit} message="editando" />
           <ImagePreview
             modal={modal}
             onClose={onClose}
