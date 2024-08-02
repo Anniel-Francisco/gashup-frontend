@@ -60,6 +60,9 @@ export async function getSubCommentsByComment(id: string) {
 export async function getTimeLine(body: { _id: string | null }) {
   return http.get(`post/timeLine`, body).then((data) => data);
 }
+export async function getPolular() {
+  return http.get(`post/popularPost`).then((data) => data);
+}
 
 export async function getPostByUserId(id: string) {
   return http.get(`post/userProfile/${id}`).then((data) => data);
@@ -92,4 +95,3 @@ export async function deleteComment(id: string) {
 export async function deleteSubComment(id: string) {
   return http.delete(`post/deleteResponseComment/${id}`).then((data) => data);
 }
-

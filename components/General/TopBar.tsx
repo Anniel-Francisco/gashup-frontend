@@ -34,6 +34,7 @@ export default function TopBar() {
     if (sidebar) {
       setSidebar(false);
       sidebarRef.style.display = "none";
+      sidebarRef.style.position = "sticky";
     } else {
       setSidebar(true);
     }
@@ -54,7 +55,7 @@ export default function TopBar() {
         </Link>
       )}
 
-      {pathName === "/" ? (
+      {/* {pathName === "/" ? (
         <div className="input-container">
           <input
             type="text"
@@ -65,7 +66,7 @@ export default function TopBar() {
         </div>
       ) : (
         ""
-      )}
+      )} */}
       <Options />
     </div>
   );

@@ -77,7 +77,7 @@ export function ChatItem({
                   size={20}
                   color="#2c3e50"
                   style={{ cursor: "pointer" }}
-                  onClick={() => goToEditChat(chat._id)}
+                  onClick={() => goToEditChat(chat._id ?? '')}
                 />
               </div>
             )}

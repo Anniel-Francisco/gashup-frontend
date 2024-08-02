@@ -1,8 +1,9 @@
+import { IUser } from "./user";
 export interface ICommunityChats {
   _id?: string;
   community_id?: string;
   chatOwner_id: string;
-  members_id?: string[];
+  members_id?: string[] | IUser[];
   name: string;
   img: string | null;
   isDeleted?: boolean;

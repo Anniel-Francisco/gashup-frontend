@@ -28,9 +28,6 @@ export default function Chats({ params }: { params: { id: string } }) {
     }
   }, [session]);
   async function getCommunityChats() {
-    const body = {
-      userId: session?._id ?? "",
-    };
     const { response, error } = await load();
     if (response?.data.ok) {
       setChats(response.data.data);

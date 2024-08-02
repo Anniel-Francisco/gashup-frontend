@@ -18,7 +18,7 @@ export function Spinner({ loading, message, longMessage }: Props) {
     borderColor: "red",
   };
   return loading ? (
-    <div className="spinner-modal-overlay" style={{ zIndex: 10 }}>
+    <div className="spinner-modal-overlay">
       <div className="spinner-modal-content flex flex-col">
         <ClockLoader
           color="#fff"

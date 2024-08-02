@@ -28,9 +28,16 @@ export default function Communities() {
     <div className="w-full">
       <Spinner loading={loading} message="cargando" />
       <div className="flex flex-row justify-between items-center">
-        <h1 className="font-bold text-lg md:text-3xl my-5">Comunidades</h1>
+        <h1 className="font-bold text-lg md:text-3xl my-5 text-[#2c3e50]">
+          Comunidades
+        </h1>
         <div>
-          <Button variant="outlined" size="small" color="primary" href={`/create-community`}>
+          <Button
+            variant="outlined"
+            size="small"
+            color="primary"
+            href={`/create-community`}
+          >
             Crear comunidad
           </Button>
         </div>

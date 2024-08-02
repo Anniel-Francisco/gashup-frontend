@@ -10,7 +10,6 @@ interface Props {
   borderWidth?: number;
   letterSize?: number;
   session?: IUser | null;
-  onSetImage?: (image: string | Blob | null | undefined) => void;
   pointer?: boolean;
   styles?: CSSProperties;
   className?: string;
