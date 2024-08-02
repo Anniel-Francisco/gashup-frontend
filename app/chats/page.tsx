@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext";
 // HOOKS
@@ -7,27 +8,34 @@ import {
   useGetCommunityChats,
   useGetChats,
   useFindChat,
-  useDeleteMessage,
+  useGetChatMembers,
 } from "@/hooks/useChats";
 // TYPES
 import { IDataResponse } from "@/types/response";
-import { IChat, ICommunityChats } from "@/types/chats";
+import { ICommunityChats } from "@/types/chats";
 // COMPONENTS
 import { CommunityChats } from "@/components/Chats/CommunityChats";
 import { Chat } from "@/components/Chats/Chat";
 import { ToastContainer } from "react-toastify";
 import { Spinner } from "@/components/Spinner/Spinner";
-
+import { ChatMembers } from "@/components/Chats/ChatMembers";
 // STYLES
 import "@/styles/chats/chats.css";
 
 export default function Chats() {
   const { session } = useAuthProvider();
+  const router = useRouter();
+  const [members, setMembers] = useState<ICommunityChats | null>(null);
   const [data, setData] = useState<IDataResponse | null>(null);
   const [search, setSearch] = useState<string>("");
+  const [showMembers, setShowMembers] = useState<boolean>(false);
   const windowWidth = window.innerWidth;
-  const chatsRef = document.querySelector(".chats-container") as HTMLElement | null;
-  const chatRef = document.querySelector(".messages-container") as HTMLElement | null;
+  const chatsRef = document.querySelector(
+    ".chats-container"
+  ) as HTMLElement | null;
+  const chatRef = document.querySelector(
+    ".messages-container"
+  ) as HTMLElement | null;
   const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
     null
   );
@@ -36,7 +44,7 @@ export default function Chats() {
   );
   const [, loadFindChat] = useFindChat(search, session?._id ?? "");
   const [loading, load] = useGetCommunityChats(session?._id ?? "");
-
+  const [, loadMembers] = useGetChatMembers(selectedChat?._id ?? "");
   const [messages, loadMessages, loadingMessages] = useGetChats(
     selectedChat?.community_id ?? "",
     selectedChat?._id ?? ""
@@ -48,9 +56,18 @@ export default function Chats() {
       setData(response.data);
     }
   }
-
-  async function getChats() {
-    loadMessages();
+  async function getChatMembers() {
+    const { response } = await loadMembers();
+    if (response) {
+      setMembers(response.data.data);
+    }
+  }
+  function goToProfileUser(id: string) {
+    if (id === session?._id) {
+      router.push(`/profile/posts`);
+    } else {
+      router.push(`/user/${id}`);
+    }
   }
   const onSetSearch = (value: string) => {
     setSearch(value);
@@ -76,7 +93,19 @@ export default function Chats() {
       setFilterChats([...response.data.data]);
     }
   };
-
+  const onSetShowMembers = () => {
+    setShowMembers(!showMembers);
+  };
+  const clearChatMembers = () => {
+  
+    setMembers(null);
+    setShowMembers(false);
+  };
+  useEffect(() => {
+    if (showMembers) {
+      getChatMembers();
+    }
+  }, [showMembers]);
   useEffect(() => {
     if (search) {
       onFindChat();
@@ -96,7 +125,8 @@ export default function Chats() {
 
   useEffect(() => {
     if (selectedChat) {
-      getChats();
+      if (members) clearChatMembers();
+      loadMessages();
     }
   }, [selectedChat]);
 
@@ -109,12 +139,21 @@ export default function Chats() {
         search={search}
         selectedChat={selectedChat}
       />
-      <Chat
-        currentChat={selectedChat}
-        messages={messages}
-        userID={session?._id ?? ""}
-        clearCurrentChat={clearSelectedChat}
-      />
+      {showMembers ? (
+        <ChatMembers
+          chat={members}
+          clearChatMembers={clearChatMembers}
+          goToProfileUser={goToProfileUser}
+        />
+      ) : (
+        <Chat
+          currentChat={selectedChat}
+          messages={messages}
+          userID={session?._id ?? ""}
+          clearCurrentChat={clearSelectedChat}
+          onSetShowMembers={onSetShowMembers}
+        />
+      )}
       {/* Spinner */}
       <Spinner loading={loadingMessages || loading} message="cargando" />
       {/* Alert */}

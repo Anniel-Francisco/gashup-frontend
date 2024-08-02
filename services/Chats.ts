@@ -34,6 +34,10 @@ export async function getChatById(id: string) {
   return http.get(`chat/getChatByID/${id}`).then((data) => data);
 }
 
+export async function getChatMembers(id: string) {
+  return http.get(`chat/getMembers/${id}`).then((data) => data);
+}
+
 export async function deleteMessage(
   communityID: string,
   chatID: string,

@@ -18,6 +18,7 @@ interface Props {
   messages: IChat[] | null;
   userID: string;
   clearCurrentChat: () => void;
+  onSetShowMembers: () => void;
 }
 
 interface MessageGroupedByDate {
@@ -30,6 +31,7 @@ export function Chat({
   messages,
   userID,
   clearCurrentChat,
+  onSetShowMembers,
 }: Props) {
   const [message, setMessage] = useState<string>("");
   const [showAlert] = useAlert();
@@ -106,7 +108,9 @@ export function Chat({
     <div
       className="flex flex-col w-[75%] max-md:w-[100%]  messages-container"
       style={
-        windowWidth <= 768 ? {} : { borderColor: "#999999", borderLeftWidth: 1 }
+        windowWidth <= 768
+          ? { display: "flex" }
+          : { borderColor: "#999999", borderLeftWidth: 1 }
       }
     >
       <AlertDialog
@@ -141,6 +145,8 @@ export function Chat({
             size={50}
             name={currentChat?.name ?? ""}
             image={currentChat?.img ? currentChat.img : ""}
+            onClick={onSetShowMembers}
+            pointer
           />
           <span className="font-bold text-xl text-[#2c3e50]">
             {currentChat?.name}

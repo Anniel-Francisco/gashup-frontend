@@ -31,7 +31,6 @@ const AlertDialog = ({
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
-        style={{zIndex: 5}}
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className="font-bold">{titleText}</DialogTitle>

@@ -8,6 +8,7 @@ import {
   findChat,
   getChatById,
   deleteMessage,
+  getChatMembers
 } from "@/services/Chats";
 import { getChat } from "@/utils/chat";
 
@@ -49,6 +50,34 @@ export const useGetCommunityChats = (id: string): UseChatsType => {
     load,
   ];
 };
+
+
+export const useGetChatMembers= (id: string): UseChatsType => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await getChatMembers(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
 
 export const useGetChats = (
   communityId: string,
