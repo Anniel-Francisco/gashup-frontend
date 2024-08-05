@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext";
 // HOOKS
@@ -97,7 +97,6 @@ export default function Chats() {
     setShowMembers(!showMembers);
   };
   const clearChatMembers = () => {
-  
     setMembers(null);
     setShowMembers(false);
   };
@@ -118,6 +117,7 @@ export default function Chats() {
     if (!session) {
       setData(null);
       setSelectedChat(null);
+      redirect("/");
     } else {
       getCommunityChats();
     }

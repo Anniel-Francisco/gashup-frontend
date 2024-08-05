@@ -8,6 +8,9 @@ import { IoMdTrendingUp } from "react-icons/io";
 import { FaRegFaceSmile } from "react-icons/fa6";
 import { BsChatLeftText } from "react-icons/bs";
 import { IoBookmarkOutline } from "react-icons/io5";
+// HOOKS
+import { useAuthProvider } from "@/context/AuthContext";
+import { useAlert } from "@/hooks/useAlert";
 // STYLES
 import "@/styles/general/sidebar.css";
 
@@ -21,6 +24,8 @@ export default function SideBar() {
   const pathName = usePathname();
   const router = useRouter();
   const windowWidth = window.innerWidth;
+  const { session } = useAuthProvider();
+  const [showAlert] = useAlert();
   const sidebarRef = document.querySelector(".sidebar") as HTMLElement;
   const [links, setLinks] = useState<Sidebar[]>([
     {
@@ -61,8 +66,16 @@ export default function SideBar() {
   }, [pathName]);
   const goToRoute = (route: string) => {
     if (windowWidth >= 768) {
+      if (!session && (route === "/my-communities" || route === "/chats")) {
+        showAlert("warning", "Debes iniciar sesión");
+        return;
+      }
       router.push(route);
     } else {
+      if (!session && (route === "/my-communities" || route === "/chats")) {
+        showAlert("warning", "Debes iniciar sesión");
+        return;
+      }
       sidebarRef.style.display = "none";
       router.push(route);
     }

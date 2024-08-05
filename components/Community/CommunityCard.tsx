@@ -2,18 +2,16 @@ import { ICategory } from "@/types/Categories";
 import { ICommunity } from "@/types/community";
 import { Button, Chip } from "@mui/material";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 interface props {
   data: ICommunity;
+  onClick: (value: string) => void;
 }
 
-export default function CommunityCard({ data }: props) {
-      const router = useRouter();
-
+export default function CommunityCard({ data, onClick }: props) {
   return (
     <div
-      onClick={() => router.push(`/communities/${data._id}`)}
+      onClick={() => onClick(data._id ?? "")}
       className="max-w-lg mx-auto flex flex-row items-center min-h-14 w-full gap-2 bg-[#e0e0e0] hover:bg-[#c9c7c7] rounded-md overflow-hidden cursor-pointer"
     >
       <div className="bg-slate-400 w-[25%] h-full rounded-t-md md:rounded-l-md md:rounded-t-none overflow-hidden flex items-center justify-center">
