@@ -1,4 +1,5 @@
 "use client";
+
 import "@/styles/general/communities.css";
 import CreatePost from "@/components/Post/CreatePost";
 import MappedPosts from "@/components/Post/MappedPosts";
@@ -8,8 +9,14 @@ import { ICommunity } from "@/types/community";
 import CommunityCard from "@/components/Community/CommunityCard";
 import { Spinner } from "@/components/Spinner/Spinner";
 import { Button } from "@mui/material";
-
+import { useRouter } from "next/navigation";
+import { useAlert } from "@/hooks/useAlert";
+import { ToastContainer } from "react-toastify";
+import { useAuthProvider } from "@/context/AuthContext";
 export default function Communities() {
+  const router = useRouter();
+  const [showAlert] = useAlert();
+  const { session } = useAuthProvider();
   const [loading, load] = useGetCommunities();
   const [communities, setCommunities] = useState<Array<ICommunity>>([]);
 
@@ -24,6 +31,13 @@ export default function Communities() {
     }
   };
 
+  const onClick = (id: string) => {
+    if (session) {
+      router.push(`/communities/${id}`);
+    } else {
+      showAlert("warning", "Debes iniciar sesión");
+    }
+  };
   return (
     <div className="w-full">
       <Spinner loading={loading} message="cargando" />
@@ -44,10 +58,11 @@ export default function Communities() {
       </div>
       <div className="w-full grid gap-4 sm:grid-cols-2 mb-2">
         {communities.map((item: ICommunity) => (
-          <CommunityCard key={item._id} data={item} />
+          <CommunityCard key={item._id} data={item} onClick={onClick} />
         ))}
       </div>
       {/* <MappedPosts className="" _i/> */}
+      <ToastContainer />
     </div>
   );
 }

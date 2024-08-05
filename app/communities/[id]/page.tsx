@@ -146,9 +146,9 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
                   </Box>
                   <CustomTabPanel value={value} index={0}>
                     {/* Create post */}
-                    {isMember && (
-                      <CreatePost className="w-full" community_id={params.id} />
-                    )}
+
+                    <CreatePost className="w-full" community_id={params.id} />
+
                     {/* Posts */}
                     <MappedPosts className="w-full" _id={params.id} />
                   </CustomTabPanel>
@@ -166,7 +166,7 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
 
                 <div className="hidden md:flex flex-col">
                   {/* Create post */}
-                  {isMember && (
+                  {session && (
                     <CreatePost className="w-full" community_id={params.id} />
                   )}
                   {/* Posts */}

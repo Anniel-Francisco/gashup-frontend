@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext";
+
 // COMPONENTS
 import { CommunityItem } from "@/components/MyCommunities/CommunityItem";
 import { Spinner } from "@/components/Spinner/Spinner";
@@ -29,15 +30,24 @@ export default function MyCommunities() {
   const goToCommunity = (id: string) => {
     router.push(`/communities/${id}`);
   };
+
   useEffect(() => {
     laodCommunities();
   }, []);
   useEffect(() => {
-    if (!session) setData(null);
+    if (!session) {
+      setData(null);
+      redirect("/");
+    }
   }, [session]);
   return (
     <>
       <div className="flex flex-col w-full">
+        {!data && (
+          <h2 className="text-xl text-center mt-2 w-full font-semibold text-[#2c3e50]">
+            Debes ser miembro de una comunidad o crear una
+          </h2>
+        )}
         {data?.Owner && data?.Owner.length > 0 ? (
           <div className="mt-4">
             <h2 className="text-2xl font-semibold text-[#2c3e50]">Creadas</h2>
