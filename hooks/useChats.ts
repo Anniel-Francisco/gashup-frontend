@@ -5,10 +5,9 @@ import {
   postMessage,
   joinChat,
   leaveChat,
-  findChat,
   getChatById,
   deleteMessage,
-  getChatMembers
+  getChatMembers,
 } from "@/services/Chats";
 import { getChat } from "@/utils/chat";
 
@@ -51,8 +50,7 @@ export const useGetCommunityChats = (id: string): UseChatsType => {
   ];
 };
 
-
-export const useGetChatMembers= (id: string): UseChatsType => {
+export const useGetChatMembers = (id: string): UseChatsType => {
   const [loading, setLoading] = useState<boolean>(false);
 
   async function load(): Promise<{
@@ -77,7 +75,6 @@ export const useGetChatMembers= (id: string): UseChatsType => {
     load,
   ];
 };
-
 
 export const useGetChats = (
   communityId: string,
@@ -199,31 +196,6 @@ export const useLeaveChat = (body: any, chatId: string): UseChatsType => {
     try {
       setLoading(true);
       const data = await leaveChat(body, chatId);
-      return { response: data, error: null };
-    } catch (error: any) {
-      return { response: null, error: error };
-    } finally {
-      setLoading(false);
-    }
-  }
-  return [
-    //states
-    loading,
-    //methods
-    load,
-  ];
-};
-
-export const useFindChat = (search: string, id: string): UseChatsType => {
-  const [loading, setLoading] = useState<boolean>(false);
-
-  async function load(): Promise<{
-    response: IResponse | null;
-    error: IError | null;
-  }> {
-    try {
-      setLoading(true);
-      const data = await findChat(search, id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

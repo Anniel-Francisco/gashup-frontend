@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { redirect, useRouter } from "next/navigation";
 // SESSION
 import { useAuthProvider } from "@/context/AuthContext";
@@ -7,7 +7,6 @@ import { useAuthProvider } from "@/context/AuthContext";
 import {
   useGetCommunityChats,
   useGetChats,
-  useFindChat,
   useGetChatMembers,
 } from "@/hooks/useChats";
 // TYPES
@@ -36,13 +35,10 @@ export default function Chats() {
   const chatRef = document.querySelector(
     ".messages-container"
   ) as HTMLElement | null;
-  const [filterChats, setFilterChats] = useState<ICommunityChats[] | null>(
-    null
-  );
+
   const [selectedChat, setSelectedChat] = useState<ICommunityChats | null>(
     null
   );
-  const [, loadFindChat] = useFindChat(search, session?._id ?? "");
   const [loading, load] = useGetCommunityChats(session?._id ?? "");
   const [, loadMembers] = useGetChatMembers(selectedChat?._id ?? "");
   const [messages, loadMessages, loadingMessages] = useGetChats(
@@ -87,12 +83,6 @@ export default function Chats() {
     }
   };
 
-  const onFindChat = async () => {
-    const { response } = await loadFindChat();
-    if (response) {
-      setFilterChats([...response.data.data]);
-    }
-  };
   const onSetShowMembers = () => {
     setShowMembers(!showMembers);
   };
@@ -100,18 +90,21 @@ export default function Chats() {
     setMembers(null);
     setShowMembers(false);
   };
+  const filterChats = useMemo(() => {
+    if (search) {
+      return data?.data.filter((item: ICommunityChats) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    } else {
+      return data?.data;
+    }
+  }, [search, data?.data]);
+
   useEffect(() => {
     if (showMembers) {
       getChatMembers();
     }
   }, [showMembers]);
-  useEffect(() => {
-    if (search) {
-      onFindChat();
-    } else {
-      setFilterChats(null);
-    }
-  }, [search]);
 
   useEffect(() => {
     if (!session) {
@@ -134,7 +127,7 @@ export default function Chats() {
     <div className="flex flex-row" style={{ height: "calc(100vh - 60px)" }}>
       <CommunityChats
         onSetSearch={onSetSearch}
-        communityChats={filterChats ? filterChats : data?.data}
+        communityChats={filterChats}
         setChat={setChat}
         search={search}
         selectedChat={selectedChat}
