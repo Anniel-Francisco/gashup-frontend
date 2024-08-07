@@ -74,7 +74,6 @@ export default function CommunityControls({ id, members, owner }: props) {
   };
 
   const openLogInModal = () => {
-    console.log("hola")
     return showAlert("warning", "Debes iniciar sesión para unirte");
   };
 
