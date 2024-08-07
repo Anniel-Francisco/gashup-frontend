@@ -6,13 +6,17 @@ import {
   createPost,
   deleteComment,
   deletePost,
+  deleteSubComment,
   getAllPostByCommunity,
   getPostById,
   getSubCommentsByComment,
   getTimeLine,
   likeComment,
   likePost,
+  likeSubComment,
   responseComment,
+  updateComment,
+  updateSubComment,
 } from "@/services/Post";
 import { getPostByUserId } from "@/services/Post";
 import { IComment } from "@/types/post";
@@ -301,6 +305,56 @@ export const useLikeComment = (id: string, userId: string): UseReponseType => {
   ];
 };
 
+export const useUpdateComment = (id: string, body: IComment): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await updateComment(id, body);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useUpdateSubComment = (id: string, body: ISubComment): UseReponseType => {
+  const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
+  async function loadUpdate(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoadingUpdate(true);
+      const data = await updateSubComment(id, body);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoadingUpdate(false);
+    }
+  }
+
+  return [
+    //states
+    loadingUpdate,
+    //methods
+    loadUpdate,
+  ];
+};
+
 export const useDeletePost = (id: string): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
@@ -350,3 +404,54 @@ export const useDeleteComment = (id: string): UseReponseType => {
     load,
   ];
 };
+
+export const useLikeSubComment = (id: string, userId: string): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await likeSubComment(id, userId);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useDeleteSubComment = (id: string): UseReponseType => {
+  const [loadingDeleteSub, setLoadingDeleteSub] = useState<boolean>(false);
+  async function loadDeleteSub(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoadingDeleteSub(true);
+      const data = await deleteSubComment(id);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoadingDeleteSub(false);
+    }
+  }
+
+  return [
+    //states
+    loadingDeleteSub,
+    //methods
+    loadDeleteSub,
+  ];
+};
+

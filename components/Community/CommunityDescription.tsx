@@ -41,7 +41,7 @@ export default function CommunityDescription({
       <div className="w-full flex flex-col gap-2 font-medium text-gray-600">
         <span>Moderadores</span>
         {admins?.map((item: IUser) => (
-          <AdminCard item={item} />
+          <AdminCard key={item._id} item={item} />
         ))}
       </div>
       <Divider component="li" />

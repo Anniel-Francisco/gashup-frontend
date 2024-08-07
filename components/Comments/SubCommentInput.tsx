@@ -11,12 +11,14 @@ import { useAuthProvider } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import { IComment, ISubComment } from "@/types/post";
+import { Transaction, TextSelection } from 'prosemirror-state'; // Asegúrate de importar los tipos necesarios
 
 interface props {
   className?: string;
   comment_id: string;
   callback: (item: ISubComment) => void;
   setSubCommentActive: Function;
+  subCommentInitial?: string;
 }
 
 export default function SubCommentInput({
@@ -24,6 +26,7 @@ export default function SubCommentInput({
   comment_id,
   callback,
   setSubCommentActive,
+  subCommentInitial,
 }: props) {
   const { session, removeSession } = useAuthProvider();
   const comment: ISubComment = {
@@ -37,11 +40,61 @@ export default function SubCommentInput({
   const [commentData, setCommentData] = useState<ISubComment>(comment);
   const [loading, load] = useCreateSubComment(commentData);
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: "Añade un comentario",
+        emptyEditorClass:
+          "cursor-text before:content-[attr(data-placeholder)] before:absolute before:left-3 before:text-mauve-11 before:opacity-50 before-pointer-events-none",
+      }),
+    ],
+    autofocus: true,
+    content: "",
+    injectCSS: true,
+    editorProps: {
+      attributes: {
+        class: "p-2 rounded-lg focus:outline-none", // Añadir clase focus:outline-none
+      },
+    },
+
+    onUpdate({ editor }) {
+      setCommentData((prev) => ({ ...prev, description: editor.getHTML() }));
+    },
+    // onFocus(() => console.log("hola")),
+  });
+
   useEffect(() => {
     if (session?._id) {
       setCommentData({ ...comment, user_id: session?._id });
     }
   }, [session]);
+
+  useEffect(() => {
+    if (editor && subCommentInitial) {
+      // Establecer el contenido inicial
+      setCommentData((prev) => ({
+        ...prev,
+        description: `<b>${subCommentInitial}</b>&nbsp;`,
+      }));
+      editor.commands.setContent(`<b>${subCommentInitial}</b>&nbsp;`);
+
+      // Esperar hasta que el contenido se haya renderizado y luego mover el cursor
+      setTimeout(() => {
+        if (!editor) return; // Verificar que el editor aún esté definido
+
+        const { state, view } = editor;
+        const { tr, doc } = state;
+
+        // Crear una nueva selección al final del contenido
+        const endPosition = doc.content.size;
+        const newSelection = TextSelection.create(doc, endPosition);
+        const newTransaction: Transaction = tr.setSelection(newSelection);
+
+        view.dispatch(newTransaction);
+      }, 0);
+    }
+  }, [editor, subCommentInitial]);
 
   const clearData = () => {
     setCommentData(comment);
@@ -72,31 +125,8 @@ export default function SubCommentInput({
     }
   };
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: "Añade un comentario",
-        emptyEditorClass:
-          "cursor-text before:content-[attr(data-placeholder)] before:absolute before:left-3 before:text-mauve-11 before:opacity-50 before-pointer-events-none",
-      }),
-    ],
-    content: "",
-    injectCSS: true,
-    editorProps: {
-      attributes: {
-        class: "p-2 rounded-lg",
-      },
-    },
-
-    onUpdate({ editor }) {
-      setCommentData((prev) => ({ ...prev, description: editor.getHTML() }));
-    },
-    // onFocus(() => console.log("hola")),
-  });
-
   return (
-    <div className={`${className} flex flex-col gap-3 py-2`}>
+    <div className={`${className} flex flex-col gap-3`}>
       <EditorButtons editor={editor} />
       <div className="flex flex-col w-full border rounded-lg">
         <EditorContent

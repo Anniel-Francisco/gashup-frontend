@@ -12,14 +12,18 @@ import { useAlert } from "@/hooks/useAlert";
 import { ToastContainer } from "react-toastify";
 import { IUser } from "@/types/user";
 import SettingsComment from "./SettingsComment";
+import EditCommentInput from "./EditCommentInput";
 
 interface props {
   item: IComment;
   subCommentActive: string | null;
   toggleSubCommentActive: Function;
   callback: (item: ISubComment) => void;
+  editCommentFunct: (item: IComment) => void;
   comments: Array<IComment>;
   setComments: Function;
+  editCommentId: string | null;
+  setEditCommentId: Function;
 }
 
 export default function Comment({
@@ -27,8 +31,11 @@ export default function Comment({
   subCommentActive,
   toggleSubCommentActive,
   callback,
+  editCommentFunct,
   comments,
   setComments,
+  editCommentId,
+  setEditCommentId,
 }: props) {
   const { session } = useAuthProvider();
   const router = useRouter();
@@ -40,6 +47,8 @@ export default function Comment({
   const [userLikesAmount, setUserLikesAmount] = useState<number>(
     item?.user_likes?.length as number
   );
+  const [editSubCommentId, setEditSubCommentId] = useState<string | null>(null);
+
 
   useEffect(() => {
     const findLike = item.user_likes?.find((item) => item == session?._id);
@@ -81,7 +90,7 @@ export default function Comment({
     <>
       <div key={item?._id} className="">
         {/* Alert */}
-        <ToastContainer />
+        {/* <ToastContainer /> */}
 
         <div className="flex flex-row gap-1">
           <div className="w-9">
@@ -101,37 +110,55 @@ export default function Comment({
             )}
           </div>
 
-          <div>
+          <div className={`${editCommentId == item._id && "w-full"}`}>
             <div className="flex flex-row gap-1">
-              <div className="px-2 bg-gray-200 rounded-md">
-                <div className="flex gap-1 py-1 items-center">
-                  {typeof item?.user_id !== "string" && (
-                    <span
-                      className="font-bold text-sm cursor-pointer"
-                      onClick={() => {
-                        const id =
-                          typeof item?.user_id !== "string" &&
-                          item?.user_id?._id;
-                        if (typeof id === "string") {
-                          goToPerfil(id);
-                        }
-                      }}
-                    >
-                      {item?.user_id?.name}
-                    </span>
-                  )}
-                  <span>{"•"}</span>
-                  <span className="text-sm">{item?.commentDate}</span>
-                </div>
-                <div
-                  className="pb-2"
-                  dangerouslySetInnerHTML={{ __html: item.description }}
+              {editCommentId === item._id ? (
+                <EditCommentInput
+                  className="w-full py-0 gap-0"
+                  callback={(updatedComment) => {
+                    editCommentFunct(updatedComment);
+                    setEditCommentId(null); // Desactivar edición después de editar
+                  }}
+                  item={item}
+                  cancel={() => {
+                    setEditCommentId(null);
+                  }}
                 />
-              </div>
+              ) : (
+                <div className="px-2 bg-gray-200 rounded-md">
+                  <div className="flex gap-1 py-1 items-center">
+                    {typeof item?.user_id !== "string" && (
+                      <span
+                        className="font-bold text-sm cursor-pointer"
+                        onClick={() => {
+                          const id =
+                            typeof item?.user_id !== "string" &&
+                            item?.user_id?._id;
+                          if (typeof id === "string") {
+                            goToPerfil(id);
+                          }
+                        }}
+                      >
+                        {item?.user_id?.name}
+                      </span>
+                    )}
+                    <span>{"•"}</span>
+                    <span className="text-sm">{item?.commentDate}</span>
+                  </div>
+                  <div
+                    className="pb-2"
+                    dangerouslySetInnerHTML={{ __html: item.description }}
+                  />
+                </div>
+              )}
+
               <SettingsComment
                 id={item._id ?? ""}
                 comments={comments ?? []}
                 setComments={setComments ?? Function}
+                setEditCommentId={setEditCommentId}
+                isEditing={editCommentId === item._id}
+                isSubComment={false}
               />
             </div>
 
@@ -146,7 +173,10 @@ export default function Comment({
                 <span
                   className="cursor-pointer"
                   onClick={() => {
-inputRef?.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+                    inputRef?.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
                     toggleSubCommentActive(item?._id ?? "");
                   }}
                 >
@@ -168,16 +198,25 @@ inputRef?.current?.scrollIntoView({ behavior: "smooth", block: "center" });
           </div>
         </div>
 
-        <div className="pl-10 mt-2 flex flex-col gap-3">
+        <div className="pl-10 mt-2 flex flex-col gap-1">
           {item?.subComments &&
             item.subComments.map((item: ISubComment, index) => (
-              <SubComment item={item} />
+              <SubComment
+                key={index}
+                item={item}
+                callback={callback}
+                comments={comments}
+                setComments={setComments}
+                editSubCommentId={editSubCommentId}
+                setEditSubCommentId={setEditSubCommentId}
+              />
             ))}
         </div>
 
         <div ref={inputRef}>
           {subCommentActive === item?._id && (
             <SubCommentInput
+              className="py-2"
               setSubCommentActive={() => {
                 toggleSubCommentActive(item?._id ?? "");
               }}

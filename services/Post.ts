@@ -79,6 +79,20 @@ export async function likeComment(id: string, user: string) {
   return http.put(`post/likeComment/${id}`, { user }).then((data) => data);
 }
 
+export async function likeSubComment(id: string, user: string) {
+  return http.put(`post/likeSubComment/${id}`, { user }).then((data) => data);
+}
+
+export async function updateComment(id: string, body: IComment) {
+  return http.put(`post/updateComment/${id}`, body).then((data) => data);
+}
+
+export async function updateSubComment(id: string, body: ISubComment) {
+  return http
+    .put(`post/updateResponseComment/${id}`, body)
+    .then((data) => data);
+}
+
 // DELETE
 
 export async function deletePost(id: string) {

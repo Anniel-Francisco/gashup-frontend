@@ -15,12 +15,13 @@ interface props {
   data: IPost;
   post?: Array<IPost>;
   setPosts?: Function;
+  commentsAmount?: number;
 }
 
 import { useAuthProvider } from "@/context/AuthContext";
 import { useAlert } from "@/hooks/useAlert";
 import { ToastContainer } from "react-toastify";
-export default function Post({ data, post, setPosts }: props) {
+export default function Post({ data, post, setPosts, commentsAmount }: props) {
   const router = useRouter();
   const [showAlert] = useAlert();
 
@@ -155,7 +156,11 @@ export default function Post({ data, post, setPosts }: props) {
         <PostButton
           Icon={FaComments}
           amount={
-            !Number(data.comments?.length) ? 0 : Number(data.comments?.length)
+            commentsAmount
+              ? commentsAmount
+              : !Number(data.comments?.length)
+              ? 0
+              : Number(data.comments?.length)
           }
           callback={() => router.push(`/post/${data._id}`)}
           classNameButton={"p-2"}

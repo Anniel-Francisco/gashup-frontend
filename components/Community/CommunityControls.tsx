@@ -15,7 +15,7 @@ import { ToastContainer } from "react-toastify";
 interface props {
   id: string;
   members?: IUser[] | undefined;
-  owner?: IUser
+  owner?: IUser;
 }
 
 export default function CommunityControls({ id, members, owner }: props) {
@@ -74,7 +74,7 @@ export default function CommunityControls({ id, members, owner }: props) {
   };
 
   const openLogInModal = () => {
-    console.log("hola")
+    console.log("hola");
     return showAlert("warning", "Debes iniciar sesión para unirte");
   };
 
@@ -83,24 +83,24 @@ export default function CommunityControls({ id, members, owner }: props) {
   const remainingMembersCount = (members?.length || 0) - 3;
 
   return (
-    <div className="flex w-full mt-14 justify-between px-3 pb-2 items-center">
+    <>
       <ToastContainer />
+      <div className="flex w-full mt-14 justify-between px-3 pb-2 items-center">
+        <div className="flex flex-row items-center gap-3 ">
+          <span>{members?.length ? members?.length : 0} Miembros</span>
 
-      <div className="flex flex-row items-center gap-3 ">
-        <span>{members?.length ? members?.length : 0} Miembros</span>
-
-        <div className="flex flex-row gap-1">
-          {firstThreeMembers?.map((item: IUser, index) => (
-            <Avatar key={index} name={item.name} size={35} image={item.img} />
-          ))}
-          {remainingMembersCount > 0 && (
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-300 text-black">
-              +{remainingMembersCount}
-            </div>
-          )}
+          <div className="flex flex-row gap-1">
+            {firstThreeMembers?.map((item: IUser, index) => (
+              <Avatar key={index} name={item.name} size={35} image={item.img} />
+            ))}
+            {remainingMembersCount > 0 && (
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-300 text-black">
+                +{remainingMembersCount}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {/* <button
+        {/* <button
         onClick={() => (session?._id ? handleJoinLeave() : openLogInModal())}
         className={`${
           joined ? "bg-[#aa40c7]" : "bg-[#afafaf]"
@@ -108,39 +108,40 @@ export default function CommunityControls({ id, members, owner }: props) {
       >
         {joined ? "Unido" : "Unirse"}
       </button> */}
-      <div className="flex flex-row gap-3">
-        <Button
-          variant="contained"
-          color={"primary"}
-          className="flex flex-row gap-2"
-          onClick={() => router.push(`/chats/${id}`)}
-        >
-          {"CHATS"}
-
-          <BsChatSquareFill className="w-5 h-5 fill-white" />
-        </Button>
-
-        {owner?._id != session?._id ? (
+        <div className="flex flex-row gap-3">
           <Button
             variant="contained"
-            color={`${joined ? "primary" : "secondary"}`}
-            onClick={() =>
-              session?._id ? handleJoinLeave() : openLogInModal()
-            }
+            color={"primary"}
+            className="flex flex-row gap-2"
+            onClick={() => router.push(`/chats/${id}`)}
           >
-            {joined ? "Unido" : "Unirse"}
+            {"CHATS"}
+
+            <BsChatSquareFill className="w-5 h-5 fill-white" />
           </Button>
-        ) : (
-          <div>
-            <IoIosSettings
-              onClick={() => {
-                router.push(`/edit-community/${id}`);
-              }}
-              className="fill-gray-500 cursor-pointer h-9 w-9 hover:fill-gray-600 transition-all"
-            />
-          </div>
-        )}
+
+          {owner?._id != session?._id ? (
+            <Button
+              variant="contained"
+              color={`${joined ? "primary" : "secondary"}`}
+              onClick={() =>
+                session?._id ? handleJoinLeave() : openLogInModal()
+              }
+            >
+              {joined ? "Unido" : "Unirse"}
+            </Button>
+          ) : (
+            <div>
+              <IoIosSettings
+                onClick={() => {
+                  router.push(`/edit-community/${id}`);
+                }}
+                className="fill-gray-500 cursor-pointer h-9 w-9 hover:fill-gray-600 transition-all"
+              />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

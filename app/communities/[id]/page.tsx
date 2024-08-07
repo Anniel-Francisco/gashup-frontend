@@ -184,7 +184,7 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
               members={community?.members_id as IUser[]}
               rank={community?.rank ?? 0}
             />
-            <MembersBar />
+            {/* <MembersBar /> */}
           </div>
         </div>
       </div>
