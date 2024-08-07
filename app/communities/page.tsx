@@ -82,6 +82,12 @@ export default function Communities() {
         {filterCommunities.map((item: ICommunity) => (
           <CommunityCard key={item._id} data={item} onClick={onClick} />
         ))}
+
+        {filterCommunities.length === 0 && (
+          <span className="font-medium text-[#2c3e50] text-start">
+            No se encontraron comunidades
+          </span>
+        )}
       </div>
       {/* <MappedPosts className="" _i/> */}
       <ToastContainer />
