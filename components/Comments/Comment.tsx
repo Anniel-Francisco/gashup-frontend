@@ -61,27 +61,27 @@ export default function Comment({
     }
   };
 
- const likeComment = async () => {
-   if (!session?._id) {
-     return showAlert("warning", "Debes iniciar sesión");
-   }
+  const likeComment = async () => {
+    if (!session?._id) {
+      return showAlert("warning", "Debes iniciar sesión");
+    }
 
-   const { response, error } = await load();
+    const { response, error } = await load();
 
-   if (response?.data.ok) {
-     const updatedComment = response.data.comment;
-     setComments((prevComments: Array<IComment>) =>
-       prevComments.map((comment) =>
-         comment._id === item._id
-           ? {
-               ...comment,
-               user_likes: updatedComment.user_likes,
-             }
-           : comment
-       )
-     );
-   }
- };
+    if (response?.data.ok) {
+      const updatedComment = response.data.comment;
+      setComments((prevComments: Array<IComment>) =>
+        prevComments.map((comment) =>
+          comment._id === item._id
+            ? {
+                ...comment,
+                user_likes: updatedComment.user_likes,
+              }
+            : comment
+        )
+      );
+    }
+  };
 
   const setEditedSubComment = (editedSubComment: ISubComment) => {
     setComments((prevComments: Array<IComment>) =>
@@ -166,14 +166,16 @@ export default function Comment({
                 </div>
               )}
 
-              <SettingsComment
-                id={item._id ?? ""}
-                comments={comments ?? []}
-                setComments={setComments ?? Function}
-                setEditCommentId={setEditCommentId}
-                isEditing={editCommentId === item._id}
-                isSubComment={false}
-              />
+              {session && (
+                <SettingsComment
+                  id={item._id ?? ""}
+                  comments={comments ?? []}
+                  setComments={setComments ?? Function}
+                  setEditCommentId={setEditCommentId}
+                  isEditing={editCommentId === item._id}
+                  isSubComment={false}
+                />
+              )}
             </div>
 
             {session?._id && (

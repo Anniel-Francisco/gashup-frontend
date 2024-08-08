@@ -14,6 +14,7 @@ import { IUser } from "@/types/user";
 import { ICommunity } from "@/types/community";
 
 export default function PostPage({ params }: { params: { id: string } }) {
+  const { session } = useAuthProvider();
   const [post, setPost] = useState<IPost | null>(null);
   const [comments, setComments] = useState<Array<IComment>>([]);
   const [subComments, setSubComments] = useState<Array<ISubComment>>([]);
@@ -21,7 +22,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
   const [loadingComments, loadComments] = useGetCommentsByPost(params.id);
   const [subCommentActive, setSubCommentActive] = useState<string | null>(null);
   const [community, setCommunity] = useState<ICommunity>();
-const [editCommentId, setEditCommentId] = useState<string | null>(null);
+  const [editCommentId, setEditCommentId] = useState<string | null>(null);
 
   const getPost = async () => {
     const { response, error } = await load();
@@ -80,15 +81,15 @@ const [editCommentId, setEditCommentId] = useState<string | null>(null);
     setSubCommentActive((prev) => (prev === commentId ? null : commentId));
   };
 
-  console.log(comments.length)
-
   return (
     <div className="w-full flex flex-row gap-2 min-h-screen">
       <Spinner loading={loading} />
       <div className="w-full md:w-[70%]">
         {post ? <Post commentsAmount={comments.length} data={post} /> : null}
 
-        <CommentInput post_id={params.id} callback={addNewComment} />
+        {session && (
+          <CommentInput post_id={params.id} callback={addNewComment} />
+        )}
 
         <div className="flex flex-col gap-3 mt-3">
           {comments.length > 0 ? (
