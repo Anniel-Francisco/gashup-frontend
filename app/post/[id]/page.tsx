@@ -12,7 +12,7 @@ import { Spinner } from "@/components/Spinner/Spinner";
 import CommunityDescription from "@/components/Community/CommunityDescription";
 import { IUser } from "@/types/user";
 import { ICommunity } from "@/types/community";
-
+import { ToastContainer } from "react-toastify";
 export default function PostPage({ params }: { params: { id: string } }) {
   const { session } = useAuthProvider();
   const [post, setPost] = useState<IPost | null>(null);
@@ -83,7 +83,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="w-full flex flex-row gap-2 min-h-screen">
-      <Spinner loading={loading} />
+      <Spinner loading={loading} message="cargando" />
       <div className="w-full md:w-[70%]">
         {post ? <Post commentsAmount={comments.length} data={post} /> : null}
 
@@ -124,6 +124,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
           />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
