@@ -11,14 +11,23 @@ import { IoIosSettings } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { BsChatSquareFill } from "react-icons/bs";
 import { ToastContainer } from "react-toastify";
+import { TbRulerMeasure } from "react-icons/tb";
 
 interface props {
   id: string;
   members?: IUser[] | undefined;
   owner?: IUser;
+  setIsMember: Function;
+  isMember: boolean;
 }
 
-export default function CommunityControls({ id, members, owner }: props) {
+export default function CommunityControls({
+  id,
+  members,
+  owner,
+  setIsMember,
+  isMember,
+}: props) {
   const { session } = useAuthProvider();
   const [showAlert] = useAlert();
   const router = useRouter();
@@ -48,6 +57,7 @@ export default function CommunityControls({ id, members, owner }: props) {
 
     if (response?.data.ok) {
       setJoined(true);
+      setIsMember(true);
       return showAlert("success", response?.data.mensaje);
     } else {
       return showAlert("warning", response?.data.mensaje);
@@ -59,6 +69,7 @@ export default function CommunityControls({ id, members, owner }: props) {
 
     if (response?.data.ok) {
       setJoined(false);
+      setIsMember(false);
       return showAlert("success", response?.data.mensaje);
     } else {
       return showAlert("warning", response?.data.mensaje);
@@ -99,14 +110,6 @@ export default function CommunityControls({ id, members, owner }: props) {
             )}
           </div>
         </div>
-        {/* <button
-        onClick={() => (session?._id ? handleJoinLeave() : openLogInModal())}
-        className={`${
-          joined ? "bg-[#aa40c7]" : "bg-[#afafaf]"
-        } p-2 rounded-md text-white`}
-      >
-        {joined ? "Unido" : "Unirse"}
-      </button> */}
         <div className="flex flex-row gap-3">
           <Button
             variant="contained"
@@ -127,7 +130,7 @@ export default function CommunityControls({ id, members, owner }: props) {
                 session?._id ? handleJoinLeave() : openLogInModal()
               }
             >
-              {joined ? "Unido" : "Unirse"}
+              {joined ? "Miembro" : "Unirse"}
             </Button>
           ) : (
             <div>

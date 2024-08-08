@@ -29,7 +29,11 @@ export default function Popular() {
       {posts.length > 0 ? (
         <div className="w-full flex flex-col gap-2">
           {posts?.map((item: IPost) => (
-            <Post key={item._id} data={item} />
+            <Post
+              key={item._id}
+              data={item}
+              commentsAmount={item?.commentCount ?? 0}
+            />
           ))}
         </div>
       ) : (

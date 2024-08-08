@@ -96,7 +96,7 @@ export default function CreatePost({ className, community_id }: props) {
 
   return (
     <div
-      className={`${className} flex flex-col gap-3 border p-4 border-r-2 rounded-md`}
+      className={`${className} flex flex-col gap-3 border px-4 pt-4 pb-2 border-r-2 rounded-md`}
     >
       <AlertDialog
         setOpen={setOpenConfirmationModal}

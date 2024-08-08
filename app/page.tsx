@@ -27,9 +27,13 @@ export default function Home() {
       <Spinner loading={loading} message="cargando" />
 
       {posts.length > 0 ? (
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-1">
           {posts?.map((item: IPost) => (
-            <Post key={item._id} data={item} />
+            <Post
+              key={item._id}
+              data={item}
+              commentsAmount={item?.commentCount ?? 0}
+            />
           ))}
         </div>
       ) : (

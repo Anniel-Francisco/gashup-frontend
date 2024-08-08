@@ -119,6 +119,8 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
                 id={params.id}
                 members={community?.members_id as IUser[]}
                 owner={community?.owner_id as IUser}
+                setIsMember={setIsMember}
+                isMember={isMember}
               />
               <Divider
                 component="li"
@@ -146,7 +148,9 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
                   </Box>
                   <CustomTabPanel value={value} index={0}>
                     {/* Create post */}
-                    {community.owner_id === session?._id || isMember ? (
+                    {(typeof community.owner_id !== "string" &&
+                      community.owner_id?._id === session?._id) ||
+                    isMember ? (
                       <CreatePost className="w-full" community_id={params.id} />
                     ) : (
                       ""
@@ -168,8 +172,10 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
 
                 <div className="hidden md:flex flex-col">
                   {/* Create post */}
-                  {community.owner_id === session?._id || isMember ? (
-                    <CreatePost className="w-full" community_id={params.id} />
+                  {(typeof community.owner_id !== "string" &&
+                    community.owner_id?._id === session?._id) ||
+                  isMember ? (
+                    <CreatePost className="w-full mt-2" community_id={params.id} />
                   ) : (
                     ""
                   )}

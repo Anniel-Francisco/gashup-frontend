@@ -69,7 +69,7 @@ export async function joinCommunity(id: string, data: Object) {
 }
 
 export async function leaveCommunity(id: string, data: Object) {
-  return http.post(`community/leaveCommunity/${id}`, data).then((data) => data);
+  return http.put(`community/leaveCommunity/${id}`, data).then((data) => data);
 }
 
 export async function createCommunityChat(body: FormData) {

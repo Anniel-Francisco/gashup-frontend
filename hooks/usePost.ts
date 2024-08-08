@@ -16,6 +16,8 @@ import {
   likePost,
   likeSubComment,
   responseComment,
+  updateComment,
+  updateSubComment,
 } from "@/services/Post";
 import { getPostByUserId } from "@/services/Post";
 import { IComment } from "@/types/post";
@@ -237,7 +239,7 @@ export const useGetTimeLine = (id: string | null): UseReponseType => {
   }> {
     try {
       setLoading(true);
-      const data = await getTimeLine({ _id: id });
+      const data = await getTimeLine(id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

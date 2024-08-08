@@ -27,9 +27,9 @@ export default function CreateButtons({
     <div className="flex justify-between items-center">
       <div className="flex gap-3 items-center h-full">
         <ImageInputButton handleFileChange={handleImageSelection} />
-        <button>
+        {/* <button>
           <BiPoll className="fill-slate-500 w-7 h-7" />
-        </button>
+        </button> */}
       </div>
 
       <button

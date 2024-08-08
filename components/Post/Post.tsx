@@ -83,7 +83,7 @@ export default function Post({ data, post, setPosts, commentsAmount }: props) {
   };
 
   return (
-    <div className="flex flex-col gap-2 border w-full border-r-2 rounded-md my-3">
+    <div className="flex flex-col gap-2 border w-full border-r-2 rounded-md my-2">
       {/* Alert */}
       {/* <ToastContainer /> */}
 
@@ -165,12 +165,12 @@ export default function Post({ data, post, setPosts, commentsAmount }: props) {
           callback={() => router.push(`/post/${data._id}`)}
           classNameButton={"p-2"}
         />
-        <PostButton
+        {/* <PostButton
           Icon={FaShare}
           amount={0}
           callback={() => {}}
           classNameButton={"p-3"}
-        />
+        /> */}
       </div>
     </div>
   );

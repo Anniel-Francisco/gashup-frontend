@@ -88,7 +88,7 @@ export default function SideBar() {
   return (
     <div
       style={{ flex: 2, zIndex: 10 }}
-      className="flex flex-col p-2 gap-4 sidebar bg-[#fdfbfb] sticky"
+      className="hidden sm:flex flex-col p-2 gap-4 sidebar bg-[#fdfbfb] sticky"
     >
       {windowWidth <= 768 && (
         <Link href="/" onClick={goToHome} className="app-name outline-none">

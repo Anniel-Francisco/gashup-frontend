@@ -14,6 +14,7 @@ export interface IPost {
   user_likes?: Array<string>;
   images?: (File | Blob | string)[] | null;
   postDate?: string;
+  commentCount?: number;
 }
 
 export interface IComment {
