@@ -13,7 +13,7 @@ import MessageDialog from "@/components/MessageDialog";
 import { useGetCommunity } from "@/hooks/useCommunity";
 import { IUser } from "@/types/user";
 import { ICommunity } from "@/types/community";
-
+import { ToastContainer } from "react-toastify";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -175,7 +175,10 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
                   {(typeof community.owner_id !== "string" &&
                     community.owner_id?._id === session?._id) ||
                   isMember ? (
-                    <CreatePost className="w-full mt-2" community_id={params.id} />
+                    <CreatePost
+                      className="w-full mt-2"
+                      community_id={params.id}
+                    />
                   ) : (
                     ""
                   )}
@@ -200,6 +203,7 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
           </div>
         </>
       )}
+      <ToastContainer />
     </div>
   );
 }

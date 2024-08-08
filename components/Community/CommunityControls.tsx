@@ -4,14 +4,12 @@ import { useAuthProvider } from "@/context/AuthContext";
 import { useAlert } from "@/hooks/useAlert";
 import { useJoinCommunity, useLeaveCommunity } from "@/hooks/useCommunity";
 import { IUser } from "@/types/user";
-import { useEffect, useState } from "react";
-import { Auth } from "../General/Auth";
+import { useEffect } from "react";
 import { Button } from "@mui/material";
 import { IoIosSettings } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { BsChatSquareFill } from "react-icons/bs";
-import { ToastContainer } from "react-toastify";
-import { TbRulerMeasure } from "react-icons/tb";
+
 
 interface props {
   id: string;
@@ -31,7 +29,7 @@ export default function CommunityControls({
   const { session } = useAuthProvider();
   const [showAlert] = useAlert();
   const router = useRouter();
-  const [joined, setJoined] = useState<boolean>(false);
+  // const [joined, setJoined] = useState<boolean>(false);
 
   const [loadingJoin, loadJoin] = useJoinCommunity(id, {
     memberID: session?._id,
@@ -45,9 +43,9 @@ export default function CommunityControls({
     if (members) {
       const findUser = members.find((item) => item._id === session?._id);
       if (findUser) {
-        setJoined(true);
+        setIsMember(true);
       } else {
-        setJoined(false);
+        setIsMember(false);
       }
     }
   }, [members, session?._id]);
@@ -56,7 +54,6 @@ export default function CommunityControls({
     const { response, error } = await loadJoin();
 
     if (response?.data.ok) {
-      setJoined(true);
       setIsMember(true);
       return showAlert("success", response?.data.mensaje);
     } else {
@@ -68,7 +65,6 @@ export default function CommunityControls({
     const { response, error } = await loadLeave();
 
     if (response?.data.ok) {
-      setJoined(false);
       setIsMember(false);
       return showAlert("success", response?.data.mensaje);
     } else {
@@ -77,7 +73,7 @@ export default function CommunityControls({
   };
 
   const handleJoinLeave = () => {
-    if (joined) {
+    if (isMember) {
       leaveCommunity();
     } else {
       joinCommunity();
@@ -94,7 +90,6 @@ export default function CommunityControls({
 
   return (
     <>
-      <ToastContainer />
       <div className="flex w-full mt-14 justify-between px-3 pb-2 items-center">
         <div className="flex flex-row items-center gap-3 ">
           <span>{members?.length ? members?.length : 0} Miembros</span>
@@ -111,26 +106,26 @@ export default function CommunityControls({
           </div>
         </div>
         <div className="flex flex-row gap-3">
-          <Button
-            variant="contained"
-            color={"primary"}
-            className="flex flex-row gap-2"
-            onClick={() => router.push(`/chats/${id}`)}
-          >
-            {"CHATS"}
+          {isMember && (
+            <Button
+              variant="contained"
+              color={"primary"}
+              className="flex flex-row gap-2"
+              onClick={() => router.push(`/chats/${id}`)}
+            >
+              {"CHATS"}
 
-            <BsChatSquareFill className="w-5 h-5 fill-white" />
-          </Button>
+              <BsChatSquareFill className="w-5 h-5 fill-white" />
+            </Button>
+          )}
 
           {owner?._id != session?._id ? (
             <Button
               variant="contained"
-              color={`${joined ? "primary" : "secondary"}`}
-              onClick={() =>
-                session?._id ? handleJoinLeave() : openLogInModal()
-              }
+              color={`${isMember ? "primary" : "secondary"}`}
+              onClick={handleJoinLeave}
             >
-              {joined ? "Miembro" : "Unirse"}
+              {isMember ? "Miembro" : "Unirse"}
             </Button>
           ) : (
             <div>
