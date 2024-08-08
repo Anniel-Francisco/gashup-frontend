@@ -85,7 +85,7 @@ export default function Post({ data, post, setPosts, commentsAmount }: props) {
   return (
     <div className="flex flex-col gap-2 border w-full border-r-2 rounded-md my-3">
       {/* Alert */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       <div className="flex justify-between px-4 pt-4">
         <div className="flex flex-row items-center gap-3">

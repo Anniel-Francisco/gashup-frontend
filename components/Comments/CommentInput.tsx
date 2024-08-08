@@ -125,7 +125,7 @@ export default function CommentInput({ className, post_id, callback }: props) {
         </button>
       </div>
       <Spinner loading={loading} />
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 }
