@@ -1,13 +1,14 @@
+import { IUser } from "./user";
 export interface ICommunityChats {
-  _id: string;
-  community_id: string;
+  _id?: string;
+  community_id?: string;
   chatOwner_id: string;
-  members_id: string[];
+  members_id?: string[] | IUser[];
   name: string;
-  img: string;
-  isDeleted: boolean;
-  isMember: boolean;
-  isActive: boolean;
+  img: string | null;
+  isDeleted?: boolean;
+  isMember?: boolean;
+  isActive?: boolean;
 }
 
 export interface IChat {

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 // TYPES
 import { IPost } from "@/types/post";
 import { IDataResponse } from "@/types/response";
@@ -14,9 +13,11 @@ import { Spinner } from "@/components/Spinner/Spinner";
 // HOOKS
 import { useGetPostByUserId } from "@/hooks/usePost";
 import { useFollowUser, useUnFollowUser } from "@/hooks/useUser";
+import { useAlert } from "@/hooks/useAlert";
 export default function User({ params }: { params: { id: string } }) {
   const { session, handleFollowed } = useAuthProvider();
   const [post, setPosts] = useState<IPost[]>([]);
+  const [showAlert] = useAlert();
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [data, setData] = useState<IDataResponse | null>(null);
   const [, loadFollow] = useFollowUser(session?._id ?? "");
@@ -29,11 +30,6 @@ export default function User({ params }: { params: { id: string } }) {
       setPosts(response.data.posts);
     }
   }
-  useEffect(() => {
-    if (!session) {
-      redirect("/");
-    }
-  }, [session]);
 
   useEffect(() => {
     const isUserFollowed = session?.followed.includes(params.id);
@@ -47,16 +43,20 @@ export default function User({ params }: { params: { id: string } }) {
 
   const handleFollow = async () => {
     const findUser = session?.followed.includes(params.id);
-    if (findUser) {
-      await loadUnFollow({ userToUnFollow: params.id });
-      setIsFollowing(false);
-      handleFollowed(params.id, "unfollow");
-      loadUserProfile();
+    if (session) {
+      if (findUser) {
+        await loadUnFollow({ userToUnFollow: params.id });
+        setIsFollowing(false);
+        handleFollowed(params.id, "unfollow");
+        loadUserProfile();
+      } else {
+        await loadFollow({ userToFollow: params.id });
+        setIsFollowing(true);
+        handleFollowed(params.id, "follow");
+        loadUserProfile();
+      }
     } else {
-      await loadFollow({ userToFollow: params.id });
-      setIsFollowing(true);
-      handleFollowed(params.id, "follow");
-      loadUserProfile();
+      showAlert("warning", "Debes iniciar sesión");
     }
   };
 
@@ -96,7 +96,7 @@ export default function User({ params }: { params: { id: string } }) {
               marginTop: 40,
             }}
           >
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-row items-center gap-2 max-md:mt-6">
               <span>
                 <span className="font-semibold">
                   {data.user?.followed.length}
@@ -199,7 +199,9 @@ export default function User({ params }: { params: { id: string } }) {
           })}
 
         {data?.posts?.length === 0 && (
-          <span className="font-semibold text-center w-full mt-2 text-xl text-[#2c3e50]">Este usuario no ha realizado publicación</span>
+          <span className="font-semibold text-center w-full mt-2 text-xl text-[#2c3e50]">
+            Este usuario no ha realizado publicación
+          </span>
         )}
       </div>
       {/* Spinner */}

@@ -1,7 +1,7 @@
 import http from "@/utils/http";
 import { IPostMessage } from "@/types/chats";
 export async function getCommunityChats(id: string) {
-  return http.get(`community/getCommunityChats/${id}`).then((data) => data);
+  return http.get(`chat/userChats/${id}`).then((data) => data);
 }
 
 // BODY USERID Y MESSAGE
@@ -27,6 +27,20 @@ export async function leaveChat(body: any, chatId: string) {
     .then((data) => data);
 }
 
-export async function findChat(search: string, id: string) {
-  return http.get(`chat/findChat/${id}/${search}`).then((data) => data);
+export async function getChatById(id: string) {
+  return http.get(`chat/getChatByID/${id}`).then((data) => data);
+}
+
+export async function getChatMembers(id: string) {
+  return http.get(`chat/getMembers/${id}`).then((data) => data);
+}
+
+export async function deleteMessage(
+  communityID: string,
+  chatID: string,
+  messageID: string
+) {
+  return http
+    .delete(`chat/deleteMessage/${communityID}/${chatID}/${messageID}`)
+    .then((data) => data);
 }

@@ -8,7 +8,7 @@ import { IPost } from "@/types/post";
 import { useEffect, useState } from "react";
 export default function Home() {
   const { session } = useAuthProvider();
-  const [loading, load] = useGetTimeLine(session?._id ?? "");
+  const [loading, load] = useGetTimeLine(session?._id ?? null);
   const [posts, setPosts] = useState<Array<IPost>>([]);
 
   useEffect(() => {
@@ -25,12 +25,20 @@ export default function Home() {
   return (
     <div className="w-full">
       <Spinner loading={loading} message="cargando" />
-      {/* <h1 className="font-bold text-3xl my-5">Comunidades</h1> */}
-      <div className="w-full flex flex-col gap-2">
-        {posts.length > 0 &&
-          posts?.map((item: IPost) => <Post key={item._id} data={item} />)}
-      </div>
-      {/* <MappedPosts className="" _i/> */}
+
+      {posts.length > 0 ? (
+        <div className="w-full flex flex-col gap-2">
+          {posts?.map((item: IPost) => (
+            <Post key={item._id} data={item} />
+          ))}
+        </div>
+      ) : (
+        <div className="w-full gap-2 mt-2">
+          <h3 className="text-[#2c3e50] text-center text-lg font-semibold">
+            No hay publicaciones
+          </h3>
+        </div>
+      )}
     </div>
   );
 }

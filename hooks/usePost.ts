@@ -8,6 +8,7 @@ import {
   deletePost,
   deleteSubComment,
   getAllPostByCommunity,
+  getPolular,
   getPostById,
   getSubCommentsByComment,
   getTimeLine,
@@ -15,8 +16,6 @@ import {
   likePost,
   likeSubComment,
   responseComment,
-  updateComment,
-  updateSubComment,
 } from "@/services/Post";
 import { getPostByUserId } from "@/services/Post";
 import { IComment } from "@/types/post";
@@ -230,7 +229,7 @@ export const useGetPostById = (id: string): UseReponseType => {
   ];
 };
 
-export const useGetTimeLine = (id: string): UseReponseType => {
+export const useGetTimeLine = (id: string | null): UseReponseType => {
   const [loading, setLoading] = useState<boolean>(false);
   async function load(): Promise<{
     response: IResponse | null;
@@ -238,7 +237,32 @@ export const useGetTimeLine = (id: string): UseReponseType => {
   }> {
     try {
       setLoading(true);
-      const data = await getTimeLine(id);
+      const data = await getTimeLine({ _id: id });
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return [
+    //states
+    loading,
+    //methods
+    load,
+  ];
+};
+
+export const useGetPopular = (): UseReponseType => {
+  const [loading, setLoading] = useState<boolean>(false);
+  async function load(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoading(true);
+      const data = await getPolular();
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };

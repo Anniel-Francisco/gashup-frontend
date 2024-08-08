@@ -1,44 +1,25 @@
 "use client";
-import {
-  useCreateCommunity,
-  useGetCategories,
-  useGetCommunities,
-} from "@/hooks/useCommunity";
+import { useCreateCommunityChat } from "@/hooks/useCommunity";
 import { ChangeEvent, useEffect, useState } from "react";
-import { ICommunity } from "@/types/community";
+import { ICommunityChats } from "@/types/chats";
 import { Spinner } from "@/components/Spinner/Spinner";
 import {
   Box,
   Button,
-  Checkbox,
-  Chip,
   FormControl,
-  FormControlLabel,
   Grid,
   InputAdornment,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  SelectChangeEvent,
   TextField,
   Theme,
   useTheme,
 } from "@mui/material";
 import { useAuthProvider } from "@/context/AuthContext";
-import { useEditor } from "@tiptap/react";
-import Placeholder from "@tiptap/extension-placeholder";
-import StarterKit from "@tiptap/starter-kit";
 import { useAlert } from "@/hooks/useAlert";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import CreateCommunityDescription from "@/components/Community/CreateCommunityDescription";
-import Link from "next/link";
-import { ICategory } from "@/types/Categories";
 import { MdPhotoLibrary } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { Visibility } from "@mui/icons-material";
-import { FaRegUserCircle } from "react-icons/fa";
-import { IoPhonePortraitOutline } from "react-icons/io5";
 import { ImagePreview } from "@/components/SignUp/ImagePreview";
 import { ToastContainer } from "react-toastify";
 import AlertDialog from "@/components/ConfirmationDialog";
@@ -54,62 +35,50 @@ const MenuProps = {
   },
 };
 
-export default function CreateCommunity() {
+export default function CreateCommunityChat({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { session } = useAuthProvider();
   const [showAlert] = useAlert();
   const router = useRouter();
 
-  const community: ICommunity = {
+  const chat: ICommunityChats = {
     name: "",
-    description: "",
-    owner_id: session?._id as string,
+    chatOwner_id: session?._id as string,
     img: "",
-    banner: "",
-    admins_id: [],
-    communityCategory_id: [],
+    community_id: params.id,
   };
 
-  const [loading, load] = useGetCommunities();
-  const [loadingCategories, loadCategories] = useGetCategories();
-  const [communityData, setCommunityData] = useState<ICommunity>(community);
-  const [categories, setCategories] = useState<Array<ICategory>>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [chatData, setChatData] = useState<ICommunityChats>(chat);
   const [modal, setModal] = useState<boolean>(false);
-  const [modalBanner, setModalBanner] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string>("");
-  const [bannerPreview, setBannerPreview] = useState<string>("");
 
-  const [loadingCreate, loadCreate] = useCreateCommunity(communityData);
+  const [loadingCreate, loadCreate] = useCreateCommunityChat(chatData);
   const [openConfimationModal, setOpenConfirmationModal] = useState(false);
 
   useEffect(() => {
     if (!session?._id) {
       router.back();
     }
-
-    getCategories();
   }, []);
 
-  const getCategories = async () => {
-    const { response, error } = await loadCategories();
-    if (response?.data.ok) {
-      setCategories(response.data.data);
+  useEffect(() => {
+    if (!session) {
+      redirect("/");
     }
-  };
+  }, [session]);
 
   const clearData = () => {
-    setCommunityData(community);
+    setChatData(chatData);
   };
 
   const onSubmit = async () => {
     // e.preventDefault();
 
-    if (!communityData.img) {
+    if (!chatData.img) {
       return showAlert("warning", "Debe agregar una imagen.");
-    }
-
-    if (communityData.communityCategory_id.length === 0) {
-      return showAlert("warning", "Debe seleccionar al menos una categoría.");
     }
 
     const { response, error } = await loadCreate();
@@ -123,8 +92,9 @@ export default function CreateCommunity() {
     }
 
     if (response?.data.ok) {
-      router.push(`/communities/${response.data.data._id}`);
+      router.push(`/chats/${params.id}`);
       clearData();
+      setOpenConfirmationModal(false);
       return showAlert("success", response?.data.mensaje);
     } else {
       return showAlert("warning", response?.data.mensaje);
@@ -132,25 +102,6 @@ export default function CreateCommunity() {
   };
 
   const theme = useTheme();
-
-  const handleChange = (
-    event: SelectChangeEvent<typeof selectedCategories>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    const selectedValues = typeof value === "string" ? value.split(",") : value;
-    setSelectedCategories(selectedValues);
-
-    const selectedCategoryIds = categories
-      .filter((category) => selectedValues.includes(category.name))
-      .map((category) => category._id as string);
-
-    setCommunityData((prev) => ({
-      ...prev,
-      communityCategory_id: selectedCategoryIds,
-    }));
-  };
 
   function getStyles(
     name: string,
@@ -171,19 +122,7 @@ export default function CreateCommunity() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(file.name);
-        setCommunityData((prev) => ({ ...prev, img: file as File }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBannerPreview(file.name);
-        setCommunityData((prev) => ({ ...prev, banner: file as File }));
+        setChatData((prev) => ({ ...prev, img: file as File }));
       };
       reader.readAsDataURL(file);
     }
@@ -191,20 +130,9 @@ export default function CreateCommunity() {
 
   const onDeleteImage = () => {
     setImagePreview("");
-    setCommunityData((prev) => ({ ...prev, img: "" }));
+    setChatData((prev) => ({ ...prev, img: "" }));
     const fileInput = document.getElementById(
       "file-input-image"
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = "";
-    }
-  };
-
-  const onDeleteBanner = () => {
-    setBannerPreview("");
-    setCommunityData((prev) => ({ ...prev, banner: "" }));
-    const fileInput = document.getElementById(
-      "file-input-banner"
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
@@ -214,13 +142,10 @@ export default function CreateCommunity() {
   const onOpen = (type: number): void => {
     if (type) {
       setModal(true);
-    } else {
-      setModalBanner(true);
     }
   };
   const onClose = (): void => {
     setModal(false);
-    setModalBanner(false);
   };
 
   const triggerFileInput = (type: string) => {
@@ -229,37 +154,41 @@ export default function CreateCommunity() {
       fileInput.click();
     }
   };
+  const onCancel = () => {
+    router.push(`/chats/${params.id}`);
+  };
 
   return (
     <>
       {session?._id && (
-        <div className="w-full h-full flex flex-row gap-4">
+        <div className="w-full h-full flex flex-row ">
           {/* Alert */}
           <ToastContainer />
-          <Spinner loading={loading} />
+          <Spinner loading={loadingCreate} message="creando" />
           <ImagePreview
-            modal={modal || modalBanner}
+            modal={modal}
             onClose={onClose}
-            image={modal ? communityData.img : communityData.banner}
+            image={modal ? chatData.img : ""}
           />
 
           <AlertDialog
             setOpen={setOpenConfirmationModal}
             open={openConfimationModal}
-            titleText={"Crear comunidad"}
-            confirmationText={"Estas seguro de crear esta comunidad?"}
+            titleText={"Crear chat"}
+            confirmationText={"Estas seguro de crear este chat?"}
             cancelButtonText={"Cancelar"}
             confirmButtonText={"Confirmar"}
             callback={onSubmit}
           />
           <div className="w-full md:w-[70%] p-1">
             <div className="flex flex-row justify-between items-center mt-2 mb-5">
-              <h1 className="font-bold text-3xl">Crear Chat</h1>
+              <h1 className="font-bold text-3xl text-[#2c3e76]">Crear Chat</h1>
               <div>
                 <Button
                   variant="outlined"
                   color="primary"
-                  href={`/create-community`}
+                  size="small"
+                  onClick={onCancel}
                 >
                   Cancelar
                 </Button>
@@ -275,7 +204,7 @@ export default function CreateCommunity() {
                 sx={{ mt: 3 }}
               >
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={12}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       autoComplete="given-name"
                       // name="firstName"
@@ -284,9 +213,9 @@ export default function CreateCommunity() {
                       // id="firstName"
                       label="Nombre del chat"
                       autoFocus
-                      value={communityData.name}
+                      value={chatData.name}
                       onChange={(e) =>
-                        setCommunityData((prev) => ({
+                        setChatData((prev) => ({
                           ...prev,
                           name: e.target.value,
                         }))
@@ -294,7 +223,7 @@ export default function CreateCommunity() {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}>
                     <TextField
                       id="outlined-multiline-static"
                       label="Descripción"
@@ -305,14 +234,14 @@ export default function CreateCommunity() {
                       variant="outlined"
                       value={communityData.description}
                       onChange={(e) =>
-                        setCommunityData((prev) => ({
+                        setChatData((prev) => ({
                           ...prev,
                           description: e.target.value,
                         }))
                       }
                     />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Grid> */}
+                  <Grid item xs={12} sm={6}>
                     <input
                       id="file-input-image"
                       type="file"
@@ -344,7 +273,7 @@ export default function CreateCommunity() {
                                 fontSize={20}
                                 className="cursor-pointer mr-2"
                                 style={{
-                                  display: communityData.img ? "" : "none",
+                                  display: chatData.img ? "" : "none",
                                 }}
                                 onClick={onDeleteImage}
                               />

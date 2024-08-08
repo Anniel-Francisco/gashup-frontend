@@ -5,10 +5,11 @@ export default function CreateCommunityDescription({}) {
         <h2 className="text-2xl font-semibold">Recuerda</h2>
 
         <span className="text-sm">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Similique
-          temporibus dignissimos modi sit provident laborum ducimus? Molestiae,
-          quibusdam totam eum alias illum porro unde dolor molestias autem
-          ratione voluptatum pariatur!
+          Queremos ofrecerte una experiencia personalizada
+          en nuestras comunidades virtuales. Por favor, completa el siguiente
+          formulario segun tus ideas. La información que compartas nos ayudará a
+          conectar a personas con intereses similares y a crear un espacio de
+          diálogo enriquecedor sobre los temas que te apasionan.
         </span>
       </div>
     </div>

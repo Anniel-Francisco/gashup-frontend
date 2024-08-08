@@ -19,10 +19,7 @@ export function CommunityChats({
     setChat(value);
   }
   return (
-    <div
-      className="w-[25%] max-lg:w-[100%] flex-grow pr-2"
-      style={{ borderColor: "#999999", borderRightWidth: 1 }}
-    >
+    <div className="w-[25%] max-lg:w-[100%] flex-grow pr-2 chats-container">
       <div>
         <h1 className="font-bold text-xl my-2 text-[#2c3e50]">Chats</h1>
       </div>
@@ -44,9 +41,9 @@ export function CommunityChats({
             return (
               <CommunityItem
                 key={index}
-                image={item?.img}
+                image={item?.img ?? ""}
                 name={item.name}
-                members={item.members_id.length}
+                members={item?.members_id ? item?.members_id.length : 0}
                 isSelected={selectedChat?._id === item._id}
                 onClick={() => onSelectCommunity(item)}
               />

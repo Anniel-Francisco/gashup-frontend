@@ -6,9 +6,10 @@ interface Props {
   image?: Blob | undefined | string | null;
   onClick?: () => void;
   name?: string;
+  borderColor?: string;
+  borderWidth?: number;
   letterSize?: number;
   session?: IUser | null;
-  onSetImage?: (image: string | Blob | null | undefined) => void;
   pointer?: boolean;
   styles?: CSSProperties;
   className?: string;
@@ -23,7 +24,9 @@ export function Avatar({
   styles,
   letterSize,
   pointer,
-  className
+  borderWidth,
+  borderColor,
+  className,
 }: Props) {
   return (
     <div
@@ -33,6 +36,8 @@ export function Avatar({
         backgroundImage: image ? `url('${image}')` : "",
         width: `${size}px`,
         height: `${size}px`,
+        borderWidth: borderWidth ?? 0,
+        borderColor: borderColor ?? "transparent",
         cursor: pointer ? "pointer" : "default",
         ...styles,
       }}

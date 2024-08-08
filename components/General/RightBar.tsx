@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 import { ICommunity } from "@/types/community";
 import { Avatar } from "../Avatar/Avatar";
 import { Button } from "@mui/material";
-
+import { useAuthProvider } from "@/context/AuthContext";
+import { useAlert } from "@/hooks/useAlert";
+import { ToastContainer } from "react-toastify";
 export interface Rightbar {
   image?: string;
   name: string;
@@ -17,8 +19,9 @@ export default function RightBar() {
   const router = useRouter();
   const path = usePathname();
   const [loading, load] = useGetHotCommunities();
+  const [showAlert] = useAlert();
   const [communities, setCommunities] = useState<Array<ICommunity>>([]);
-
+  const { session } = useAuthProvider();
   useEffect(() => {
     getHotCommunities();
   }, []);
@@ -35,7 +38,11 @@ export default function RightBar() {
   }
 
   const goToCommunity = (id: string) => {
-    router.push(`/communities/${id}`);
+    if (session) {
+      router.push(`/communities/${id}`);
+    } else {
+      showAlert("warning", "Debes inicar sesión");
+    }
   };
 
   function RightBar() {
@@ -65,7 +72,10 @@ export default function RightBar() {
                     {item.name}
                   </span>
                   <span className="text-xs md:text-sm lg:text-md font-light">
-                    {item.members_id?.length} Miembros
+                    {item.members_id?.length}{" "}
+                    {item.members_id && item.members_id?.length > 1
+                      ? " Miembros"
+                      : " Miembro"}
                   </span>
                 </div>
               </div>
@@ -73,7 +83,7 @@ export default function RightBar() {
                 <Button
                   variant="contained"
                   color="primary"
-                  href={`/communities/${item._id}`}
+                  onClick={() => goToCommunity(item?._id ?? "")}
                 >
                   <span className="text-sm">Unirte</span>
                 </Button>
@@ -81,6 +91,7 @@ export default function RightBar() {
             </div>
           ))}
         </div>
+        <ToastContainer />
       </div>
     );
   }
