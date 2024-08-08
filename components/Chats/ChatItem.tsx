@@ -77,23 +77,24 @@ export function ChatItem({
                   size={20}
                   color="#2c3e50"
                   style={{ cursor: "pointer" }}
-                  onClick={() => goToEditChat(chat._id ?? '')}
+                  onClick={() => goToEditChat(chat._id ?? "")}
                 />
               </div>
             )}
           </div>
         </div>
       </div>
-
-      <Button
-        variant="contained"
-        style={{
-          backgroundColor: isJoined ? "#9b26b6" : "#afafaf",
-        }}
-        onClick={handleChatState}
-      >
-        <span className="text-sm">{isJoined ? "Unido" : "Unirse"}</span>
-      </Button>
+      {chat.CommunityOwner !== userID && (
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: isJoined ? "#9b26b6" : "#afafaf",
+          }}
+          onClick={handleChatState}
+        >
+          <span className="text-sm">{isJoined ? "Miembro" : "Unirse"}</span>
+        </Button>
+      )}
     </div>
   );
 }

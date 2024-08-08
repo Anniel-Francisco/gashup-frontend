@@ -9,6 +9,7 @@ export interface ICommunityChats {
   isDeleted?: boolean;
   isMember?: boolean;
   isActive?: boolean;
+  CommunityOwner?: string;
 }
 
 export interface IChat {
