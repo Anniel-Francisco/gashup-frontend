@@ -61,6 +61,13 @@ export default function Chats({ params }: { params: { id: string } }) {
           />
         ))}
       </div>
+      {chats.length === 0 && (
+        <div className="flex justify-center">
+          <span className="font-medium text-[#2c3e76]">
+            No hay chats creados en esta comunidad
+          </span>
+        </div>
+      )}
       {/* <MappedPosts className="" _i/> */}
     </div>
   );
