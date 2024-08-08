@@ -37,7 +37,6 @@ export function Message({ message, userID, onDelete }: Props) {
         style={{
           flexDirection: message.userID === userID ? "row-reverse" : "row",
         }}
-        
       >
         <div className="flex flex-col justify-end">
           <Avatar
@@ -49,7 +48,7 @@ export function Message({ message, userID, onDelete }: Props) {
           />
         </div>
         <div
-          className="bg-[#e5e7eb] py-1 pl-3 max-w-52 pr-2 flex flex-col"
+          className="py-1 pl-3 max-w-52 pr-2 flex flex-col"
           onClick={() => onDelete(message)}
           style={
             message.userID === userID
@@ -57,11 +56,14 @@ export function Message({ message, userID, onDelete }: Props) {
                   borderTopLeftRadius: 10,
                   borderTopRightRadius: 10,
                   borderBottomLeftRadius: 10,
+                  backgroundColor: "#9b26b6",
+                  color: "white",
                 }
               : {
                   borderTopLeftRadius: 10,
                   borderTopRightRadius: 10,
                   borderBottomRightRadius: 10,
+                  backgroundColor: "#e5e7eb",
                 }
           }
         >

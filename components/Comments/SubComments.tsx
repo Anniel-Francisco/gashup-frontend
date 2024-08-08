@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { IComment, ISubComment } from "@/types/post";
 import { Avatar } from "../Avatar/Avatar";
 import { useRouter } from "next/navigation";
@@ -173,15 +173,17 @@ export default function SubComment({
                 </div>
               )}
 
-              <SettingsComment
-                id={item._id ?? ""}
-                subComment={item}
-                isSubComment={true}
-                comments={comments ?? []}
-                setComments={setComments ?? Function}
-                setEditCommentId={setEditSubCommentId}
-                // isEditing={editCommentId === item._id}
-              />
+              {session && (
+                <SettingsComment
+                  id={item._id ?? ""}
+                  subComment={item}
+                  isSubComment={true}
+                  comments={comments ?? []}
+                  setComments={setComments ?? Function}
+                  setEditCommentId={setEditSubCommentId}
+                  // isEditing={editCommentId === item._id}
+                />
+              )}
             </div>
 
             {session?._id && (

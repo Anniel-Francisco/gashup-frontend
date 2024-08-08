@@ -139,7 +139,7 @@ export default function CommunityControls({
           </div>
         </div>
         <div className="flex flex-row gap-3">
-          {isMember && (
+          {isMember || session?._id === owner?._id ? (
             <Button
               variant="contained"
               color={"primary"}
@@ -150,6 +150,8 @@ export default function CommunityControls({
 
               <BsChatSquareFill className="w-5 h-5 fill-white" />
             </Button>
+          ) : (
+            ""
           )}
 
           {owner?._id != session?._id ? (

@@ -14,6 +14,7 @@ import { Spinner } from "@/components/Spinner/Spinner";
 import { useGetPostByUserId } from "@/hooks/usePost";
 import { useFollowUser, useUnFollowUser } from "@/hooks/useUser";
 import { useAlert } from "@/hooks/useAlert";
+import { redirect } from "next/navigation";
 export default function User({ params }: { params: { id: string } }) {
   const { session, handleFollowed } = useAuthProvider();
   const [post, setPosts] = useState<IPost[]>([]);
@@ -31,6 +32,11 @@ export default function User({ params }: { params: { id: string } }) {
     }
   }
 
+  useEffect(() => {
+    if (session && session._id === params.id) {
+      redirect("/");
+    }
+  }, [session]);
   useEffect(() => {
     const isUserFollowed = session?.followed.includes(params.id);
     if (isUserFollowed) {

@@ -39,7 +39,7 @@ export default function Posts() {
       </div>
       {data?.posts?.length === 0 && (
         <h3 className="font-semibold text-center w-full mt-2 text-xl text-[#2c3e50]">
-          No has realizado publicación
+          No ha realizado publicación
         </h3>
       )}
       {/* Spinner */}
