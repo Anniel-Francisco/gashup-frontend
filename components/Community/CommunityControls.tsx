@@ -2,14 +2,20 @@
 import { Avatar } from "@/components/Avatar/Avatar";
 import { useAuthProvider } from "@/context/AuthContext";
 import { useAlert } from "@/hooks/useAlert";
-import { useJoinCommunity, useLeaveCommunity } from "@/hooks/useCommunity";
+import {
+  useDeleteCommunity,
+  useJoinCommunity,
+  useLeaveCommunity,
+} from "@/hooks/useCommunity";
 import { IUser } from "@/types/user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { IoIosSettings } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { BsChatSquareFill } from "react-icons/bs";
-
+import { MdDelete } from "react-icons/md";
+import { Spinner } from "../Spinner/Spinner";
+import AlertDialog from "../ConfirmationDialog";
 
 interface props {
   id: string;
@@ -38,6 +44,12 @@ export default function CommunityControls({
   const [loadingLeave, loadLeave] = useLeaveCommunity(id, {
     userID: session?._id,
   });
+
+  const [loadingDelete, loadDelete] = useDeleteCommunity(id, {
+    ownerID: session?._id,
+  });
+  const [openConfimationModal, setOpenConfirmationModal] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (members) {
@@ -80,6 +92,17 @@ export default function CommunityControls({
     }
   };
 
+  const deleteCommunity = async () => {
+    const { response, error } = await loadDelete();
+
+    if (response?.data.ok) {
+      router.push("/communities");
+      return showAlert("success", response?.data.mensaje);
+    } else {
+      return showAlert("warning", response?.data.mensaje);
+    }
+  };
+
   const openLogInModal = () => {
     return showAlert("warning", "Debes iniciar sesión para unirte");
   };
@@ -90,6 +113,16 @@ export default function CommunityControls({
 
   return (
     <>
+      <Spinner loading={loadingDelete} message="Eliminando la comunidad" />
+      <AlertDialog
+        setOpen={setOpenConfirmationModal}
+        open={openConfimationModal}
+        titleText={"Eliminar comunidad"}
+        confirmationText={"Estas seguro de eliminar esta comunidad?"}
+        cancelButtonText={"Cancelar"}
+        confirmButtonText={"Confirmar"}
+        callback={deleteCommunity}
+      />
       <div className="flex w-full mt-14 justify-between px-3 pb-2 items-center">
         <div className="flex flex-row items-center gap-3 ">
           <span>{members?.length ? members?.length : 0} Miembros</span>
@@ -128,13 +161,15 @@ export default function CommunityControls({
               {isMember ? "Miembro" : "Unirse"}
             </Button>
           ) : (
-            <div>
+            <div className="flex flex-row gap-2">
               <IoIosSettings
                 onClick={() => {
                   router.push(`/edit-community/${id}`);
                 }}
                 className="fill-gray-500 cursor-pointer h-9 w-9 hover:fill-gray-600 transition-all"
               />
+
+              <MdDelete onClick={() => setOpenConfirmationModal(true)} className="fill-red-500 cursor-pointer h-9 w-9 hover:fill-gray-600 transition-all" />
             </div>
           )}
         </div>

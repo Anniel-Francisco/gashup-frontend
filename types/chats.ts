@@ -5,7 +5,7 @@ export interface ICommunityChats {
   chatOwner_id: string;
   members_id?: string[] | IUser[];
   name: string;
-  img: string | null;
+  img: string | null | File;
   isDeleted?: boolean;
   isMember?: boolean;
   isActive?: boolean;

@@ -109,8 +109,15 @@ export async function updateCommunityChat(id: string, body: any) {
     .then((data) => data);
 }
 
+export async function deleteCommunity(id: string, body: object) {
+  return http
+    .put(`community/deleteCommunity/${id}`, body)
+    .then((data) => data);
+}
+
 // DELETE
 
 export async function deletePost(id: string) {
   return http.delete(`post/deletePost/${id}`).then((data) => data);
 }
+

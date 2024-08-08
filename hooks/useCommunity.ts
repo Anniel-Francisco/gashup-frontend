@@ -15,6 +15,7 @@ import {
   createCommunityChat,
   updateCommunityChat,
   findCommunityChats,
+  deleteCommunity,
 } from "@/services/Community";
 import { ICommunity } from "@/types/community";
 
@@ -322,6 +323,7 @@ export const useUpdateCommunityChat = (
     load,
   ];
 };
+
 export const useFindCommunityChats = (
   id: string,
   userId: string
@@ -347,5 +349,30 @@ export const useFindCommunityChats = (
     loading,
     //methods
     load,
+  ];
+};
+
+export const useDeleteCommunity = (id: string, objectData: Object): UseReponseType => {
+  const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
+  async function loadDelete(): Promise<{
+    response: IResponse | null;
+    error: IError | null;
+  }> {
+    try {
+      setLoadingDelete(true);
+      const data = await deleteCommunity(id, objectData);
+      return { response: data, error: null };
+    } catch (error: any) {
+      return { response: null, error: error };
+    } finally {
+      setLoadingDelete(false);
+    }
+  }
+
+  return [
+    //states
+    loadingDelete,
+    //methods
+    loadDelete,
   ];
 };
