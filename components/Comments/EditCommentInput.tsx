@@ -14,7 +14,7 @@ import { Spinner } from "../Spinner/Spinner";
 interface Props {
   className?: string;
   item: IComment;
-  callback: (item: IComment) => void;
+  callback: (item: any) => void;
   cancel: () => void;
   isSubComment?: boolean;
 }

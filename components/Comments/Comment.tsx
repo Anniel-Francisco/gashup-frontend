@@ -9,12 +9,10 @@ import { useAuthProvider } from "@/context/AuthContext";
 import PostButton from "../Post/PostButton";
 import { AiFillLike } from "react-icons/ai";
 import { useAlert } from "@/hooks/useAlert";
-import { ToastContainer } from "react-toastify";
-import { IUser } from "@/types/user";
 import SettingsComment from "./SettingsComment";
 import EditCommentInput from "./EditCommentInput";
 
-interface props {
+interface Props {
   item: IComment;
   subCommentActive: string | null;
   toggleSubCommentActive: Function;
@@ -36,7 +34,7 @@ export default function Comment({
   setComments,
   editCommentId,
   setEditCommentId,
-}: props) {
+}: Props) {
   const { session } = useAuthProvider();
   const router = useRouter();
   const [showAlert] = useAlert();
@@ -49,16 +47,11 @@ export default function Comment({
   );
   const [editSubCommentId, setEditSubCommentId] = useState<string | null>(null);
 
-
   useEffect(() => {
-    const findLike = item.user_likes?.find((item) => item == session?._id);
+    const findLike = item.user_likes?.find((like) => like === session?._id);
     setUserLikesAmount(item?.user_likes?.length ?? 0);
-    if (findLike) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
-  }, [comments]);
+    setActive(!!findLike);
+  }, [item.user_likes, session?._id]);
 
   const goToPerfil = (id: string) => {
     if (id === session?._id) {
@@ -68,22 +61,43 @@ export default function Comment({
     }
   };
 
-  const likePost = async () => {
-    if (!session?._id) {
-      return showAlert("warning", "Debes iniciar sessión");
-    }
+ const likeComment = async () => {
+   if (!session?._id) {
+     return showAlert("warning", "Debes iniciar sesión");
+   }
 
-    const { response, error } = await load();
+   const { response, error } = await load();
 
-    if (response?.data.ok) {
-      if (response.data.data) {
-        setUserLikesAmount(userLikesAmount + 1);
-        setActive(true);
-      } else {
-        setUserLikesAmount(userLikesAmount - 1);
-        setActive(false);
-      }
-    }
+   if (response?.data.ok) {
+     const updatedComment = response.data.comment;
+     setComments((prevComments: Array<IComment>) =>
+       prevComments.map((comment) =>
+         comment._id === item._id
+           ? {
+               ...comment,
+               user_likes: updatedComment.user_likes,
+             }
+           : comment
+       )
+     );
+   }
+ };
+
+  const setEditedSubComment = (editedSubComment: ISubComment) => {
+    setComments((prevComments: Array<IComment>) =>
+      prevComments.map((comment) =>
+        comment._id === item._id
+          ? {
+              ...comment,
+              subComments: comment?.subComments?.map((subComment) =>
+                subComment._id === editedSubComment._id
+                  ? editedSubComment
+                  : subComment
+              ),
+            }
+          : comment
+      )
+    );
   };
 
   return (
@@ -110,7 +124,7 @@ export default function Comment({
             )}
           </div>
 
-          <div className={`${editCommentId == item._id && "w-full"}`}>
+          <div className={`${editCommentId === item._id && "w-full"}`}>
             <div className="flex flex-row gap-1">
               {editCommentId === item._id ? (
                 <EditCommentInput
@@ -165,7 +179,7 @@ export default function Comment({
             {session?._id && (
               <div className="flex pl-2 gap-2 mt-1 text-sm items-center">
                 <span
-                  onClick={likePost}
+                  onClick={likeComment}
                   className={`${active && "text-[#9b34b7]"} cursor-pointer`}
                 >
                   Me gusta
@@ -189,7 +203,7 @@ export default function Comment({
                     classNameButton={"pb-1 cursor-auto"}
                     Icon={AiFillLike}
                     amount={userLikesAmount}
-                    // callback={likePost}
+                    // callback={likeComment}
                     active={active}
                   />
                 )}
@@ -200,15 +214,16 @@ export default function Comment({
 
         <div className="pl-10 mt-2 flex flex-col gap-1">
           {item?.subComments &&
-            item.subComments.map((item: ISubComment, index) => (
+            item.subComments.map((subComment: ISubComment, index) => (
               <SubComment
                 key={index}
-                item={item}
+                item={subComment}
                 callback={callback}
                 comments={comments}
                 setComments={setComments}
                 editSubCommentId={editSubCommentId}
                 setEditSubCommentId={setEditSubCommentId}
+                editCommentFunct={setEditedSubComment}
               />
             ))}
         </div>

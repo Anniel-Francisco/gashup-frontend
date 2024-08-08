@@ -81,11 +81,13 @@ export async function likePost(id: string, user: string) {
 }
 
 export async function likeComment(id: string, user: string) {
-  return http.put(`post/likeComment/${id}`, { user }).then((data) => data);
+  const noCache = `noCache=${new Date().getTime()}`;
+  return http.put(`post/likeComment/${id}??${noCache}`, { user }).then((data) => data);
 }
 
 export async function likeSubComment(id: string, user: string) {
-  return http.put(`post/likeSubComment/${id}`, { user }).then((data) => data);
+  const noCache = `noCache=${new Date().getTime()}`;
+  return http.put(`post/likeSubComment/${id}??${noCache}`, { user }).then((data) => data);
 }
 
 export async function updateComment(id: string, body: IComment) {

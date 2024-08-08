@@ -15,6 +15,7 @@ import EditCommentInput from "./EditCommentInput";
 interface props {
   item: ISubComment;
   callback: (item: ISubComment) => void;
+  editCommentFunct: (item: ISubComment) => void;
   comments?: Array<IComment>;
   setComments?: Function;
   editSubCommentId: string | null;
@@ -28,6 +29,7 @@ export default function SubComment({
   setComments,
   editSubCommentId,
   setEditSubCommentId,
+  editCommentFunct,
 }: props) {
   const router = useRouter();
   const { session } = useAuthProvider();
@@ -78,13 +80,10 @@ export default function SubComment({
     const { response, error } = await load();
 
     if (response?.data.ok) {
-      if (response.data.data) {
-        setUserLikesAmount(userLikesAmount + 1);
-        setActive(true);
-      } else {
-        setUserLikesAmount(userLikesAmount - 1);
-        setActive(false);
-      }
+      editCommentFunct({
+        ...item,
+        user_likes: response.data.comment.user_likes,
+      });
     }
   };
 
@@ -137,13 +136,13 @@ export default function SubComment({
                 <EditCommentInput
                   className="w-full py-0 gap-0"
                   callback={(updatedComment) => {
-                    // editCommentFunct(updatedComment);
+                    editCommentFunct(updatedComment);
                     setEditSubCommentId(null); // Desactivar edición después de editar
                   }}
                   isSubComment={true}
                   item={item as any}
                   cancel={() => {
-                    // setEditCommentId(null);
+                    setEditSubCommentId(null);
                   }}
                 />
               ) : (
