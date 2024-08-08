@@ -50,7 +50,7 @@ export default function Communities() {
   };
   return (
     <div className="w-full">
-      <Spinner loading={loading} message="cargando" />
+      <Spinner loading={loading} message="Cargando..." />
       <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-lg md:text-3xl my-4 text-[#2c3e50]">
           Comunidades

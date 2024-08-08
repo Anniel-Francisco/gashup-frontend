@@ -14,6 +14,9 @@ import { useGetCommunity } from "@/hooks/useCommunity";
 import { IUser } from "@/types/user";
 import { ICommunity } from "@/types/community";
 import { ToastContainer } from "react-toastify";
+import { IPost } from "@/types/post";
+import { useGetAllPostByCommunity } from "@/hooks/usePost";
+import Post from "@/components/Post/Post";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -30,6 +33,8 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
   const [isMember, setIsMember] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [value, setValue] = useState(0);
+  const [post, setPosts] = useState<IPost[]>([]);
+  const [loadingPost, loadPost] = useGetAllPostByCommunity(params.id);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -58,10 +63,20 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     getCommunity();
-  }, []);
+    getPosts();
+  }, [params.id]);
+
   useEffect(() => {
     if (!session) redirect("/");
   }, [session]);
+
+  const getPosts = async () => {
+    const { response, error } = await loadPost();
+    if (response?.data.ok) {
+      setPosts(response.data.data);
+    }
+  };
+
   function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
@@ -99,6 +114,10 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
       />
     );
   }
+
+  const addCreatedPost = async (item: IPost) => {
+    setPosts((prev) => [item, ...prev]);
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -151,12 +170,26 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
                     {(typeof community.owner_id !== "string" &&
                       community.owner_id?._id === session?._id) ||
                     isMember ? (
-                      <CreatePost className="w-full" community_id={params.id} />
+                      <CreatePost
+                        className="w-full"
+                        community_id={params.id}
+                        callback={addCreatedPost}
+                      />
                     ) : (
                       ""
                     )}
                     {/* Posts */}
-                    <MappedPosts className="w-full" _id={params.id} />
+                    {/* <MappedPosts className="w-full" _id={params.id} />  */}
+                    <div className={"w-full"}>
+                      {post && post?.map((item: IPost) => (
+                        <Post
+                          key={item._id}
+                          data={item}
+                          post={post}
+                          setPosts={setPosts}
+                        />
+                      ))}
+                    </div>
                   </CustomTabPanel>
                   <CustomTabPanel value={value} index={1}>
                     <CommunityDescription
@@ -178,12 +211,24 @@ export default function CommunityPage({ params }: { params: { id: string } }) {
                     <CreatePost
                       className="w-full mt-2"
                       community_id={params.id}
+                      callback={addCreatedPost}
                     />
                   ) : (
                     ""
                   )}
                   {/* Posts */}
-                  <MappedPosts className="w-full" _id={params.id} />
+                  {/* <MappedPosts className="w-full" _id={params.id} /> */}
+                  <div className={"w-full"}>
+                    {post &&
+                      post?.map((item: IPost) => (
+                        <Post
+                          key={item._id}
+                          data={item}
+                          post={post}
+                          setPosts={setPosts}
+                        />
+                      ))}
+                  </div>
                 </div>
               </div>
             </div>

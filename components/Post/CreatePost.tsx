@@ -19,9 +19,10 @@ import AlertDialog from "../ConfirmationDialog";
 interface props {
   className?: string;
   community_id: string;
+  callback: (item: IPost) => void
 }
 
-export default function CreatePost({ className, community_id }: props) {
+export default function CreatePost({ className, community_id, callback }: props) {
   const { session, removeSession } = useAuthProvider();
   const post: IPost = {
     title: "",
@@ -41,7 +42,7 @@ export default function CreatePost({ className, community_id }: props) {
   const clearData = () => {
     editor?.commands.setContent("");
     setPostData(post);
-    setImages([])
+    setImages([]);
   };
 
   const openConfirmation = () => {
@@ -66,6 +67,7 @@ export default function CreatePost({ className, community_id }: props) {
     }
 
     if (response?.data.ok) {
+      callback(response.data.post)
       clearData();
       return showAlert("success", response?.data.mensaje);
     } else {
@@ -138,7 +140,7 @@ export default function CreatePost({ className, community_id }: props) {
       {/* Alert */}
       <ToastContainer />
       {/* Spinner */}
-      <Spinner loading={loading} message="Publicando..."/>
+      <Spinner loading={loading} message="Publicando..." />
     </div>
   );
 }

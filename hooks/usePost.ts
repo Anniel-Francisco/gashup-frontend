@@ -107,27 +107,27 @@ export const useCreateSubComment = (body: ISubComment): UseReponseType => {
 };
 
 export const useGetAllPostByCommunity = (id: string): UseReponseType => {
-  const [loading, setLoading] = useState<boolean>(false);
-  async function load(): Promise<{
+  const [loadingPost, setLoadingPost] = useState<boolean>(false);
+  async function loadPost(): Promise<{
     response: IResponse | null;
     error: IError | null;
   }> {
     try {
-      setLoading(true);
+      setLoadingPost(true);
       const data = await getAllPostByCommunity(id);
       return { response: data, error: null };
     } catch (error: any) {
       return { response: null, error: error };
     } finally {
-      setLoading(false);
+      setLoadingPost(false);
     }
   }
 
   return [
     //states
-    loading,
+    loadingPost,
     //methods
-    load,
+    loadPost,
   ];
 };
 
